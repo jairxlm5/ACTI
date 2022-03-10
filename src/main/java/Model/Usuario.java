@@ -13,6 +13,7 @@ import java.util.LinkedList;
  * @author danielp
  */
 public class Usuario {
+    //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
     private String identificacion;
     private String nombre, apellido2, apellido3;
     private Date fechaNacimiento;
