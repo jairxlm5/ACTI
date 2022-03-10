@@ -1,8 +1,9 @@
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/Enum/Perfil.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/Enum/TipoIdentificacion.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/Model/Usuario.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/utn/proyectoprogramacion/resources/JavaEE8Resource.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/Enum/TipoTelefono.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/utn/proyectoprogramacion/JAXRSConfiguration.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/Controller/AutoregistroBean.java
-/home/danielp/NetBeansProjects/ProyectoProgramacion/src/main/java/Controller/LoginBean.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/LoginBean.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Enum/Perfil.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Model/Sede.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Enum/TipoIdentificacion.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/AutoregistroBean.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/utn/proyectoprogramacion/JAXRSConfiguration.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Model/Usuario.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Enum/TipoTelefono.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/utn/proyectoprogramacion/resources/JavaEE8Resource.java
