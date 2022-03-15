@@ -15,24 +15,24 @@ import java.util.LinkedList;
 public class Usuario {
     //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
     private String identificacion;
-    private String nombre, apellido2, apellido3;
+    private String nombre, apellido1, apellido2;
     private Date fechaNacimiento;
     private Object provincia;
     private Object canton;
     private String otrasDirecciones;
     private String correo;
-    private Object sede;
+    private Sede sede;
     private LinkedList<Object> perfiles;
     private LinkedList<Object> telefonos;
     private int codSeguridad;
     private byte[] clave;
 
     public Usuario(String identificacion, String nombre, String apellido2, String apellido3, Date fechaNacimiento, Object provincia,
-            Object canton, String otrasDirecciones, String correo, Object sede, LinkedList<Object> perfiles, LinkedList<Object> telefonos) {
+            Object canton, String otrasDirecciones, String correo, Sede sede, LinkedList<Object> perfiles, LinkedList<Object> telefonos) {
         this.identificacion = identificacion;
         this.nombre = nombre;
-        this.apellido2 = apellido2;
-        this.apellido3 = apellido3;
+        this.apellido1 = apellido2;
+        this.apellido2 = apellido3;
         this.fechaNacimiento = fechaNacimiento;
         this.provincia = provincia;
         this.canton = canton;
@@ -63,20 +63,20 @@ public class Usuario {
         this.nombre = nombre;
     }
 
+    public String getApellido1() {
+        return apellido1;
+    }
+
+    public void setApellido1(String apellido1) {
+        this.apellido1 = apellido1;
+    }
+
     public String getApellido2() {
         return apellido2;
     }
 
     public void setApellido2(String apellido2) {
         this.apellido2 = apellido2;
-    }
-
-    public String getApellido3() {
-        return apellido3;
-    }
-
-    public void setApellido3(String apellido3) {
-        this.apellido3 = apellido3;
     }
 
     public Date getFechaNacimiento() {
@@ -119,11 +119,11 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public Object getSede() {
+    public Sede getSede() {
         return sede;
     }
 
-    public void setSede(Object sede) {
+    public void setSede(Sede sede) {
         this.sede = sede;
     }
 
