@@ -33,4 +33,14 @@
         <managed-bean-class>Controller.AutoregistroBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>MantenimientoFuncionariosBean</managed-bean-name>
+        <managed-bean-class>Controller.MantenimientoFuncionariosBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>SolicitudFuncionariosBean</managed-bean-name>
+        <managed-bean-class>Controller.SolicitudFuncionariosBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>

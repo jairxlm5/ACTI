@@ -6,6 +6,7 @@
 package Controller;
 
 import Enum.TipoIdentificacion;
+import Model.Sede;
 import Model.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,32 +18,32 @@ import java.util.LinkedList;
  */
 public class AutoregistroBean {
     //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
-    //private ArrayList<Object> tiposID;
+    //Estos son los atributos para relacionarlos con campos de texto en el bean
     private TipoIdentificacion tipoIdSeleccionado;
     private String identificacion;
     private String nombre, apellido1, apellido2;
+    private String correo;
     private Date fechaNacimiento;
     private int edad;
     private String otrasDirecciones;
+    //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
     private LinkedList<Object> telefonos;
     private LinkedList<Object> perfiles;
-    private String correo;
-    private ArrayList<Object> sedes;
-    private Object sede;
-    //private ArrayList<Object> tiposDePerfil;
-    //private ArrayList<Object> tiposDeTelefono;
+    //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
+    //Solo estan para desplegar informacion
     private ArrayList<Object> provincias;
     private ArrayList<Object> cantones;
+    private ArrayList<Sede> sedes;
+    //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Object provincia, canton;
+    private Sede sede;
+    //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
     
     public AutoregistroBean(){
-        //this.tiposID = new ArrayList<>();
         this.telefonos = new LinkedList<>();
         this.perfiles = new LinkedList<>();
         this.sedes = new ArrayList<>();
-        //this.tiposDePerfil = new ArrayList<>();
-        //his.tiposDeTelefono = new ArrayList<>();
         this.provincias = new ArrayList<>();
         this.cantones = new ArrayList<>();
     }
@@ -98,16 +99,6 @@ public class AutoregistroBean {
         
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
     }
-
-    /*
-    public ArrayList<Object> getTiposID() {
-        return tiposID;
-    }
-
-    public void setTiposID(ArrayList<Object> tiposID) {
-        this.tiposID = tiposID;
-    }
-    */
     
     /**
      * Llena los ArrayList que a su vez llenan los combos en la pagina xhtml
@@ -188,23 +179,13 @@ public class AutoregistroBean {
         this.correo = correo;
     }
 
-    public ArrayList<Object> getSedes() {
+    public ArrayList<Sede> getSedes() {
         return sedes;
     }
 
-    public void setSedes(ArrayList<Object> sedes) {
+    public void setSedes(ArrayList<Sede> sedes) {
         this.sedes = sedes;
     }
-
-    /*
-    public ArrayList<Object> getTiposDePerfil() {
-        return tiposDePerfil;
-    }
-
-    public void setTiposDePerfil(ArrayList<Object> tiposDePerfil) {
-        this.tiposDePerfil = tiposDePerfil;
-    }
-    */
     
     public LinkedList<Object> getPerfiles() {
         return perfiles;
@@ -213,16 +194,6 @@ public class AutoregistroBean {
     public void setPerfiles(LinkedList<Object> perfiles) {
         this.perfiles = perfiles;
     }
-
-    /*
-    public ArrayList<Object> getTiposDeTelefono() {
-        return tiposDeTelefono;
-    }
-
-    public void setTiposDeTelefono(ArrayList<Object> tiposDeTelefono) {
-        this.tiposDeTelefono = tiposDeTelefono;
-    }
-    */
     
     public String getValidationMessage() {
         return validationMessage;
@@ -240,11 +211,11 @@ public class AutoregistroBean {
         this.tipoIdSeleccionado = tipoIdSeleccionado;
     }
 
-    public Object getSede() {
+    public Sede getSede() {
         return sede;
     }
 
-    public void setSede(Object sede) {
+    public void setSede(Sede sede) {
         this.sede = sede;
     }
 
