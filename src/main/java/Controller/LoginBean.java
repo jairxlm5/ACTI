@@ -14,23 +14,25 @@ import Model.Usuario;
  */
 public class LoginBean {
     //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
+    //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String username;
     private String password;
+    //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Perfil perfilSeleccionado;
+    //Mensaje para desplegar info de validaciones
     private String validationMessage;
-    //private ArrayList<Object> tiposDePerfil; //Se llenara con objetos de la clase TipoPerfil y se usara para llenar el combo en el Login
     
     public LoginBean(){
-        //this.tiposDePerfil = new ArrayList<>();
+        
     }
     
     public String processLoginData(){
         this.validationMessage = "";
-        if(this.username.equals("")){
+        if(this.username.trim().length() == 0){
             this.validationMessage = "Ingrese su numero de identificacion";
             return "";
         }
-        if(this.password.equals("")){
+        if(this.password.trim().length() == 0){
             this.validationMessage = "Ingrese su clave";
             return "";
         }
@@ -39,6 +41,8 @@ public class LoginBean {
         /*passwordCorrect();
         userHasProfile();
         */
+        
+        //Se tiene que guardar la info de la sesion
         
         //Dependiendo del tipo de perfil se abren las paginas respectivas
         switch(perfilSeleccionado){
@@ -56,7 +60,7 @@ public class LoginBean {
         
     }
     
-    public Usuario getUserFromDB(){//Temporalmente esta definido como Object, luego se debe cambiar a la clase Usuario
+    public Usuario getUserFromDB(){
         return null;
     }
     
@@ -72,6 +76,9 @@ public class LoginBean {
         return false;
     }
     
+    /*
+      METODOS GET Y SET
+    */
     public String getUsername() {
         return username;
     }
