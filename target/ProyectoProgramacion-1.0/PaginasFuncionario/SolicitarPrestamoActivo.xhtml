@@ -11,31 +11,30 @@
     </h:head>
     <h:body>
 
-<!-- Aqui supongo que podemos solamente pedir el ID del activo y hacer
-la solicitud -->
+        <!-- Aqui supongo que podemos solamente pedir el ID del activo y hacer
+        la solicitud -->
 
-<!-- Si exacto y yo pienso que tambien se le puede incluir cajas de texto y text area para desplegar algo de 
-informacion del activo cuando se ingresa el ID, y un boton para buscar la info del activo
-En el Bean estan los valores que tal vez se pueden desplegar-->
+        <!-- Si exacto y yo pienso que tambien se le puede incluir cajas de texto y text area para desplegar algo de 
+        informacion del activo cuando se ingresa el ID, y un boton para buscar la info del activo
+        En el Bean estan los valores que tal vez se pueden desplegar-->
 
         <div class="container">
+            <h1>Solicitar prestamo de Activos</h1>
 
-            <div class="Bienvenida Usuario">
-
-                <h1>Bienvenido</h1>
-            </div>
-
-
-
-            <nav class="nav">
-
-                <a href="#">	Reporte activos PTA</a>
-                <a href="#">	Reporte de solicitudes  para PTA de activos</a>
-                <a href="#">	Mantenimiento de Funcionarios  </a>
-                <a href="#">	Solicitud de Funcionarios Nuevos</a>
-                <a href="#">	Volver</a>
-            </nav>
-
+            <h:outputText class="textos"  value="Id del Activo: "></h:outputText>
+            <p:inputText value=""></p:inputText>
+            <br></br><br></br>
+            <h:outputText class="textos"  value="Informacion del activo: "></h:outputText>
+            <br></br>
+            <p:inputTextarea>  </p:inputTextarea>
+            <br></br><br></br>
+                 <h:outputText value="Fecha de Retorno: "></h:outputText>
+                    <p:calendar showOn="button"/>
+                    <br></br><br></br>
+                    
+                    
+                    <p:button value="Solicitar prestamo" ></p:button>
+                    <p:button value="Cancelar" ></p:button>
         </div>
 
 

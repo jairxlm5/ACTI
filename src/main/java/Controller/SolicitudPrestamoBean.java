@@ -17,6 +17,7 @@ public class SolicitudPrestamoBean {
     //el usuario, los ultimos 3 son solo para desplegar informacion
     private String idActivo; 
     private Date fechaRetorno;
+    
     private String nombre;
     private String descripcion;
     private String nombreSede;
