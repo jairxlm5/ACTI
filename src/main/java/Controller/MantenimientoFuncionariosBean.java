@@ -16,7 +16,7 @@ import java.util.LinkedList;
  * @author danielp
  */
 public class MantenimientoFuncionariosBean {
-    //Este objeto usuario solo se usa cuando se traen datos de consulta de la base de datos de un usuario que ya existe
+    //Este objeto Usuario solo se usa cuando se traen datos de consulta de la base de datos de un Usuario que ya existe
     private Usuario user;
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String identificacion;

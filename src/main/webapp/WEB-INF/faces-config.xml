@@ -43,4 +43,14 @@
         <managed-bean-class>Controller.SolicitudFuncionariosBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>RegistroActivosBean</managed-bean-name>
+        <managed-bean-class>Controller.RegistroActivosBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>SolicitudPrestamoBean</managed-bean-name>
+        <managed-bean-class>Controller.SolicitudPrestamoBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>
