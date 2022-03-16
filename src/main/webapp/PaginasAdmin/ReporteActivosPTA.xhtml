@@ -11,16 +11,50 @@
     </h:head>
     <h:body>
 
-<!-- Falta agregar donde se veran los datos -->
+<!-- Donde dice ejemplo es donde va el bean -->
 
+    <h1> Reporte de Activos </h1>
 
         <div class="container">
 
        
-                <h1> Reporte de Activos </h1>
+            
     
-              
+                     <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+            <p:column headerText="ID">
+                <h:outputText value="Ejemplo" />
+            </p:column>
 
+            <p:column headerText="Nombre">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Descripcion">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Valor">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+                         
+              <p:column headerText="Sede">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+                         
+                         
+              <p:column headerText="Fecha de Adquisicion">
+                <h:outputText value="Ejemplo" />
+            </p:column>      
+                         
+                            <p:column headerText="Funcionario">
+                <h:outputText value="Ejemplo" />
+            </p:column> 
+                         
+                         
+                         
+        </p:dataTable>
+                
+                  
 
             
 
