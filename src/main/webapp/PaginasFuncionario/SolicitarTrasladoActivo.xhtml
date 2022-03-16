@@ -11,18 +11,14 @@
     </h:head>
     <h:body>
 
-        <!-- Aqui supongo que podemos solamente pedir el ID del activo y hacer
-        la solicitud -->
-
-        <!-- Si exacto y yo pienso que tambien se le puede incluir cajas de texto y text area para desplegar algo de 
-        informacion del activo cuando se ingresa el ID, y un boton para buscar la info del activo
-        En el Bean estan los valores que tal vez se pueden desplegar-->
+        <!-- La fecha de traslado no la puse pero por detras agarramos la hora en la que se hace la solicitud-->
 
         <div class="container">
             <h1>Solicitar traslado de Activos</h1>
 
             <h:outputText class="textos"  value="Id del Activo: "></h:outputText>
             <p:inputText value=""></p:inputText>
+             <p:button value="Buscar Activo" ></p:button>
             <br></br><br></br>
             <h:outputText class="textos"  value="Informacion del activo: "></h:outputText>
             <br></br>

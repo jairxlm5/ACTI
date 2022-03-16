@@ -11,20 +11,56 @@
     </h:head>
     <h:body>
 
-<!-- Me imagino que aqui deberia meterse un poco mas de carnita por asi decirlo jaja -->
+        <!-- Me imagino que aqui deberia meterse un poco mas de carnita por asi decirlo jaja -->
 
         <div class="container">
 
             <h1>Aprobacion de Prestamos de activos </h1>
-            
+
             <div class="BaseDeDATOS">
-                <br></br><br></br><br></br><br></br><br></br>
+                <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+                    <p:column headerText="ID">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Valor">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Sede">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+
+                    <p:column headerText="Fecha de Adquisicion">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>      
+
+                      <p:column headerText="Solicitante">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>    
+                    
+                    <p:column headerText="Aprobar Prestamo">
+                        <p:button value="Aprobar "></p:button>
+                        <p:button value="Rechazar"></p:button>
+                    </p:column> 
+
+
+
+                </p:dataTable>
             </div>
-            
-            <p:button value="Aprobar"></p:button>
-            <p:button value="Rechazar"></p:button>
-                       
-  
+
+
+
+
         </div>
 
 
