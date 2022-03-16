@@ -11,30 +11,100 @@
     </h:head>
     <h:body>
 
-        
-        
-        <!-- Va a necesitar 5 botones y un lugar donde mostar la info de la 
-        bases de datos, asi como algunos campos donde se muestren las cosas
-        de cada uno de los activos, ya tengo una idea basandome en lo de 
-        progra 3-->
+
+
+        <!-- Necesita dos varas para meter la info de cuales perfiles tiene y cuales telefonos-->
 
         <div class="container">
 
-            <div class="">
+            <div class="Botones">
 
-                <h1>Bienvenido</h1>
+                <p:button value="Nuevo"></p:button>
+                <p:button value="Guardar"></p:button>
+                <p:button value="Buscar"></p:button>
+                <p:button value="Editar"></p:button>  
+
             </div>
 
 
+            <div class="Info Del Usuario">
 
-            <nav class="nav">
 
-                <a href="#">	</a>
-                <a href="#">	Reporte de solicitudes  para PTA de activos</a>
-                <a href="#">	Mantenimiento de Funcionarios  </a>
-                <a href="#">	Solicitud de Funcionarios Nuevos</a>
-                <a href="#">	Volver</a>
-            </nav>
+                <h1>Mantenimiento de Funcionarios </h1>
+                <br></br><br></br>       
+                <div class="Contenedor-inputs">
+                 
+                    
+                    <h:outputText class="textos"  value="Identificacion: "></h:outputText>
+                    <p:inputText value=""></p:inputText>
+                    <br></br><br></br>
+
+                    <h:outputText value="Nombre: "></h:outputText>
+                    <p:inputText value=""></p:inputText>
+                    <h:outputText class="textos"  value="Primer Apellido: "></h:outputText>
+                    <p:inputText value=""></p:inputText>
+                    <h:outputText class="textos"  value="Segundo Apellido: "></h:outputText>
+                    <p:inputText value=""></p:inputText>
+                    <br></br><br></br>
+
+                    <h:outputText value="Fecha de Nacimiento: "></h:outputText>
+                    <p:calendar showOn="button"/>
+                    <br></br><br></br>
+
+                    <h:outputText value="Dirección: "></h:outputText>
+                    <p:inputTextarea></p:inputTextarea>
+                    <br></br><br></br>
+
+                    <h:outputText value="Teléfono: "></h:outputText>
+                    <p:inputNumber></p:inputNumber>
+                    <br></br><br></br>
+
+                    <h:outputText value="Correo electrónico: "></h:outputText>
+                    <p:inputText value=""></p:inputText>
+                    <br></br><br></br>
+
+
+
+
+
+                    <h:outputText value="Sede:   "></h:outputText>
+                    <p:selectOneMenu value="">
+
+                        <f:selectItem itemLabel="Ejemplo de sede 1" itemValue="Funcionario"/>
+                        <f:selectItem itemLabel="Ejemplo de sede 2" itemValue="Administrativo"/>
+                        <f:selectItem itemLabel="Ejemplo de sede 3" itemValue="Tecnico"/>
+
+                    </p:selectOneMenu>
+                    <br></br><br></br><br></br>
+
+
+           <h:outputText value="Provincia:   "></h:outputText>
+                    <p:selectOneMenu>
+                        <f:selectItem itemLabel="Provincia" itemValue=""/>
+                        <f:selectItem itemLabel="Heredia" itemValue="Heredia"/>
+                        <f:selectItem itemLabel="Alajuela" itemValue="Alajuela"/>
+                        <f:selectItem itemLabel="Guancaste" itemValue="Guanacaste"/>
+                    </p:selectOneMenu>
+                    <br></br><br></br>  
+                    
+                      <h:outputText value="Canton:   "></h:outputText>
+                    <p:selectOneMenu>
+                        <f:selectItem itemLabel="Provincia" itemValue=""/>
+                        <f:selectItem itemLabel="Heredia" itemValue="Heredia"/>
+                        <f:selectItem itemLabel="Alajuela" itemValue="Alajuela"/>
+                        <f:selectItem itemLabel="Guancaste" itemValue="Guanacaste"/>
+                    </p:selectOneMenu>
+                    <br></br><br></br>  
+
+                    <p:button class="btn" value="Aceptar"></p:button>
+                    <p:button class="btn" value="Salir" ></p:button>
+                    <p:button class="btn" value="Ayuda" ></p:button>
+
+
+                    
+                </div>
+
+            </div>
 
         </div>
 

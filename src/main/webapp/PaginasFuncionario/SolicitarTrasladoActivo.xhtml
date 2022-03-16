@@ -11,28 +11,47 @@
     </h:head>
     <h:body>
 
-<!-- Creo que solamente se va a necesitar el ID y dos combos con uno con la sede
-donde esta y uno con la sede a la que va -->
-<!-- Y tal vez se le puede pedir que ingrese la fecha para el traslado-->
+        <!-- Aqui supongo que podemos solamente pedir el ID del activo y hacer
+        la solicitud -->
+
+        <!-- Si exacto y yo pienso que tambien se le puede incluir cajas de texto y text area para desplegar algo de 
+        informacion del activo cuando se ingresa el ID, y un boton para buscar la info del activo
+        En el Bean estan los valores que tal vez se pueden desplegar-->
 
         <div class="container">
+            <h1>Solicitar traslado de Activos</h1>
 
-            <div class="Bienvenida Usuario">
+            <h:outputText class="textos"  value="Id del Activo: "></h:outputText>
+            <p:inputText value=""></p:inputText>
+            <br></br><br></br>
+            <h:outputText class="textos"  value="Informacion del activo: "></h:outputText>
+            <br></br>
+            <p:inputTextarea>  </p:inputTextarea>
+            <br></br><br></br>
 
-                <h1>Bienvenido</h1>
-            </div>
+            <h:outputText value="Sede Origen:   "></h:outputText>
+            <p:selectOneMenu value="">
+
+                <f:selectItem itemLabel="Ejemplo de sede 1" itemValue="Funcionario"/>
+                <f:selectItem itemLabel="Ejemplo de sede 2" itemValue="Administrativo"/>
+                <f:selectItem itemLabel="Ejemplo de sede 3" itemValue="Tecnico"/>
+
+            </p:selectOneMenu>
 
 
+            <h:outputText value="Sede Destino :   "></h:outputText>
+            <p:selectOneMenu value="">
 
-            <nav class="nav">
+                <f:selectItem itemLabel="Ejemplo de sede 1" itemValue="Funcionario"/>
+                <f:selectItem itemLabel="Ejemplo de sede 2" itemValue="Administrativo"/>
+                <f:selectItem itemLabel="Ejemplo de sede 3" itemValue="Tecnico"/>
 
-                <a href="#">	Reporte activos PTA</a>
-                <a href="#">	Reporte de solicitudes  para PTA de activos</a>
-                <a href="#">	Mantenimiento de Funcionarios  </a>
-                <a href="#">	Solicitud de Funcionarios Nuevos</a>
-                <a href="#">	Volver</a>
-            </nav>
+            </p:selectOneMenu>
+            <br></br><br></br>
 
+
+            <p:button value="Solicitar traslado" ></p:button>
+            <p:button value="Cancelar" ></p:button>
         </div>
 
 
