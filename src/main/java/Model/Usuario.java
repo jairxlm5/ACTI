@@ -5,6 +5,7 @@
  */
 package Model;
 
+import Enum.Perfil;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -17,25 +18,30 @@ public class Usuario {
     private String identificacion;
     private String nombre, apellido1, apellido2;
     private Date fechaNacimiento;
-    private Object provincia;
-    private Object canton;
+    private Provincia provincia;
+    private Canton canton;
+    private Distrito distrito;
+    private Barrio barrio;
     private String otrasDirecciones;
     private String correo;
     private Sede sede;
-    private LinkedList<Object> perfiles;
-    private LinkedList<Object> telefonos;
+    private LinkedList<Perfil> perfiles;
+    private LinkedList<Telefono> telefonos;
     private int codSeguridad;
     private byte[] clave;
 
-    public Usuario(String identificacion, String nombre, String apellido2, String apellido3, Date fechaNacimiento, Object provincia,
-            Object canton, String otrasDirecciones, String correo, Sede sede, LinkedList<Object> perfiles, LinkedList<Object> telefonos) {
+    public Usuario(String identificacion, String nombre, String apellido1, String apellido2, Date fechaNacimiento, Provincia provincia, 
+                    Canton canton, Distrito distrito, Barrio barrio, String otrasDirecciones, String correo, Sede sede, 
+                    LinkedList<Perfil> perfiles, LinkedList<Telefono> telefonos) {
         this.identificacion = identificacion;
         this.nombre = nombre;
-        this.apellido1 = apellido2;
-        this.apellido2 = apellido3;
+        this.apellido1 = apellido1;
+        this.apellido2 = apellido2;
         this.fechaNacimiento = fechaNacimiento;
         this.provincia = provincia;
         this.canton = canton;
+        this.distrito = distrito;
+        this.barrio = barrio;
         this.otrasDirecciones = otrasDirecciones;
         this.correo = correo;
         this.sede = sede;
@@ -87,19 +93,19 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Object getProvincia() {
+    public Provincia getProvincia() {
         return provincia;
     }
 
-    public void setProvincia(Object provincia) {
+    public void setProvincia(Provincia provincia) {
         this.provincia = provincia;
     }
 
-    public Object getCanton() {
+    public Canton getCanton() {
         return canton;
     }
 
-    public void setCanton(Object canton) {
+    public void setCanton(Canton canton) {
         this.canton = canton;
     }
 
@@ -127,19 +133,19 @@ public class Usuario {
         this.sede = sede;
     }
 
-    public LinkedList<Object> getPerfiles() {
+    public LinkedList<Perfil> getPerfiles() {
         return perfiles;
     }
 
-    public void setPerfiles(LinkedList<Object> perfiles) {
+    public void setPerfiles(LinkedList<Perfil> perfiles) {
         this.perfiles = perfiles;
     }
 
-    public LinkedList<Object> getTelefonos() {
+    public LinkedList<Telefono> getTelefonos() {
         return telefonos;
     }
 
-    public void setTelefonos(LinkedList<Object> telefonos) {
+    public void setTelefonos(LinkedList<Telefono> telefonos) {
         this.telefonos = telefonos;
     }
 
