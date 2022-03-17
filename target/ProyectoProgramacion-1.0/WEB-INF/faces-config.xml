@@ -53,4 +53,9 @@
         <managed-bean-class>Controller.SolicitudPrestamoBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>SolicitudTrasladoBean</managed-bean-name>
+        <managed-bean-class>Controller.SolicitudTrasladoBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>

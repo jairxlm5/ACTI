@@ -17,7 +17,7 @@ import java.util.Date;
 public class SolicitudTrasladoBean {
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String idActivo;
-    private String sedeOrigen;
+    private String nombreSedeOrigen;
     private Date fechaTraslado;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Sede sedeDestino;
@@ -76,12 +76,12 @@ public class SolicitudTrasladoBean {
         this.idActivo = idActivo;
     }
 
-    public String getSedeOrigen() {
-        return sedeOrigen;
+    public String getNombreSedeOrigen() {
+        return nombreSedeOrigen;
     }
 
-    public void setSedeOrigen(String sedeOrigen) {
-        this.sedeOrigen = sedeOrigen;
+    public void setNombreSedeOrigen(String nombreSedeOrigen) {
+        this.nombreSedeOrigen = nombreSedeOrigen;
     }
 
     public Sede getSedeDestino() {

@@ -5,8 +5,14 @@
  */
 package Controller;
 
+import Enum.Perfil;
 import Enum.TipoIdentificacion;
+import Model.Barrio;
+import Model.Canton;
+import Model.Distrito;
+import Model.Provincia;
 import Model.Sede;
+import Model.Telefono;
 import Model.Usuario;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +23,6 @@ import java.util.LinkedList;
  * @author danielp
  */
 public class AutoregistroBean {
-    //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private TipoIdentificacion tipoIdSeleccionado;
     private String identificacion;
@@ -27,15 +32,20 @@ public class AutoregistroBean {
     private int edad;
     private String otrasDirecciones;
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
-    private LinkedList<Object> telefonos;
-    private LinkedList<Object> perfiles;
+    private LinkedList<Telefono> telefonos;
+    private LinkedList<Perfil> perfiles;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
-    private ArrayList<Object> provincias;
-    private ArrayList<Object> cantones;
+    private ArrayList<Provincia> provincias;
+    private ArrayList<Canton> cantones;
+    private ArrayList<Distrito> distritos;
+    private ArrayList<Barrio> barrios;
     private ArrayList<Sede> sedes;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
-    private Object provincia, canton;
+    private Provincia provinciaSeleccionada;
+    private Canton cantonSeleccionado;
+    private Distrito distritoSeleccionado;
+    private Barrio barrioSeleccionado;
     private Sede sede;
     //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
@@ -46,12 +56,18 @@ public class AutoregistroBean {
         this.sedes = new ArrayList<>();
         this.provincias = new ArrayList<>();
         this.cantones = new ArrayList<>();
+        this.distritos = new ArrayList<>();
+        this.barrios = new ArrayList<>();
     }
     
     public void cleanData(){
         this.identificacion = this.nombre = this.apellido1 = this.apellido2 = this.otrasDirecciones = this.correo = this.validationMessage = "";
         this.fechaNacimiento = null;
         this.edad = 0;
+        this.provinciaSeleccionada = null;
+        this.cantonSeleccionado = null;
+        this.distritoSeleccionado = null;
+        this.barrioSeleccionado = null;
         this.telefonos.clear();
         this.perfiles.clear();
     }
@@ -75,10 +91,6 @@ public class AutoregistroBean {
             this.validationMessage = "Indique su Fecha de Nacimiento";
             return;
         }
-        if(this.otrasDirecciones.trim().length() == 0){
-            this.validationMessage = "Indique su Dirección";
-            return;
-        }
         if(this.correo.trim().length() == 0){
             this.validationMessage = "Ingrese su Correo Electrónico";
             return;
@@ -92,8 +104,9 @@ public class AutoregistroBean {
             return;
         }
         //Se tiene que crear el nuevo usuario
-        Usuario newUser = new Usuario(identificacion, nombre, apellido2, apellido1, fechaNacimiento, provincia, canton, 
-                otrasDirecciones, correo, sede, perfiles, telefonos);
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada, 
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, 
+                perfiles, telefonos);
         
         //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
         
@@ -163,11 +176,11 @@ public class AutoregistroBean {
         this.otrasDirecciones = otrasDirecciones;
     }
 
-    public LinkedList<Object> getTelefonos() {
+    public LinkedList<Telefono> getTelefonos() {
         return telefonos;
     }
 
-    public void setTelefonos(LinkedList<Object> telefonos) {
+    public void setTelefonos(LinkedList<Telefono> telefonos) {
         this.telefonos = telefonos;
     }
 
@@ -187,11 +200,11 @@ public class AutoregistroBean {
         this.sedes = sedes;
     }
     
-    public LinkedList<Object> getPerfiles() {
+    public LinkedList<Perfil> getPerfiles() {
         return perfiles;
     }
 
-    public void setPerfiles(LinkedList<Object> perfiles) {
+    public void setPerfiles(LinkedList<Perfil> perfiles) {
         this.perfiles = perfiles;
     }
     
@@ -219,36 +232,68 @@ public class AutoregistroBean {
         this.sede = sede;
     }
 
-    public ArrayList<Object> getProvincias() {
+    public ArrayList<Provincia> getProvincias() {
         return provincias;
     }
 
-    public void setProvincias(ArrayList<Object> provincias) {
+    public void setProvincias(ArrayList<Provincia> provincias) {
         this.provincias = provincias;
     }
 
-    public ArrayList<Object> getCantones() {
+    public ArrayList<Canton> getCantones() {
         return cantones;
     }
 
-    public void setCantones(ArrayList<Object> cantones) {
+    public void setCantones(ArrayList<Canton> cantones) {
         this.cantones = cantones;
     }
 
-    public Object getProvincia() {
-        return provincia;
+    public ArrayList<Distrito> getDistritos() {
+        return distritos;
     }
 
-    public void setProvincia(Object provincia) {
-        this.provincia = provincia;
+    public void setDistritos(ArrayList<Distrito> distritos) {
+        this.distritos = distritos;
     }
 
-    public Object getCanton() {
-        return canton;
+    public ArrayList<Barrio> getBarrios() {
+        return barrios;
     }
 
-    public void setCanton(Object canton) {
-        this.canton = canton;
+    public void setBarrios(ArrayList<Barrio> barrios) {
+        this.barrios = barrios;
+    }
+
+    public Provincia getProvinciaSeleccionada() {
+        return provinciaSeleccionada;
+    }
+
+    public void setProvinciaSeleccionada(Provincia provincia) {
+        this.provinciaSeleccionada = provincia;
+    }
+
+    public Canton getCantonSeleccionado() {
+        return cantonSeleccionado;
+    }
+
+    public void setCantonSeleccionado(Canton canton) {
+        this.cantonSeleccionado = canton;
+    }
+
+    public Distrito getDistritoSeleccionado() {
+        return distritoSeleccionado;
+    }
+
+    public void setDistritoSeleccionado(Distrito distritoSeleccionado) {
+        this.distritoSeleccionado = distritoSeleccionado;
+    }
+
+    public Barrio getBarrioSeleccionado() {
+        return barrioSeleccionado;
+    }
+
+    public void setBarrioSeleccionado(Barrio barrioSeleccionado) {
+        this.barrioSeleccionado = barrioSeleccionado;
     }
     
     
