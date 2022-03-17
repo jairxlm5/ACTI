@@ -6,12 +6,15 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <title>Menu-Admin</title>
+        <title>Solicitud-Funcionarios-Nuevos</title>
         <link rel="stylesheet" href="CSS/styleMenu.css"></link>
     </h:head>
     <h:body>
+            <form>
+            
+   
 
-        <!-- Traer de la DB y dos botones-->
+        <!--Mae seria como que los funcionarios aprobados ya no aparezcan en el data Table-->
 
 
         <div class="container">
@@ -20,17 +23,54 @@
 
 
             <div class="VarasDeLaDB">
+                
+<p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+            <p:column headerText="Identificacion">
+                <h:outputText value="Ejemplo" />
+            </p:column>
 
+            <p:column headerText="Nombre">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Apellido 1">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Apellido 2">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+                         
+              <p:column headerText="Fecha de Nacimiento">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+                         
+                         
+              <p:column headerText="Direccion">
+                <h:outputText value="Ejemplo" />
+            </p:column>      
+    
+     <p:column headerText="Correo">
+                <h:outputText value="Ejemplo" />
+            </p:column>   
+                            <p:column headerText="Aprobacion">
+                            <p:button value="Aceptar"></p:button>
+                            <p:button value="Rechazar"></p:button>
+            </p:column> 
+                         
+                         
+                         
+        </p:dataTable>
+            
+                 <p:button class="btn" value="Regresar" ></p:button>
+            <p:button class="btn" value="Ayuda" ></p:button>
             </div>
-
-            <p:button value="Aprobar"></p:button>
-            <p:button value="Rechazar"></p:button>
 
         </div>
 
 
 
-
+  </form>
     </h:body>
 </html>
 

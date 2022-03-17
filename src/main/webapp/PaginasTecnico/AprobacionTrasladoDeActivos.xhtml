@@ -6,27 +6,63 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <title>Menu-Admin</title>
+        <title>Aprovacion-Traslado-Activos</title>
         <link rel="stylesheet" href="CSS/styleMenu.css"></link>
     </h:head>
     <h:body>
+            <form>
+            
+       
 
 <!-- Para el traslado del activo ocupara un combo que diga en que sede esta 
 segun su ID y otro para poner a que sede va -->
 
   <div class="container">
 
-            <h1>Aprobacion de traslado de activos </h1>
-            
-            <div class="BaseDeDATOS">
-                <br></br><br></br><br></br><br></br><br></br>
-            </div>
-            
-            <p:button value="Aprobar"></p:button>
-            <p:button value="Rechazar"></p:button>
-                       
+           <div class="BaseDeDATOS">
+                <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+                    <p:column headerText="ID">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Valor">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                    <p:column headerText="Sede Actual">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                     <p:column headerText="Sede Solicitada">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>
+
+                      <p:column headerText="Solicitante">
+                        <h:outputText value="Ejemplo" />
+                    </p:column>    
+                    
+                    <p:column headerText="Aprobar Traslado">
+                        <p:button value="Aprobar "></p:button>
+                        <p:button value="Rechazar"></p:button>
+                    </p:column> 
+
+
+
+                </p:dataTable>  
+                <p:button class="btn" value="Regresar" ></p:button>
+            <p:button class="btn" value="Ayuda" ></p:button>
   
         </div>
+            </div>
+  </form>
     </h:body>
 </html>
 

@@ -10,17 +10,57 @@
         <link rel="stylesheet" href="CSS/styleMenu.css"></link>
     </h:head>
     <h:body>
+            <form>
+            
 
-        <!-- Falta agregar donde se veran los datos -->
+
+        <!-- Mi bro, no se que informacion vamos anecesitar desplegar aqui  -->
 
 
         <div class="container">
             <h1> Reporte de solicitud de Activos </h1>
+            
+                    <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+            <p:column headerText="ID">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Nombre">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Descripcion">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+
+            <p:column headerText="Valor">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+                         
+              <p:column headerText="Sede">
+                <h:outputText value="Ejemplo" />
+            </p:column>
+                         
+                         
+              <p:column headerText="Fecha de Adquisicion">
+                <h:outputText value="Ejemplo" />
+            </p:column>      
+                         
+                            <p:column headerText="Funcionario">
+                <h:outputText value="Ejemplo" />
+            </p:column> 
+                         
+                         
+                         
+        </p:dataTable>
+            <br></br><br></br><br></br>
+             <p:button class="btn" value="Regresar" ></p:button>
+            <p:button class="btn" value="Ayuda" ></p:button>
         </div>
 
 
 
-
+  </form>
     </h:body>
 </html>
 
