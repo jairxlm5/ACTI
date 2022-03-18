@@ -58,4 +58,29 @@
         <managed-bean-class>Controller.SolicitudTrasladoBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>AprobacionPrestamoBean</managed-bean-name>
+        <managed-bean-class>Controller.AprobacionPrestamoBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>AprobacionTrasladoBean</managed-bean-name>
+        <managed-bean-class>Controller.AprobacionTrasladoBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>CheckActivosAsignados</managed-bean-name>
+        <managed-bean-class>Controller.CheckActivosAsignados</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ReporteActivosPTA</managed-bean-name>
+        <managed-bean-class>Controller.ReporteActivosPTA</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ReporteSolicitudActivos</managed-bean-name>
+        <managed-bean-class>Controller.ReporteSolicitudActivos</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>
