@@ -26,24 +26,34 @@ public class LoginBean {
         
     }
     
+    
+    /*Mae estoy creando este metodo para bretear los Beans*/
+    public Perfil[] getPerfiles(){
+        return Perfil.values();
+    }
+    
+    
     public String processLoginData(){
+        
+   
         this.validationMessage = "";
         if(this.username.trim().length() == 0){
             this.validationMessage = "Ingrese su numero de identificacion";
             return "";
         }
+      
         if(this.password.trim().length() == 0){
             this.validationMessage = "Ingrese su clave";
             return "";
         }
         //Llamado a metodos que validan con la base de datos la informacion indicada por el usuario iniciando sesion
-        Usuario user = getUserFromDB(); //Este metodo se trae el usuario de la base de datos
+      //  Usuario user = getUserFromDB(); //Este metodo se trae el usuario de la base de datos
         /*passwordCorrect();
         userHasProfile();
         */
         
         //Se tiene que guardar la info de la sesion
-        
+  
         //Dependiendo del tipo de perfil se abren las paginas respectivas
         switch(perfilSeleccionado){
             case Administrativo:
@@ -55,7 +65,8 @@ public class LoginBean {
                 //Se tiene que validar si la cuenta ya esta habilitada
                 return "MenuTecnico.xhtml";
             default:
-                return "Debe indicar el perfil con que desea entrar";
+                this.validationMessage = "Debe indicar el perfil con que desea entrar";
+                return "login.xhtml";
         }
         
     }

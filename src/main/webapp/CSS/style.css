@@ -62,5 +62,9 @@ body{
     cursor: pointer;
     margin: 12px 0;
 }
+
+p{
+    color: white;
+}
     
 ::placeholder { color: whitesmoke; }

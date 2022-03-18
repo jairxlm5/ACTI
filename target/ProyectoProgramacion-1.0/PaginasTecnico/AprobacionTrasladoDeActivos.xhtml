@@ -7,7 +7,7 @@
 
     <h:head>
         <title>Aprovacion-Traslado-Activos</title>
-        <link rel="stylesheet" href="CSS/styleMenu.css"></link>
+         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
             <form>
@@ -19,34 +19,42 @@ segun su ID y otro para poner a que sede va -->
 
   <div class="container">
 
+        <h1>Aprobacion de Traslado de activos </h1>
            <div class="BaseDeDATOS">
                 <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
                     <p:column headerText="ID">
                         <h:outputText value="Ejemplo" />
+                  
                     </p:column>
 
                     <p:column headerText="Nombre">
                         <h:outputText value="Ejemplo" />
+                     
                     </p:column>
 
                     <p:column headerText="Descripcion">
                         <h:outputText value="Ejemplo" />
+                     
                     </p:column>
 
                     <p:column headerText="Valor">
                         <h:outputText value="Ejemplo" />
+                    
                     </p:column>
 
                     <p:column headerText="Sede Actual">
                         <h:outputText value="Ejemplo" />
+                       
                     </p:column>
 
                      <p:column headerText="Sede Solicitada">
                         <h:outputText value="Ejemplo" />
+                     
                     </p:column>
 
                       <p:column headerText="Solicitante">
                         <h:outputText value="Ejemplo" />
+                        
                     </p:column>    
                     
                     <p:column headerText="Aprobar Traslado">
@@ -57,7 +65,7 @@ segun su ID y otro para poner a que sede va -->
 
 
                 </p:dataTable>  
-                <p:button class="btn" value="Regresar" ></p:button>
+            <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
             <p:button class="btn" value="Ayuda" ></p:button>
   
         </div>

@@ -16,33 +16,32 @@
             
             <div class="Contenedor-inputs">
                 <i class="fas fa-user"></i>
-                <p:inputText placeholder="Username" style="color: white"></p:inputText>
+                <p:inputText value="#{LoginBean.username}" placeholder="Username" style="color: white"></p:inputText>
                 
             </div>
 
             <div class="Contenedor-inputs">
                 <i class="fas fa-lock"></i>
-                <p:password placeholder="Contraseña"> </p:password>
+                <p:password value="#{LoginBean.password}" placeholder="Contraseña"></p:password>
                 
             </div>
 
                <div class="Contenedor-inputs">
              
-                
-               
-                <p:selectOneMenu>
-                    <f:selectItem itemLabel="Tipo de Perfil" itemValue=""/>
-                    <f:selectItem itemLabel="Funcionario" itemValue="Funcionario"/>
-                    <f:selectItem itemLabel="Administrativo" itemValue="Administrativo"/>
-                    <f:selectItem itemLabel="Técnico" itemValue="Tecnico"/>
+            
+                   
+                   <p:selectOneMenu value="#{LoginBean.perfilSeleccionado}">
+                       <f:selectItems value="#{LoginBean.getPerfiles()}" />
+                    
                 </p:selectOneMenu>
                 
             </div>
             
             
-            <h:commandButton value="Aceptar" class="btn"></h:commandButton>
+            <h:commandButton action="#{LoginBean.processLoginData()}" value="Aceptar" class="btn"></h:commandButton>
          
-          
+            <p:button class="btn" value="Prueba" href="#{LoginBean.processLoginData()}" ></p:button>
+              <p value="#{LoginBean.validationMessage}"></p>
         </div>
 
 
