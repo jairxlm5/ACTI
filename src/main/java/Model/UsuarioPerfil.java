@@ -17,6 +17,7 @@ public class UsuarioPerfil {
     private Perfil tipoPerfil;
     private Date fechaSolicitud;
     private Date fechaAprobacion;
+    private int numSolicitud;
     private boolean aprobado;
 
     public UsuarioPerfil(Usuario idUsuario, Perfil tipoPerfil, Date fechaSolicitud, Date fechaAprobacion, boolean aprobacion) {
@@ -63,12 +64,33 @@ public class UsuarioPerfil {
         this.fechaAprobacion = fechaAprobacion;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getNumSolicitud() {
+        return numSolicitud;
+    }
+
+    public void setNumSolicitud(int numSolicitud) {
+        this.numSolicitud = numSolicitud;
+    }
+
     public boolean isAprobado() {
         return aprobado;
     }
 
     public void setAprobado(boolean aprobado) {
         this.aprobado = aprobado;
+    }
+    
+    @Override
+    public String toString(){
+        return usuario.getIdentificacion() + " " + tipoPerfil.toString();
     }
     
 }

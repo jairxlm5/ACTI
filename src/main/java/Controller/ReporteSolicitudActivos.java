@@ -30,6 +30,7 @@ public class ReporteSolicitudActivos {
     private String tipoSolicitud;
 
     public ReporteSolicitudActivos() {
+        this.tipoSolicitud = "";
         fillData();
     }
     

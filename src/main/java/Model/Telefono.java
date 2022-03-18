@@ -50,5 +50,8 @@ public class Telefono {
         this.tipo = tipo;
     }
     
-    
+    @Override
+    public String toString(){
+        return numero;
+    }
 }

@@ -165,5 +165,13 @@ public class Usuario {
         this.clave = clave;
     }
     
+    public String toString(){
+        StringBuilder mainInfo = new StringBuilder();
+        mainInfo.append(this.identificacion).append("  ");
+        mainInfo.append(this.nombre).append(" ");
+        mainInfo.append(this.apellido1).append(" ");
+        mainInfo.append(this.apellido2).append(" ");
+        return mainInfo.toString();
+    }
     
 }

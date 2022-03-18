@@ -91,5 +91,8 @@ public class Activo {
         this.funcionario = funcionario;
     }
     
-    
+    @Override
+    public String toString(){
+        return nombre;
+    }
 }

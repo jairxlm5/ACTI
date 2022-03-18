@@ -48,5 +48,8 @@ public class Barrio {
         this.distrito = distrito;
     }
     
-    
+    @Override
+    public String toString(){
+        return nombre;
+    }
 }

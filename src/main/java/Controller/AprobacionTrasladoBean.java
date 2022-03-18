@@ -32,6 +32,7 @@ public class AprobacionTrasladoBean {
 
     public AprobacionTrasladoBean() {
         this.solicitudesDeTraslado = new ArrayList<>();
+        this.validationMessage = "";
     }
     
     /**

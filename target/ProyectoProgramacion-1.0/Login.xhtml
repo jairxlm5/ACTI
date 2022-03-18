@@ -22,7 +22,7 @@
 
             <div class="Contenedor-inputs">
                 <i class="fas fa-lock"></i>
-                <p:password value="#{LoginBean.password}" placeholder="Contraseña"></p:password>
+                <p:password value="#{LoginBean.password}" placeholder="Contraseña" style="color: white"></p:password>
                 
             </div>
 
@@ -37,10 +37,10 @@
                 
             </div>
             
-            
-            <h:commandButton action="#{LoginBean.processLoginData()}" value="Aceptar" class="btn"></h:commandButton>
+            <!<!-- Bro este boton no se porque no esta ejecutando el metodo, ya le hice debug y no se 
+            por que no lo esta ejecutando-->
+            <h:commandButton value="Aceptar" action="#{LoginBean.processLoginData()}" class="btn"></h:commandButton>
          
-            <p:button class="btn" value="Prueba" href="#{LoginBean.processLoginData()}" ></p:button>
               <p value="#{LoginBean.validationMessage}"></p>
         </div>
 

@@ -30,6 +30,7 @@ public class AprobacionPrestamoBean {
 
     public AprobacionPrestamoBean() {
         this.solicitudesDePrestamo = new ArrayList<>();
+        this.validationMessage = "";
     }
     
     /**

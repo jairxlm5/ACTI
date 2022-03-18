@@ -58,6 +58,13 @@ public class AutoregistroBean {
         this.cantones = new ArrayList<>();
         this.distritos = new ArrayList<>();
         this.barrios = new ArrayList<>();
+        this.identificacion = "";
+        this.nombre = "";
+        this.apellido1 = "";
+        this.apellido2 = "";
+        this.correo = "";
+        this.otrasDirecciones = "";
+        this.validationMessage = "";
     }
     
     public void cleanData(){

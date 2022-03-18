@@ -52,6 +52,13 @@ public class MantenimientoFuncionariosBean {
     public MantenimientoFuncionariosBean() {
         this.perfiles = new LinkedList<>();
         this.telefonos = new LinkedList<>();
+        this.identificacion = "";
+        this.nombre = "";
+        this.apellido1 = "";
+        this.apellido2 = "";
+        this.correo = "";
+        this.otrasDirecciones = "";
+        this.validationMessage = "";
         this.fillComboLists();
     }
     

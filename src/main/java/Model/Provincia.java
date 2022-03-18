@@ -49,5 +49,8 @@ public class Provincia {
         this.cantones = cantones;
     }
     
-    
+    @Override
+    public String toString(){
+        return nombre;
+    }
 }
