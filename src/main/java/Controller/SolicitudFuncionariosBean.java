@@ -35,6 +35,13 @@ public class SolicitudFuncionariosBean {
     }
     
     /**
+     * Para rechazar una solicitud de cuenta
+     */
+    public void rejectRequest(){
+        
+    }
+    
+    /**
      * Trae todos los usuarios que no tienen su cuenta habilitada
      * @return ArrayList<Usuario>
      */
