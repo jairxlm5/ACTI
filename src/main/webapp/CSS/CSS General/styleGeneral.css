@@ -1,0 +1,120 @@
+
+/* Generales*/
+
+body{
+    background: #006666;
+    text-align: center;
+}
+
+h1{
+    color: whitesmoke;
+    text-align: center;
+}
+
+td,
+th{
+     color: #f28482;
+}
+
+td{
+    padding: 1rem 1rem !important;
+    text-align: left !important;
+}
+
+.textosMargen{
+    margin-left: 10px !important;
+}
+
+/* Esta es la clase que tienen asignados los botones con primefaces */
+.ui-button{
+    color: #f28482 !important;
+    border: none;
+    text-shadow: none;
+
+    color:white;
+    background: whitesmoke !important;
+}
+   
+
+/* Asi es como se puede sobre Escribir CSS de los botones impuesto por primeFaces */
+
+.ui-button.ui-widget.ui-state-default.ui-button-text-only.ui-corner-right{
+margin-left:30px !important;
+margin-top: 30px  !important;
+}
+.ui-button.ui-widget.ui-state-default.ui-button-text-only{
+margin-left:30px !important;
+margin-top: 30px  !important;
+}
+
+
+/* Estilos para Mantenimiento Funcionario */
+
+.container{
+    background-color: #006666 !important;
+    color: whitesmoke  !important;
+}
+
+.botonMante{
+    margin-bottom: 30px !important;
+}
+
+.containerInfoUsuario{
+    margin-top: 30px;
+}
+
+
+/* Estilos para Solicitar prestamo Activo */
+
+.container-SPA{
+    width: 700px;
+    text-align: justify; 
+    margin-left: 400px;
+    background-color: whitesmoke;
+    margin-bottom: 50px;
+    border-radius: 20px;
+    padding: 100px;
+    color: #f28482;
+    padding-top: 50px;
+}
+
+.container-SPA h1{
+    color: #cc3300
+}
+
+/* Estilos para Solicitar Traslado Activo */
+
+.container-STA{
+    width: 700px;
+    text-align: justify; 
+    margin-left: 400px;
+    background-color: whitesmoke;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    padding: 100px;
+    color: #f28482;
+    padding-top: 50px;
+}
+
+.container-STA h1{
+    color: #cc3300
+}
+
+
+/* Estilos para Registro de Activos */
+
+.container-RA{
+    width: 700px;
+    text-align: justify; 
+    margin-left: 400px;
+    background-color: whitesmoke;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    padding: 70px;
+    color: #f28482;
+    padding-top: 20px;
+}
+
+.container-RA h1{
+    color: #cc3300
+}
