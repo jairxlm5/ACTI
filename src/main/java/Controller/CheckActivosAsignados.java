@@ -36,7 +36,7 @@ public class CheckActivosAsignados {
     private ArrayList<Activo> activosAsignados;
     //Estos son los datos a desplegar en las columnas de la tabla
     private String idActivo;
-    private String nombre;
+    private String nombreActivo;
     private String descripcion;
     private double valor;
     private Date fechaAdquisicion;
@@ -49,6 +49,13 @@ public class CheckActivosAsignados {
 
     public CheckActivosAsignados() {
         this.activosAsignados = new ArrayList<>();
+        this.idUsuario = "";
+        this.nombreUsuario = "";
+        this.codigoSede = "";
+        this.nombreSede = "";
+        this.nombreActivo = "";
+        this.descripcion = "";
+        this.validationMessage = "";
         this.mapOpciones = new HashMap<>();
         this.mapOpciones.put("Sede", 1);
         this.mapOpciones.put("Funcionario", 2);
@@ -159,12 +166,12 @@ public class CheckActivosAsignados {
         this.idActivo = idActivo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombreActivo() {
+        return nombreActivo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombreActivo(String nombreActivo) {
+        this.nombreActivo = nombreActivo;
     }
 
     public String getDescripcion() {

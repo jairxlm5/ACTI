@@ -15,12 +15,12 @@ import Model.Usuario;
 public class LoginBean {
     //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
     //Estos son los atributos para relacionarlos con campos de texto en el bean
-    private String username;
-    private String password;
+    private String username="";
+    private String password="";
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Perfil perfilSeleccionado;
     //Mensaje para desplegar info de validaciones
-    private String validationMessage;
+    private String validationMessage="";
     
     public LoginBean(){
         
@@ -34,8 +34,6 @@ public class LoginBean {
     
     
     public String processLoginData(){
-        
-   
         this.validationMessage = "";
         if(this.username.trim().length() == 0){
             this.validationMessage = "Ingrese su numero de identificacion";
@@ -66,9 +64,14 @@ public class LoginBean {
                 return "MenuTecnico.xhtml";
             default:
                 this.validationMessage = "Debe indicar el perfil con que desea entrar";
-                return "login.xhtml";
+                return "Login.xhtml";
         }
         
+    }
+    
+    public void clearData(){
+        this.username = this.password = this.validationMessage = "";
+        this.perfilSeleccionado = Perfil.PERFIL;
     }
     
     public Usuario getUserFromDB(){

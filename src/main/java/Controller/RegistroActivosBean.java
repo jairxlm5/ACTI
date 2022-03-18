@@ -32,6 +32,10 @@ public class RegistroActivosBean {
 
     public RegistroActivosBean() {
         this.sedes = new ArrayList<>();
+        this.idActivo = "";
+        this.nombre = "";
+        this.descripcion = "";
+        this.validationMessage = "";
     }
 
     /**

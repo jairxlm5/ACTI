@@ -28,6 +28,9 @@ public class SolicitudTrasladoBean {
     private String validationMessage;
     
     public SolicitudTrasladoBean(){
+        this.idActivo = "";
+        this.nombreSedeOrigen = "";
+        this.validationMessage = "";
         fillLists();
     }
     

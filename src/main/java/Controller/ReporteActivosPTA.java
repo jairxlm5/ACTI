@@ -36,6 +36,8 @@ public class ReporteActivosPTA {
     private String validationMessage;
     
     public ReporteActivosPTA(){
+        this.motivo = "";
+        this.validationMessage = "";
         llenaData();
     }
     

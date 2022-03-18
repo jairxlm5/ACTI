@@ -10,6 +10,7 @@ package Enum;
  * @author danielp
  */
 public enum Perfil {
+    PERFIL, //Este es con puros fines ilustrativos a la hora de desplegar la info en los combos
     Administrativo,
     Funcionario,
     Tecnico{

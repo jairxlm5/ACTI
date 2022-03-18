@@ -60,5 +60,8 @@ public class Canton {
         this.distritos = distritos;
     }
     
-    
+    @Override
+    public String toString(){
+        return nombre;
+    }
 }

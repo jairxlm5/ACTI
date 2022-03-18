@@ -23,6 +23,7 @@ public class SolicitudFuncionariosBean {
 
     public SolicitudFuncionariosBean() {
         this.getDisabledUsers();
+        this.validationMessage = "";
     }
     
     /**

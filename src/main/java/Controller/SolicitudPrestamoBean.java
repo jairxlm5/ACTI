@@ -24,6 +24,14 @@ public class SolicitudPrestamoBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
+    public SolicitudPrestamoBean() {
+        this.idActivo = "";
+        this.nombre = "";
+        this.descripcion = "";
+        this.nombreSede = "";
+        this.validationMessage = "";
+    }
+
     /**
      * Trae la informacion del activo elegido
      * @return Activo
