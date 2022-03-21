@@ -18,6 +18,12 @@ import java.util.Date;
  * @author danielp
  */
 public class ReporteActivosPTA {
+    
+    //Bro para trabajar los beans en este primer entregable lo que hice fue hacer un array de activos 
+    //Luego decidimos como bretearlo 
+    private ArrayList<Activo> activos;
+    
+    
     //ArrayLists con la info para desplegar en las tablas
     private ArrayList<Prestamo> prestamos;
     private ArrayList<Traslado> traslados;
@@ -44,6 +50,7 @@ public class ReporteActivosPTA {
     public void llenaData(){
         this.prestamos = new ArrayList<>();
         this.traslados = new ArrayList<>();
+        this.activos = new ArrayList<>();
         //Cada metodo se encarga de consultar la DB y llenar su ArrayList respectivo
         getPrestamos();
         getTraslados();
@@ -151,6 +158,14 @@ public class ReporteActivosPTA {
 
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
+    }
+
+    public ArrayList<Activo> getActivos() {
+        return activos;
+    }
+
+    public void setActivos(ArrayList<Activo> activos) {
+        this.activos = activos;
     }
     
     

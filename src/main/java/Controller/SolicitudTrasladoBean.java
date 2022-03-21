@@ -15,6 +15,7 @@ import java.util.Date;
  * @author danielp
  */
 public class SolicitudTrasladoBean {
+
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String idActivo;
     private String nombreSedeOrigen;
@@ -26,51 +27,66 @@ public class SolicitudTrasladoBean {
     private ArrayList<Sede> sedes;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
-    
-    public SolicitudTrasladoBean(){
+    private String infoActivo = "";
+
+    public SolicitudTrasladoBean() {
         this.idActivo = "";
         this.nombreSedeOrigen = "";
         this.validationMessage = "";
         fillLists();
     }
-    
+
     /**
      * rae la informacion del activo elegido
+     *
      * @return Activo
      */
-    public Activo getActivoFromDB(){
+    public Activo getActivoFromDB() {
         return null;
     }
-    
+
+    /**
+     * Este lo que hace es llenar la info sobre el activo, lo ocupaba para poder
+     * manejarlo en el xhtml mejor 
+     */
+    public void llenaInfoActivo() {
+       
+    }
+
     /**
      * Llama a los metodos que procesan la solicitud
      */
-    public void processRequest(){
+    public void processRequest() {
         this.validationMessage = "";
         //Validaciones de datos de entrada
-        if(this.idActivo.trim().length() == 0){
+        if (this.idActivo.trim().length() == 0) {
             this.validationMessage = "Ingrese el codigo del activo";
             return;
         }
-        if(this.fechaTraslado == null){
+        if (this.fechaTraslado == null) {
             this.validationMessage = "Por favor ingrese la fecha en que desea hacer el traslado";
             return;
         }
-        
+
         Activo activoElegido = getActivoFromDB();
-        if(activoElegido != null){
+        if (activoElegido != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
-        } 
-        else{
+        } else {
             this.validationMessage = "El activo no exite o no esta registrado en el sistema";
         }
     }
-    
-    public void fillLists(){
+
+    public void fillLists() {
         this.sedes = new ArrayList<>();
         //Se llena la lista con las sedes guardadas en la DB
     }
 
+    
+    public void cancelar(){
+          this.idActivo = "";
+        this.nombreSedeOrigen = "";
+        this.validationMessage = "";
+    }
     public String getIdActivo() {
         return idActivo;
     }
@@ -118,5 +134,13 @@ public class SolicitudTrasladoBean {
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
     }
-    
+
+    public String getInfoActivo() {
+        return infoActivo;
+    }
+
+    public void setInfoActivo(String infoActivo) {
+        this.infoActivo = infoActivo;
+    }
+
 }

@@ -26,20 +26,20 @@
             <div class="container-SPA">
                 <h1>Solicitar prestamo de Activos</h1>
             <h:outputText class="textos"  value="Id del Activo: "></h:outputText>
-            <p:inputText value=""></p:inputText>
+            <p:inputText value="#{SolicitudPrestamoBean.idActivo}"></p:inputText>
             <p:button value="Buscar Activo" ></p:button>
             <br></br><br></br>
             <h:outputText class="textos"  value="Informacion del activo: "></h:outputText>
             <br></br>
-            <p:inputTextarea>  </p:inputTextarea>
+            <p:inputTextarea value="#{SolicitudPrestamoBean.descripcion}">  </p:inputTextarea>
             <br></br><br></br>
                  <h:outputText value="Fecha de Retorno: "></h:outputText>
-                    <p:calendar showOn="button"/>
+                 <p:calendar value="#{SolicitudPrestamoBean.fechaRetorno}" showOn="button"/>
                     <br></br><br></br>
                     
                     
                     <p:button value="Solicitar prestamo" ></p:button>
-                    <p:button value="Cancelar" ></p:button>
+                    <p:button value="Cancelar" onclick="#{SolicitudPrestamoBean.cancelar()}"></p:button>
         </div>
 </div>
             <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml" ></p:button>

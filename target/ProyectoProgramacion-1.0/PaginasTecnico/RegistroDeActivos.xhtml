@@ -26,40 +26,40 @@
             <h1>Registro de Activos</h1>
 
             <h:outputText class="textos"  value="ID Activo:"></h:outputText>
-            <p:inputText value=""></p:inputText>
+            <p:inputText value="#{RegistroActivosBean.idActivo}"></p:inputText>
              <br></br><br></br>
 
             <h:outputText class="textos"  value="Nombre   : "></h:outputText>
-            <p:inputText value=""></p:inputText>
+            <p:inputText value="#{RegistroActivosBean.nombre}"></p:inputText>
               <br></br><br></br>
 
             <h:outputText class="textos"  value="Descripcion: "></h:outputText>
-            <p:inputTextarea value=""></p:inputTextarea>
+            <p:inputTextarea value="#{RegistroActivosBean.descripcion}"></p:inputTextarea>
             <br></br> <br></br>
 
             <h:outputText class="textos"  value="Valor: "></h:outputText>
-            <p:inputText value=""></p:inputText>
+            <p:inputText value="#{RegistroActivosBean.valor}"></p:inputText>
             <h:outputText class="textos"  value="₡"></h:outputText>
               <br></br><br></br>
 
         <h:outputText value="Sede:   "></h:outputText>
-        <p:selectOneMenu value="">
-
-            <f:selectItem itemLabel="Ejemplo de sede 1" itemValue="Funcionario"/>
-            <f:selectItem itemLabel="Ejemplo de sede 2" itemValue="Administrativo"/>
-            <f:selectItem itemLabel="Ejemplo de sede 3" itemValue="Tecnico"/>
+        <p:selectOneMenu value="#{RegistroActivosBean.sedeSeleccionada}">
+            <f:selectItems value="#{RegistroActivosBean.sedes}"></f:selectItems>
+       
+  
 
         </p:selectOneMenu>
         <br></br><br></br>
 
         <h:outputText value="Fecha de Adquisicion: "></h:outputText>
-        <p:calendar showOn="button"/>
+        <p:calendar value="#{RegistroActivosBean.fecha}" showOn="button"/>
        <br></br><br></br>
 
 
         <h:outputText value="Funcionario:   "></h:outputText>
-        <p:inputText></p:inputText>
+        <p:inputText value="#{RegistroActivosBean.funcionarioFromDB}"></p:inputText>
          <br></br><br></br>
+         
              <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
             <p:button class="btn" value="Ayuda" ></p:button>
   </div>

@@ -27,29 +27,34 @@ y tambien por Sede-->
                 
                 <div class="VaraDeLaBaseDeDatos">
                     
-            <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+                    
+                    
+                    
+                    <!-- Mandar lo de opcion seleccionada esta dificil bro -->
+                    
+                    <p:dataTable var="activo" value="${CheckActivosAsignados.activosAsignados}">
             <p:column headerText="ID">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.idActivo}" />
             </p:column>
 
             <p:column headerText="Nombre">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.nombre}" />
             </p:column>
 
             <p:column headerText="Descripcion">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.descripcion}"/>
             </p:column>
 
             <p:column headerText="Valor">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.valor}" />
             </p:column>
                          
               <p:column headerText="Sede">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{activo.sede}" />
             </p:column>
 
               <p:column headerText="Fecha de Adquisicion">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{activo.fechaAdquisicion}" />
             </p:column>      
                          
         </p:dataTable>

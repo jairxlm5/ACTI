@@ -37,7 +37,7 @@ public class AprobacionPrestamoBean {
      * Metodo que llama a los metodos que aprueban un prestamo de activo
      */
     public void apruebaPrestamo(){
-        
+         
     }
     
     /**

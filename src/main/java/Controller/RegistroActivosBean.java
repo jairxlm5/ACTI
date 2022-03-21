@@ -8,8 +8,11 @@ package Controller;
 import Model.Activo;
 import Model.Funcionario;
 import Model.Sede;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -30,6 +33,13 @@ public class RegistroActivosBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
 
+       //Logica necesaria para las fechas
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Calendar myCalendar = new GregorianCalendar();
+    private Date fecha = myCalendar.getTime();
+    
+    
+    
     public RegistroActivosBean() {
         this.sedes = new ArrayList<>();
         this.idActivo = "";
@@ -156,6 +166,14 @@ public class RegistroActivosBean {
 
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
 }
