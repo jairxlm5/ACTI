@@ -13,46 +13,44 @@
 
         <h:form>
             <div class="Contenedor-AutoR">
+                       <br></br><br></br>       
                 <h1>Formulario</h1>
                 <br></br><br></br>       
                 <div class="Contenedor-inputs">
                     <h:outputText value="Tipo de Identificacion:   "></h:outputText>
-                    <p:selectOneMenu value="">
-            
-                            <f:selectItem itemLabel="Tipo de Identificacion 1" itemValue="Funcionario"/>
-                        <f:selectItem itemLabel="Tipo de Identificacion 2" itemValue="Administrativo"/>
-                        <f:selectItem itemLabel="Tipo de Identificacion 3" itemValue="Tecnico"/>
+                    <p:selectOneMenu value="#{AutoregistroBean.tipoIdSeleccionado}">
+                        <f:selectItems value="#{AutoregistroBean.getTipoIdentificacion()}"></f:selectItems>
 
                     </p:selectOneMenu>           
                     <h:outputText class="textos"  value="Identificacion: "></h:outputText>
 
-                    <p:inputText value=""></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.identificacion}"></p:inputText>
                     <br></br><br></br>
 
                     <h:outputText value="Nombre: "></h:outputText>
-                    <p:inputText value=""></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.nombre}"></p:inputText>
                     <h:outputText class="textos"  value="Primer Apellido: "></h:outputText>
-                    <p:inputText value=""></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.apellido1}"></p:inputText>
                     <h:outputText class="textos"  value="Segundo Apellido: "></h:outputText>
-                    <p:inputText value=""></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.apellido2}"></p:inputText>
                     <br></br><br></br>
 
                     <h:outputText value="Fecha de Nacimiento: "></h:outputText>
-                    <p:calendar showOn="button"/>
+                    <p:calendar value="#{AutoregistroBean.fechaNacimiento}" showOn="button"/>
                     <h:outputText class="textos"  value="Edad: "></h:outputText>
-                    <p:inputText value=""></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.edad}"></p:inputText>
                     <br></br><br></br>
 
                     <h:outputText value="Dirección: "></h:outputText>
-                    <p:inputTextarea></p:inputTextarea>
+                    <p:inputTextarea value="#{AutoregistroBean.direccionCompleta}"></p:inputTextarea>
                     <br></br><br></br>
 
                     <h:outputText value="Teléfono: "></h:outputText>
-                    <p:inputNumber></p:inputNumber>
+                    <p:inputText value="#{AutoregistroBean.telefonos}"></p:inputText>
                     <br></br><br></br>
 
                     <h:outputText value="Correo electrónico: "></h:outputText>
-                    <p:inputText value=""></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.correo}"></p:inputText>
                     <br></br><br></br>
 
 
@@ -60,31 +58,31 @@
 
 
                     <h:outputText value="Sede:   "></h:outputText>
-                    <p:selectOneMenu value="">
-
-                        <f:selectItem itemLabel="Ejemplo de sede 1" itemValue="Funcionario"/>
-                        <f:selectItem itemLabel="Ejemplo de sede 2" itemValue="Administrativo"/>
-                        <f:selectItem itemLabel="Ejemplo de sede 3" itemValue="Tecnico"/>
-
+                    <p:selectOneMenu value="#{AutoregistroBean.sede}">
+                        <f:selectItems value="#{AutoregistroBean.sedes}"></f:selectItems>
                     </p:selectOneMenu>
                     <br></br><br></br><br></br>
 
 
 
-                    <p:selectOneMenu>
-                        <f:selectItem itemLabel="Tipo de Perfil" itemValue=""/>
-                        <f:selectItem itemLabel="Funcionario" itemValue="Funcionario"/>
-                        <f:selectItem itemLabel="Administrativo" itemValue="Administrativo"/>
-                        <f:selectItem itemLabel="Técnico" itemValue="Tecnico"/>
+                 
+                        <p:selectOneMenu value="#{AutoregistroBean.perfilSeleccionado}">
+                            <f:selectItems value="#{AutoregistroBean.getPerfiles()}" />
+                       
                     </p:selectOneMenu>
                     <br></br><br></br>  
                     
-                    <p:button class="btn" value="Aceptar"></p:button>
-                    <p:button class="btn" value="Cancelar" ></p:button>
-                    
+                    <p:button class="botones" value="Aceptar"></p:button>
+                         <br></br>
+                          <br></br>
+                    <p:button class="botones" value="Cancelar" ></p:button>
+                         <br></br>
+                          <br></br>
+                         <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>
                 
                 </div>
             </div>
+      
         </h:form>
 
 
