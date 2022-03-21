@@ -39,12 +39,16 @@
             
             <!-- Bro este boton no se porque no esta ejecutando el metodo, ya le hice debug y no se 
             por que no lo esta ejecutando-->
-            <h:commandButton value="Aceptar" action="#{LoginBean.processLoginData()}" class="btn"></h:commandButton>
-         
+            
+            <p:button value="Acepar" onclick="{LoginBean.processLoginData()}" class="btn"></p:button>
+            
               <p value="#{LoginBean.validationMessage}"></p>
+              
+              
         </div>
 
-
+        <p:button value="¿No tienes cuenta?  ¡Registrate!" href="Autoregistro.xhtml" class="btn"></p:button>
+            
     </h:body>
 </html>
 

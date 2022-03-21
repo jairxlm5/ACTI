@@ -14,8 +14,11 @@ import Model.Provincia;
 import Model.Sede;
 import Model.Telefono;
 import Model.Usuario;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 /**
@@ -28,7 +31,8 @@ public class AutoregistroBean {
     private String identificacion;
     private String nombre, apellido1, apellido2;
     private String correo;
-    private Date fechaNacimiento;
+    //A este direccion completa me falta hacerle un metodo que lo llene
+    private String direccionCompleta;
     private int edad;
     private String otrasDirecciones;
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
@@ -49,6 +53,12 @@ public class AutoregistroBean {
     private Sede sede;
     //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
+    private Perfil perfilSeleccionado;
+    
+               //Logica necesaria para las fechas
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Calendar myCalendar = new GregorianCalendar();
+    private Date fechaNacimiento = myCalendar.getTime();
     
     public AutoregistroBean(){
         this.telefonos = new LinkedList<>();
@@ -119,6 +129,17 @@ public class AutoregistroBean {
         
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
     }
+    
+     /*Mae estoy creando este metodo para bretear los Beans*/
+    public Perfil[] getPerfiles(){
+        return Perfil.values();
+    }
+    
+      /*Mae estoy creando este metodo para bretear los Beans*/
+    public TipoIdentificacion[] getTipoIdentificacion(){
+        return TipoIdentificacion.values();
+    }
+    
     
     /**
      * Llena los ArrayList que a su vez llenan los combos en la pagina xhtml
@@ -207,9 +228,6 @@ public class AutoregistroBean {
         this.sedes = sedes;
     }
     
-    public LinkedList<Perfil> getPerfiles() {
-        return perfiles;
-    }
 
     public void setPerfiles(LinkedList<Perfil> perfiles) {
         this.perfiles = perfiles;
@@ -301,6 +319,22 @@ public class AutoregistroBean {
 
     public void setBarrioSeleccionado(Barrio barrioSeleccionado) {
         this.barrioSeleccionado = barrioSeleccionado;
+    }
+
+    public String getDireccionCompleta() {
+        return direccionCompleta;
+    }
+
+    public void setDireccionCompleta(String direccionCompleta) {
+        this.direccionCompleta = direccionCompleta;
+    }
+
+    public Perfil getPerfilSeleccionado() {
+        return perfilSeleccionado;
+    }
+
+    public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
+        this.perfilSeleccionado = perfilSeleccionado;
     }
     
     
