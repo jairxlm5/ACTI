@@ -78,18 +78,6 @@ public class LoginBean {
         return null;
     }
     
-    public boolean passwordCorrect(byte[] passwordStored){
-        return false;
-    }
-    
-    public boolean userHasProfile(){
-        return false;
-    }
-    
-    public boolean isAccountActivated(){
-        return false;
-    }
-    
     /*
       METODOS GET Y SET
     */
