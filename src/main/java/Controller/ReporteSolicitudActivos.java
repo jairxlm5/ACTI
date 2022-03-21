@@ -20,6 +20,11 @@ public class ReporteSolicitudActivos {
     //ArrayLists con la info para desplegar en las tablas
     private ArrayList<MovimientoActivo> solicitudesAprobadas;
     private ArrayList<MovimientoActivo> solicitudesNoAprobadas;
+    
+    //Bro para trabajar los beans en este primer entregable lo que hice fue hacer un array de activos 
+    //Luego decidimos como bretearlo 
+    private ArrayList<Activo> activos;
+    
     //Informacion para las columnas de las tablas de cada activo en los ArrayList
     private Activo activo;
     private Usuario funcionarioSolicitante, tecnicoAprobante;
@@ -37,6 +42,7 @@ public class ReporteSolicitudActivos {
     public void fillData(){
         this.solicitudesAprobadas = new ArrayList<>();
         this.solicitudesNoAprobadas = new ArrayList<>();
+        this.activos = new ArrayList<>();
         //Cada metodo se encarga de consultar la DB y llenar su ArrayList respectivo
         getSolicitudesAprobadas();
         getSolicitudesNoAprobadas();
@@ -112,6 +118,14 @@ public class ReporteSolicitudActivos {
 
     public void setTipoSolicitud(String tipoSolicitud) {
         this.tipoSolicitud = tipoSolicitud;
+    }
+
+    public ArrayList<Activo> getActivos() {
+        return activos;
+    }
+
+    public void setActivos(ArrayList<Activo> activos) {
+        this.activos = activos;
     }
     
     

@@ -9,12 +9,17 @@ import Enum.Perfil;
 import Model.Barrio;
 import Model.Canton;
 import Model.Distrito;
+import Model.Funcionario;
 import Model.Provincia;
 import Model.Sede;
 import Model.Telefono;
 import Model.Usuario;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 /**
@@ -27,7 +32,6 @@ public class MantenimientoFuncionariosBean {
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String identificacion;
     private String nombre, apellido1, apellido2;
-    private Date fechaNacimiento;
     private String otrasDirecciones;
     private String correo;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
@@ -41,6 +45,11 @@ public class MantenimientoFuncionariosBean {
     private LinkedList<Telefono> telefonos;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
+  
+      private ArrayList<Funcionario> funcionarios;
+    //Bro necesitaba la tabla funcionarios para poder cargar la data
+    
+    
     private ArrayList<Provincia> provincias;
     private ArrayList<Canton> cantones;
     private ArrayList<Distrito> distritos;
@@ -49,9 +58,17 @@ public class MantenimientoFuncionariosBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
+    
+          //Logica necesaria para las fechas
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Calendar myCalendar = new GregorianCalendar();
+    private Date fechaNacimiento = myCalendar.getTime();
+    
+    
     public MantenimientoFuncionariosBean() {
         this.perfiles = new LinkedList<>();
         this.telefonos = new LinkedList<>();
+        this.funcionarios = new ArrayList();
         this.identificacion = "";
         this.nombre = "";
         this.apellido1 = "";
@@ -356,5 +373,15 @@ public class MantenimientoFuncionariosBean {
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
     }
+
+    public ArrayList<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(ArrayList<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+    
+    
     
 }

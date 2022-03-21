@@ -42,38 +42,37 @@
             </div>
 
             <!--Div con lo de la DB-->
-          <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+            <p:dataTable var="funcionario" value="#{MantenimientoFuncionariosBean.funcionarios}">
             <p:column headerText="Identificacion">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{funcionario.identificacion}" />
             </p:column>
 
             <p:column headerText="Nombre">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{funcionario.nombre}" />
             </p:column>
 
             <p:column headerText="Primer Apellido">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{funcionario.apellido1}" />
             </p:column>
 
             <p:column headerText="Segundo Apellido">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{funcionario.apellido2}" />
             </p:column>
                          
               <p:column headerText="Fecha de Nacimiento">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{funcionario.fechaNacimiento}" />
             </p:column>
                          
                          
               <p:column headerText="Telefono">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{funcionario.telefonos}" />
             </p:column>      
     
      <p:column headerText="Correo">
-                <h:outputText value="Ejemplo" />
+         <h:outputText value="#{funcionario.correo}" />
             </p:column>   
                             <p:column headerText="Usuario Actual">
-                            <p:button value="Seleccionar"></p:button>
-                           
+                            <p:button value="Seleccionar"></p:button>                       
             </p:column> 
                          
                          
@@ -85,81 +84,65 @@
             <div class="containerInfoUsuario">
 
 
-          
-
-
                 <h:outputText class="textos"  value="Identificacion: "></h:outputText>
-                <p:inputText value=""></p:inputText>
+                <p:inputText value="#{MantenimientoFuncionariosBean.identificacion}"></p:inputText>
                 <br></br><br></br>
 
                 <h:outputText  value="Nombre: "></h:outputText>
-                <p:inputText value=""></p:inputText>
+                <p:inputText value="#{MantenimientoFuncionariosBean.nombre}"></p:inputText>
                 <h:outputText class="textosMargen"  value="Primer Apellido: "></h:outputText>
-                <p:inputText value=""></p:inputText>
+                <p:inputText value="#{MantenimientoFuncionariosBean.apellido1}"></p:inputText>
                 <h:outputText class="textosMargen"   value="Segundo Apellido: "></h:outputText>
-                <p:inputText value=""></p:inputText>
+                <p:inputText value="#{MantenimientoFuncionariosBean.apellido2}"></p:inputText>
                 <br></br><br></br>
 
                 <h:outputText value="Fecha de Nacimiento: "></h:outputText>
-                <p:calendar showOn="button"/>
+                <p:calendar value="#{MantenimientoFuncionariosBean.fechaNacimiento}" showOn="button"/>
                 <br></br><br></br>
 
                 <h:outputText value="Dirección: "></h:outputText>
-                <p:inputTextarea></p:inputTextarea>
+                <p:inputTextarea value="#{MantenimientoFuncionariosBean.provinciaSeleccionada}"></p:inputTextarea>
                 <br></br><br></br>
 
                 <h:outputText value="Teléfono: "></h:outputText>
-                <p:inputNumber></p:inputNumber>
+                <p:inputText value="#{MantenimientoFuncionariosBean.telefonos}"></p:inputText>
             
 
                 <h:outputText class="textosMargen" value="Correo electrónico: "></h:outputText>
-                <p:inputText value=""></p:inputText>
+                <p:inputText value="#{MantenimientoFuncionariosBean.correo}"></p:inputText>
                 <br></br><br></br>
 
                 <h:outputText value="Sede:   "></h:outputText>
-                <p:selectOneMenu value="">
+                <p:selectOneMenu value="#{MantenimientoFuncionariosBean.sede}">
 
-                    <f:selectItem itemLabel="Ejemplo de sede 1" itemValue="Funcionario"/>
-                    <f:selectItem itemLabel="Ejemplo de sede 2" itemValue="Administrativo"/>
-                    <f:selectItem itemLabel="Ejemplo de sede 3" itemValue="Tecnico"/>
+                    <f:selectItems value="#{MantenimientoFuncionariosBean.sedes}"></f:selectItems>
 
                 </p:selectOneMenu>
                 <br></br><br></br><br></br>
 
 
                 <h:outputText value="Provincia:   "></h:outputText>
-                <p:selectOneMenu>
-                    <f:selectItem itemLabel="Provincia" itemValue=""/>
-                    <f:selectItem itemLabel="Heredia" itemValue="Heredia"/>
-                    <f:selectItem itemLabel="Alajuela" itemValue="Alajuela"/>
-                    <f:selectItem itemLabel="Guancaste" itemValue="Guanacaste"/>
+                <p:selectOneMenu value="#{MantenimientoFuncionariosBean.provinciaSeleccionada}">
+                   
+                    <f:selectItems value="#{MantenimientoFuncionariosBean.provincias}"></f:selectItems>
                 </p:selectOneMenu>
     
 
                 <h:outputText class="textosMargen" value="Canton:   "></h:outputText>
-                <p:selectOneMenu>
-                    <f:selectItem itemLabel="Canton" itemValue=""/>
-                    <f:selectItem itemLabel="Heredia" itemValue="Heredia"/>
-                    <f:selectItem itemLabel="Alajuela" itemValue="Alajuela"/>
-                    <f:selectItem itemLabel="Guancaste" itemValue="Guanacaste"/>
+                <p:selectOneMenu value="#{MantenimientoFuncionariosBean.cantonSeleccionado}">
+                    <f:selectItems value="#{MantenimientoFuncionariosBean.cantones}"></f:selectItems>
                 </p:selectOneMenu>
      
 
                 <h:outputText class="textosMargen"  value="Distrito:   "></h:outputText>
-                <p:selectOneMenu>
-                    <f:selectItem itemLabel="Distrito" itemValue=""/>
-                    <f:selectItem itemLabel="Heredia" itemValue="Heredia"/>
-                    <f:selectItem itemLabel="Alajuela" itemValue="Alajuela"/>
-                    <f:selectItem itemLabel="Guancaste" itemValue="Guanacaste"/>
+                <p:selectOneMenu value="#{MantenimientoFuncionariosBean.distritoSeleccionado}">
+                    <f:selectItems value="#{MantenimientoFuncionariosBean.distritoSeleccionado}"></f:selectItems>
                 </p:selectOneMenu>
      
 
                 <h:outputText class="textosMargen" value="Barrio:   "></h:outputText>
-                <p:selectOneMenu>
-                    <f:selectItem itemLabel="Barrio" itemValue=""/>
-                    <f:selectItem itemLabel="Heredia" itemValue="Heredia"/>
-                    <f:selectItem itemLabel="Alajuela" itemValue="Alajuela"/>
-                    <f:selectItem itemLabel="Guancaste" itemValue="Guanacaste"/>
+                <p:selectOneMenu value="#{MantenimientoFuncionariosBean.barrioSeleccionado}">
+                    <f:selectItems value="#{MantenimientoFuncionariosBean.barrios}"></f:selectItems>
                 </p:selectOneMenu>
           <br></br><br></br>
 

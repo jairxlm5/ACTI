@@ -6,7 +6,10 @@
 package Controller;
 
 import Model.Activo;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -16,14 +19,19 @@ public class SolicitudPrestamoBean {
     //Estos son los atributos para relacionarlos con campos de texto en el bean, los primeros 2 los tiene que ingresar
     //el usuario, los ultimos 3 son solo para desplegar informacion
     private String idActivo; 
-    private Date fechaRetorno;
-    
+
     private String nombre;
     private String descripcion;
     private String nombreSede;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
+    
+           //Logica necesaria para las fechas
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Calendar myCalendar = new GregorianCalendar();
+    private Date fechaRetorno = myCalendar.getTime();
+    
     public SolicitudPrestamoBean() {
         this.idActivo = "";
         this.nombre = "";
@@ -36,6 +44,15 @@ public class SolicitudPrestamoBean {
      * Trae la informacion del activo elegido
      * @return Activo
      */
+    
+    public void cancelar(){
+           this.idActivo = "";
+        this.nombre = "";
+        this.descripcion = "";
+        this.nombreSede = "";
+        this.validationMessage = "";
+
+    }
     public Activo getActivoFromDB() {
         return null;
     }
@@ -111,7 +128,6 @@ public class SolicitudPrestamoBean {
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
     }
-    
-    
+
     
 }

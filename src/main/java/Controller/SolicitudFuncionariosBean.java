@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import Model.Funcionario;
 import Model.Usuario;
 import Model.UsuarioPerfil;
 import java.util.ArrayList;
@@ -18,6 +19,11 @@ public class SolicitudFuncionariosBean {
     private Usuario selectedUser;
     //Lista con todos los usuarios registrados en el sistema
     private ArrayList<UsuarioPerfil> disabledUsers;
+    
+    //Tuve que meter este ArrayList para lo del primer avance luego podemos ver como bretearlo 
+    private ArrayList<Funcionario> funcionarios = new ArrayList<>();
+    
+    
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
@@ -78,6 +84,14 @@ public class SolicitudFuncionariosBean {
 
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
+    }
+
+    public ArrayList<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(ArrayList<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
     }
     
     

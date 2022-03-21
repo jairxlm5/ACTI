@@ -21,39 +21,39 @@ segun su ID y otro para poner a que sede va -->
 
         <h1>Aprobacion de Traslado de activos </h1>
            <div class="BaseDeDATOS">
-                <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
-                    <p:column headerText="ID">
-                        <h:outputText value="Ejemplo" />
+               <p:dataTable var="traslado" value="#{AprobacionTrasladoBean.solicitudesDeTraslado}">
+                    <p:column headerText="ID Activo">
+                        <h:outputText value="#{traslado.activo.idActivo}" />
                   
                     </p:column>
 
                     <p:column headerText="Nombre">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{traslado.activo.nombre}" />
                      
                     </p:column>
 
                     <p:column headerText="Descripcion">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{traslado.activo.descripcion}" />
                      
                     </p:column>
 
                     <p:column headerText="Valor">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{traslado.activo.valor}" />
                     
                     </p:column>
 
                     <p:column headerText="Sede Actual">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{traslado.sedeOrigen}" />
                        
                     </p:column>
 
                      <p:column headerText="Sede Solicitada">
-                        <h:outputText value="Ejemplo" />
+                         <h:outputText value="#{traslado.sedeDestino}" />
                      
                     </p:column>
 
                       <p:column headerText="Solicitante">
-                        <h:outputText value="Ejemplo" />
+                          <h:outputText value="#{traslado.funcionarioSolicitante}" />
                         
                     </p:column>    
                     

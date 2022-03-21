@@ -24,34 +24,35 @@
 
             <div class="VarasDeLaDB">
                 
-<p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
-            <p:column headerText="Identificacion">
-                <h:outputText value="Ejemplo" />
+                <p:dataTable var="funcionario" value="#{SolicitudFuncionariosBean.funcionarios}">
+         <p:column headerText="Identificacion">
+                <h:outputText value="#{funcionario.identificacion}" />
             </p:column>
 
             <p:column headerText="Nombre">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{funcionario.nombre}" />
             </p:column>
 
-            <p:column headerText="Apellido 1">
-                <h:outputText value="Ejemplo" />
+            <p:column headerText="Primer Apellido">
+                <h:outputText value="#{funcionario.apellido1}" />
             </p:column>
 
-            <p:column headerText="Apellido 2">
-                <h:outputText value="Ejemplo" />
+            <p:column headerText="Segundo Apellido">
+                <h:outputText value="#{funcionario.apellido2}" />
             </p:column>
                          
               <p:column headerText="Fecha de Nacimiento">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{funcionario.fechaNacimiento}" />
             </p:column>
                          
                          
-              <p:column headerText="Direccion">
-                <h:outputText value="Ejemplo" />
+              <p:column headerText="Telefono">
+                  <h:outputText value="#{funcionario.telefonos}" />
             </p:column>      
     
      <p:column headerText="Correo">
-                <h:outputText value="Ejemplo" />
+         <h:outputText value="#{funcionario.correo}" />
+                         
             </p:column>   
                             <p:column headerText="Aprobacion">
                             <p:button value="Aceptar"></p:button>

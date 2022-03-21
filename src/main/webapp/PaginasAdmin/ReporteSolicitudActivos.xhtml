@@ -27,39 +27,38 @@
         <div class="container">
             <h1> Reporte de solicitud de Activos </h1>
             
-                    <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
+            <p:dataTable var="activo" value="#{ReporteSolicitudActivos.activos}">
             <p:column headerText="ID">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.idActivo}" />
             </p:column>
 
             <p:column headerText="Nombre">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.nombre}" />
             </p:column>
 
             <p:column headerText="Descripcion">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.descripcion}" />
             </p:column>
 
             <p:column headerText="Valor">
-                <h:outputText value="Ejemplo" />
+                <h:outputText value="#{activo.valor}" />
             </p:column>
                          
               <p:column headerText="Sede">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{activo.sede}" />
             </p:column>
                          
                          
               <p:column headerText="Fecha de Adquisicion">
-                <h:outputText value="Ejemplo" />
+                  <h:outputText value="#{activo.fechaAdquisicion}" />
             </p:column>      
                          
                             <p:column headerText="Funcionario">
-                <h:outputText value="Ejemplo" />
-            </p:column> 
-                         
-                         
-                         
+                                <h:outputText value="#{activo.funcionario}" />
+            </p:column>     
         </p:dataTable>
+            
+            
             <br></br><br></br><br></br>
              <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
             <p:button class="btn" value="Ayuda" ></p:button>

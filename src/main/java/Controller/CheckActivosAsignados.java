@@ -67,6 +67,13 @@ public class CheckActivosAsignados {
         return getActivosAsignados(mapOpciones.get(this.opcionElegida.getLabel()));
     }
 
+    public ArrayList<Activo> getActivosAsignados() {
+        return activosAsignados;
+    }
+
+    
+    
+
     public ArrayList<Activo> getActivosAsignados(int opcionSeleccionada) {
         if (opcionSeleccionada == 1) {
             //Se hace la consulta por Sede

@@ -20,35 +20,30 @@
 
             <h1>Aprobacion de Prestamos de activos </h1>
 
-            <div class="BaseDeDATOS">
-                <p:dataTable var="product" value="AquiPonerLaDataListaDeLaDataBase">
-                    <p:column headerText="ID">
-                        <h:outputText value="Ejemplo" />
+
+            <p:dataTable var="prestamo" value="#{AprobacionPrestamoBean.solicitudesDePrestamo}">
+                    <p:column headerText="ID Activo">
+                        <h:outputText value="#{prestamo.activo.nombre}" />
                     </p:column>
 
                     <p:column headerText="Nombre">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{prestamo.activo.nombre}" />
                     </p:column>
 
-                    <p:column headerText="Descripcion">
-                        <h:outputText value="Ejemplo" />
+                    <p:column headerText="Motivo">
+                        <h:outputText value="#{prestamo.motivo}" />
                     </p:column>
 
                     <p:column headerText="Valor">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{prestamo.activo.valor}" />
                     </p:column>
-
-                    <p:column headerText="Sede">
-                        <h:outputText value="Ejemplo" />
-                    </p:column>
-
 
                     <p:column headerText="Fecha de Adquisicion">
-                        <h:outputText value="Ejemplo" />
+                        <h:outputText value="#{prestamo.activo.fechaAdquisicion}" />
                     </p:column>      
 
                       <p:column headerText="Solicitante">
-                        <h:outputText value="Ejemplo" />
+                          <h:outputText value="#{prestamo.funcionarioSolicitante}" />
                     </p:column>    
                     
                     <p:column headerText="Aprobar Prestamo">
@@ -62,7 +57,7 @@
                 
                 <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
             <p:button class="btn" value="Ayuda" ></p:button>
-            </div>
+
 
 
 
