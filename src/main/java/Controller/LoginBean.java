@@ -20,7 +20,7 @@ public class LoginBean {
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Perfil perfilSeleccionado;
     //Mensaje para desplegar info de validaciones
-    private String validationMessage="";
+    private String validationMessage;
     
     public LoginBean(){
         
