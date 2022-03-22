@@ -13,15 +13,15 @@ import java.util.Date;
  * @author danielp
  */
 public class UsuarioPerfil {
-    private Usuario usuario;
+    private String usuarioID;
     private Perfil tipoPerfil;
     private Date fechaSolicitud;
     private Date fechaAprobacion;
     private int numSolicitud;
     private boolean aprobado;
 
-    public UsuarioPerfil(Usuario idUsuario, Perfil tipoPerfil, Date fechaSolicitud, Date fechaAprobacion, boolean aprobacion) {
-        this.usuario = idUsuario;
+    public UsuarioPerfil(String idUsuario, Perfil tipoPerfil, Date fechaSolicitud, Date fechaAprobacion, boolean aprobacion) {
+        this.usuarioID = idUsuario;
         this.tipoPerfil = tipoPerfil;
         this.fechaSolicitud = fechaSolicitud;
         this.fechaAprobacion = fechaAprobacion;
@@ -32,12 +32,12 @@ public class UsuarioPerfil {
         
     }
 
-    public Usuario getIdUsuario() {
-        return usuario;
+    public String getIdUsuario() {
+        return usuarioID;
     }
 
-    public void setIdUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(String usuario) {
+        this.usuarioID = usuario;
     }
 
     public Perfil getTipoPerfil() {
@@ -64,14 +64,6 @@ public class UsuarioPerfil {
         this.fechaAprobacion = fechaAprobacion;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     public int getNumSolicitud() {
         return numSolicitud;
     }
@@ -90,7 +82,7 @@ public class UsuarioPerfil {
     
     @Override
     public String toString(){
-        return usuario.getIdentificacion() + " " + tipoPerfil.toString();
+        return usuarioID + " " + tipoPerfil.toString();
     }
     
 }

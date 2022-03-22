@@ -6,6 +6,7 @@
 package Model;
 
 import Enum.Perfil;
+import Enum.TipoIdentificacion;
 import java.util.Date;
 import java.util.LinkedList;
 
@@ -16,6 +17,7 @@ import java.util.LinkedList;
 public class Usuario {
     //Toda referencia a Object se va a cambiar por el nombre de la clase respectiva cuando esta ya esten creadas
     private String identificacion;
+    private TipoIdentificacion tipoID;
     private String nombre, apellido1, apellido2;
     private Date fechaNacimiento;
     private Provincia provincia;
@@ -25,14 +27,14 @@ public class Usuario {
     private String otrasDirecciones;
     private String correo;
     private Sede sede;
-    private LinkedList<Perfil> perfiles;
+    private LinkedList<UsuarioPerfil> perfiles;
     private LinkedList<Telefono> telefonos;
     private int codSeguridad;
     private byte[] clave;
 
     public Usuario(String identificacion, String nombre, String apellido1, String apellido2, Date fechaNacimiento, Provincia provincia, 
                     Canton canton, Distrito distrito, Barrio barrio, String otrasDirecciones, String correo, Sede sede, 
-                    LinkedList<Perfil> perfiles, LinkedList<Telefono> telefonos) {
+                    LinkedList<UsuarioPerfil> perfiles, LinkedList<Telefono> telefonos) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -133,11 +135,11 @@ public class Usuario {
         this.sede = sede;
     }
 
-    public LinkedList<Perfil> getPerfiles() {
+    public LinkedList<UsuarioPerfil> getPerfiles() {
         return perfiles;
     }
 
-    public void setPerfiles(LinkedList<Perfil> perfiles) {
+    public void setPerfiles(LinkedList<UsuarioPerfil> perfiles) {
         this.perfiles = perfiles;
     }
 
@@ -164,6 +166,32 @@ public class Usuario {
     public void setClave(byte[] clave) {
         this.clave = clave;
     }
+
+    public Distrito getDistrito() {
+        return distrito;
+    }
+
+    public void setDistrito(Distrito distrito) {
+        this.distrito = distrito;
+    }
+
+    public Barrio getBarrio() {
+        return barrio;
+    }
+
+    public void setBarrio(Barrio barrio) {
+        this.barrio = barrio;
+    }
+
+    public TipoIdentificacion getTipoID() {
+        return tipoID;
+    }
+
+    public void setTipoID(TipoIdentificacion tipoID) {
+        this.tipoID = tipoID;
+    }
+    
+    
     
     public String toString(){
         StringBuilder mainInfo = new StringBuilder();

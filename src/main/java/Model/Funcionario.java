@@ -17,7 +17,7 @@ public class Funcionario extends Usuario{
     
     public Funcionario(String identificacion, String nombre, String apellido1, String apellido2, Date fechaNacimiento, Provincia provincia, 
                     Canton canton, Distrito distrito, Barrio barrio, String otrasDirecciones, String correo, Sede sede, 
-                    LinkedList<Perfil> perfiles, LinkedList<Telefono> telefonos){
+                    LinkedList<UsuarioPerfil> perfiles, LinkedList<Telefono> telefonos){
         super(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provincia, canton, 
                 distrito, barrio, otrasDirecciones, correo, sede, perfiles, telefonos);
     }

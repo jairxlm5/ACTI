@@ -17,15 +17,14 @@ public class Distrito {
     private Canton canton;
     private ArrayList<Barrio> barrios;
 
-    public Distrito(int id, String nombre, Canton canton, ArrayList<Barrio> barrios) {
+    public Distrito(int id, String nombre, ArrayList<Barrio> barrios) {
         this.id = id;
         this.nombre = nombre;
-        this.canton = canton;
         this.barrios = barrios;
     }
     
     public Distrito(){
-        
+        this.barrios = new ArrayList<>();
     }
 
     public int getId() {

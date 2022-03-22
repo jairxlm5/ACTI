@@ -17,15 +17,14 @@ public class Canton {
     private Provincia provincia;
     private ArrayList<Distrito> distritos;
 
-    public Canton(int id, String nombre, Provincia provincia, ArrayList<Distrito> distritos) {
+    public Canton(int id, String nombre, ArrayList<Distrito> distritos) {
         this.id = id;
         this.nombre = nombre;
-        this.provincia = provincia;
         this.distritos = distritos;
     }
     
     public Canton(){
-        
+        this.distritos = new ArrayList<>();
     }
 
     public int getId() {

@@ -14,6 +14,7 @@ import Model.Provincia;
 import Model.Sede;
 import Model.Telefono;
 import Model.Usuario;
+import Model.UsuarioPerfil;
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class MantenimientoFuncionariosBean {
     private Barrio barrioSeleccionado;
     private Sede sede;
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
-    private LinkedList<Perfil> perfiles;  
+    private LinkedList<UsuarioPerfil> perfiles;  
     private LinkedList<Telefono> telefonos;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
@@ -310,11 +311,11 @@ public class MantenimientoFuncionariosBean {
         this.sede = sede;
     }
 
-    public LinkedList<Perfil> getPerfiles() {
+    public LinkedList<UsuarioPerfil> getPerfiles() {
         return perfiles;
     }
 
-    public void setPerfiles(LinkedList<Perfil> perfiles) {
+    public void setPerfiles(LinkedList<UsuarioPerfil> perfiles) {
         this.perfiles = perfiles;
     }
 
