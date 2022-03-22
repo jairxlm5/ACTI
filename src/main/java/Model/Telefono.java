@@ -13,12 +13,12 @@ import Enum.TipoTelefono;
  */
 public class Telefono {
     private String numero;
-    private Usuario usuario;
+    private String idUsuario;
     private TipoTelefono tipo;
 
-    public Telefono(String numero, Usuario usuario, TipoTelefono tipo) {
+    public Telefono(String numero, String usuario, TipoTelefono tipo) {
         this.numero = numero;
-        this.usuario = usuario;
+        this.idUsuario = usuario;
         this.tipo = tipo;
     }
     
@@ -34,12 +34,12 @@ public class Telefono {
         this.numero = numero;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public String getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public TipoTelefono getTipo() {

@@ -19,10 +19,11 @@ public class Provincia {
     public Provincia(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
+        this.cantones = new ArrayList<>();
     }
     
     public Provincia(){
-        
+        this.cantones = new ArrayList<>();
     }
 
     public int getId() {

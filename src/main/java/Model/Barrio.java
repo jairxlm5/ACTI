@@ -14,10 +14,9 @@ public class Barrio {
     private String nombre;
     private Distrito distrito;
 
-    public Barrio(int id, String nombre, Distrito distrito) {
+    public Barrio(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.distrito = distrito;
     }
     
     public Barrio(){

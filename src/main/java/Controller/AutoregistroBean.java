@@ -14,6 +14,7 @@ import Model.Provincia;
 import Model.Sede;
 import Model.Telefono;
 import Model.Usuario;
+import Model.UsuarioPerfil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +38,7 @@ public class AutoregistroBean {
     private String otrasDirecciones;
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
     private LinkedList<Telefono> telefonos;
-    private LinkedList<Perfil> perfiles;
+    private LinkedList<UsuarioPerfil> perfiles;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
     private ArrayList<Provincia> provincias;
@@ -229,7 +230,7 @@ public class AutoregistroBean {
     }
     
 
-    public void setPerfiles(LinkedList<Perfil> perfiles) {
+    public void setPerfiles(LinkedList<UsuarioPerfil> perfiles) {
         this.perfiles = perfiles;
     }
     
