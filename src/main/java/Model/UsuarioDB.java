@@ -12,8 +12,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  *
@@ -24,10 +26,17 @@ public class UsuarioDB {
     private static final DataAccess dataAccess = new DataAccess();
     private UsuarioPerfilDB usuarioPerfilDB = new UsuarioPerfilDB();
     private TelefonoDB telefonoDB = new TelefonoDB();
+    private AdministrativoDB adminDB = new AdministrativoDB();
+    private FuncionarioDB funcDB = new FuncionarioDB();
+    private TecnicoDB tecDB = new TecnicoDB();
+
+    //Objeto Usuario para usar en la logica
+    private Usuario selectedUser = null;
 
     public void addNewUser(Usuario newUser) throws SNMPExceptions, SQLException {
         String sqlCommand = "";
         try {
+            //Se arma la sentencia del Insert
             StringBuilder str = new StringBuilder();
             str.append("Insert Into Usuario Values (");
             str.append("'").append(newUser.getIdentificacion()).append("' ,");
@@ -62,6 +71,8 @@ public class UsuarioDB {
                     if (newUser instanceof Tecnico) {
                         TecnicoDB tecDB = new TecnicoDB();
                         tecDB.addNewTec(newUser.getIdentificacion());
+                    } else {
+                        throw new Exception("El usuario " + newUser.getIdentificacion() + " no eligio un perfil");
                     }
                 }
             }
@@ -99,8 +110,22 @@ public class UsuarioDB {
                 LinkedList<UsuarioPerfil> perfiles = usuarioPerfilDB.getAccountsOfUser(id);
                 LinkedList<Telefono> telefonos = telefonoDB.getUserPhoneNumbers(id);
 
-                //Se crea el usuario
-                user = new Usuario();
+                //Se tiene que verificar que tipo de Usuario es para crearlo
+                if (adminDB.getAdminFromDB(id) != null) {
+                    user = new Administrativo();
+                } else {
+                    if (funcDB.getFuncFromDB(id) != null) {
+                        user = new Funcionario();
+                    } else {
+                        if (tecDB.getTecFromDB(id) != null) {
+                            user = new Tecnico();
+                        } else {
+                            throw new Exception("Error: El usuario " + id + " no tiene perfil registrado");
+                        }
+                    }
+                }
+
+                //Se asigna la data a las variables
                 user.setIdentificacion(identificacion);
                 user.setTipoID(tipoID);
                 user.setNombre(nombre);
@@ -117,9 +142,9 @@ public class UsuarioDB {
                 user.setBarrio(barrio);
                 user.setPerfiles(perfiles);
                 user.setTelefonos(telefonos);
-                
-                //Se tiene que verificar que tipo de Usuario es
-                
+
+                //Se asigna al objeto selectedUser
+                selectedUser = user;
 
             }
         } catch (SQLException e) {
@@ -130,7 +155,14 @@ public class UsuarioDB {
         return user;
     }
 
-    public static String getHashedPaswd(String password) throws Exception {
+    /**
+     * Encripta la clave con un Hash para guardarse de esa manera en la DB
+     *
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    public String getHashedPaswd(String password) throws Exception {
         //Primero obtener los bytes
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashedBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -145,6 +177,78 @@ public class UsuarioDB {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    /**
+     * Genera la clave para el primer inicio de sesion
+     *
+     * @return
+     */
+    public String generateFirstPasswd() {
+        //Lista con 10 numeros aleatorios
+        ArrayList<Integer> randNums = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            //Numeros entre 33 y 125
+            int randomNumber = random.nextInt((125 - 33) + 1) + 33;
+            randNums.add(randomNumber);
+        }
+        String autoPasswd = "";
+        for (Integer num : randNums) {
+            //Se agrega el caracter ASCII de cada numero a la clave autogenerada
+            autoPasswd += (char) (int) num;
+        }
+        return autoPasswd;
+    }
+
+    /**
+     * Genera el codigo de seguridad de 6 digitos para el usuario
+     * @return
+     */
+    public int generateSecurityCode() {
+        //Lista que contiene los 6 digitos para el codigo de seguridad
+        String securityCodeDigits = "";
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            //Numeros entre 0 y 9
+            int digit = random.nextInt((9 - 0) + 1) + 0;
+            securityCodeDigits += digit;
+        }
+        /*Hay que garantizar que se genere un numero de 6 digitos
+        Si el primer digito es 0 se debe agregar otro digito mas al final porque el 0
+        a la izquierda no se cuenta */
+        if (securityCodeDigits.charAt(0) == '0') {
+            int digit = random.nextInt((9 - 0) + 1) + 0;
+            securityCodeDigits += digit;
+        }
+        return Integer.parseInt(securityCodeDigits);
+    }
+
+    /**
+     * Verifica que la clave ingresada el iniciar sesion sea la misma que la 
+     * guardada en la base de datos
+     * @param passwordInserted
+     * @return
+     * @throws Exception 
+     */
+    public boolean isPasswordCorrect(String passwordInserted) throws Exception {
+        if (selectedUser != null) {
+            //Se obtiene el Hash de la clave ingresada en el inicio de sesion
+            passwordInserted = getHashedPaswd(passwordInserted);
+            //Se tiene que extraer el Hash de los bytes de la clave guardada en la DB
+            String passwordInDB = new String(selectedUser.getClave(), StandardCharsets.UTF_8);
+            return passwordInserted.equals(passwordInDB);
+        } else {
+            throw new Exception("Usuario no ha sido seleccionado");
+        }
+    }
+    
+    public boolean userHasProfile(){
+        return false;
+    }
+    
+    public boolean isProfileActive(){
+        return false;
     }
 
 }

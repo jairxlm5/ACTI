@@ -7,6 +7,7 @@ package Model;
 
 import DAO.DataAccess;
 import DAO.SNMPExceptions;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -29,5 +30,26 @@ public class TecnicoDB {
         catch(Exception e){
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
+    }
+    
+    public Tecnico getTecFromDB(String userID) throws SQLException, SNMPExceptions{
+        String sqlSelect = "";
+        Tecnico tecUser = null;
+        try{
+            sqlSelect = "Select ID From Tecnico Where ID Like " + userID;
+            ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
+            if(rs.next()){
+                String id = rs.getString("ID");
+                tecUser = new Tecnico();
+                tecUser.setIdentificacion(id);
+            }
+        }
+        catch(SQLException e){
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        }
+        catch(Exception e){
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
+        return tecUser;
     }
 }
