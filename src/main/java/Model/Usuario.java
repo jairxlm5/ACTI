@@ -31,6 +31,7 @@ public class Usuario {
     private LinkedList<Telefono> telefonos;
     private int codSeguridad;
     private byte[] clave;
+    private int logins;
 
     public Usuario(String identificacion, String nombre, String apellido1, String apellido2, Date fechaNacimiento, Provincia provincia, 
                     Canton canton, Distrito distrito, Barrio barrio, String otrasDirecciones, String correo, Sede sede, 
@@ -190,8 +191,14 @@ public class Usuario {
     public void setTipoID(TipoIdentificacion tipoID) {
         this.tipoID = tipoID;
     }
-    
-    
+
+    public int getLogins() {
+        return logins;
+    }
+
+    public void setLogins(int logins) {
+        this.logins = logins;
+    }
     
     public String toString(){
         StringBuilder mainInfo = new StringBuilder();

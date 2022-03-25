@@ -17,26 +17,25 @@ import java.util.ArrayList;
  * @author danielp
  */
 public class PerfilDB {
+
     private static final DataAccess dataAccess = new DataAccess();
-    
-    public ArrayList<Perfil> getAllPerfiles() throws SNMPExceptions, SQLException{
+
+    public ArrayList<Perfil> getAllPerfiles() throws SNMPExceptions, SQLException {
         ArrayList<Perfil> perfiles = new ArrayList<Perfil>();
         String sqlSelect = "";
-        try{
+        try {
             sqlSelect = "Select ID From Tipo_Perfil";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
-            while(rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt("ID");
                 //Verifica si el Enum existe
-                if(Perfil.values()[id] != null){
+                if (Perfil.values()[id] != null) {
                     perfiles.add(Perfil.values()[id]);
                 }
             }
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
         return perfiles;
