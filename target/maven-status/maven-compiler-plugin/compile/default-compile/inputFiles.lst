@@ -20,6 +20,7 @@
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/RegistroActivosBean.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/AprobacionTrasladoBean.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Model/ProvinciaDB.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Model/TipoTelefonoDB.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Model/UsuarioPerfilDB.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Model/FuncionarioDB.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/SolicitudTrasladoBean.java
@@ -31,6 +32,7 @@
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/AprobacionPrestamoBean.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Model/UsuarioDB.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/ReporteSolicitudActivos.java
+/home/danielp/NetBeansProjects/ACTI/src/main/java/Model/TipoIdentificacionDB.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Model/DistritoDB.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/DAO/DataAccess.java
 /home/danielp/NetBeansProjects/ACTI/src/main/java/Controller/CheckActivosAsignados.java

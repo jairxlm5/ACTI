@@ -7,6 +7,7 @@ package Model;
 
 import DAO.DataAccess;
 import DAO.SNMPExceptions;
+import Enum.Perfil;
 import Enum.TipoIdentificacion;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -53,7 +54,8 @@ public class UsuarioDB {
             str.append(newUser.getClave()).append(",");
             str.append(newUser.getProvincia().getId()).append(",");
             str.append(newUser.getDistrito().getId()).append(",");
-            str.append(newUser.getBarrio().getId()).append(",");
+            str.append(newUser.getBarrio().getId()).append(", ");
+            str.append(0).append(")");
 
             sqlCommand = str.toString();
             //Se ejecuta la sentencia SQL
@@ -76,6 +78,14 @@ public class UsuarioDB {
                     }
                 }
             }
+            
+            //Se guardan los distintos perfiles para el usuario
+            for (UsuarioPerfil profile : newUser.getPerfiles()) {
+                usuarioPerfilDB.saveUserProfile(profile);
+            }
+            //Se guardan los telefonos que el usuario registro 
+            
+            
         } catch (SQLException e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
         } catch (Exception e) {
@@ -102,12 +112,13 @@ public class UsuarioDB {
                 String correo = rs.getString("Correo_Electronico");
                 int codSeguridad = rs.getInt("Codigo_Seguridad");
                 byte[] clave = rs.getBytes("Clave");
+                int logins = rs.getInt("Logins");
                 //Asignacion de objetos al usuario
                 Provincia prov = ProvinciaDB.getProvinceFromDB(rs.getInt("Provincia"));
                 Canton canton = CantonDB.getCantonFromDB(rs.getInt("Canton"));
                 Distrito distrito = DistritoDB.getDistrictFromDB(rs.getInt("Distrito"));
                 Barrio barrio = BarrioDB.getBarrioFromDB(rs.getInt("Barrio"));
-                LinkedList<UsuarioPerfil> perfiles = usuarioPerfilDB.getAccountsOfUser(id);
+                LinkedList<UsuarioPerfil> perfiles = usuarioPerfilDB.getAccountsByUser(id);
                 LinkedList<Telefono> telefonos = telefonoDB.getUserPhoneNumbers(id);
 
                 //Se tiene que verificar que tipo de Usuario es para crearlo
@@ -136,6 +147,7 @@ public class UsuarioDB {
                 user.setCorreo(correo);
                 user.setCodSeguridad(codSeguridad);
                 user.setClave(clave);
+                user.setLogins(logins);
                 user.setProvincia(prov);
                 user.setCanton(canton);
                 user.setDistrito(distrito);
@@ -153,6 +165,41 @@ public class UsuarioDB {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
         return user;
+    }
+    
+    /**
+     * Actualiza la informacion del usuario en la DB, realiza el Update
+     * @param userToUpdate 
+     */
+    public void updateUser(Usuario userToUpdate) throws SQLException, SNMPExceptions{
+        String sqlCommand = "";
+        try{
+            StringBuilder str = new StringBuilder();
+            str.append("Update Usuario Set ");
+            str.append("TipoID = ").append(userToUpdate.getTipoID().ordinal()).append(", ");
+            str.append("Nombre = '").append(userToUpdate.getNombre()).append("', ");
+            str.append("Apellido1 = '").append(userToUpdate.getApellido1()).append("', ");
+            str.append("Apellido2 = '").append(userToUpdate.getApellido2()).append("', ");
+            str.append("Fecha_De_Nacimiento = ").append(userToUpdate.getFechaNacimiento()).append(",");
+            str.append("Canton = ").append(userToUpdate.getCanton().getId()).append(", ");
+            str.append("Otras_Direcciones = '").append(userToUpdate.getOtrasDirecciones()).append("', ");
+            str.append("Correo_Electronico = '").append(userToUpdate.getCorreo()).append("', ");
+            str.append("Sede = '").append(userToUpdate.getSede().getCodigo()).append("', ");
+            str.append("Codigo_Seguridad = ").append(userToUpdate.getCodSeguridad()).append(", ");
+            str.append("Clave = ").append(userToUpdate.getClave()).append(", ");
+            str.append("Provincia = ").append(userToUpdate.getProvincia().getId()).append(", ");
+            str.append("Distrito = ").append(userToUpdate.getDistrito().getId()).append(", ");
+            str.append("Barrio = ").append(userToUpdate.getBarrio().getId()).append(", ");
+            str.append("Where ID Like ").append(userToUpdate.getIdentificacion());
+            
+            sqlCommand = str.toString();
+            //Se ejecuta la instruccion SQL
+            dataAccess.executeSQLCommand(sqlCommand);
+        } catch (SQLException e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        } catch (Exception e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
     }
 
     /**
@@ -231,7 +278,7 @@ public class UsuarioDB {
      * @return
      * @throws Exception 
      */
-    public boolean isPasswordCorrect(String passwordInserted) throws Exception {
+    public boolean isLoginPasswordCorrect(String passwordInserted) throws Exception {
         if (selectedUser != null) {
             //Se obtiene el Hash de la clave ingresada en el inicio de sesion
             passwordInserted = getHashedPaswd(passwordInserted);
@@ -243,12 +290,31 @@ public class UsuarioDB {
         }
     }
     
-    public boolean userHasProfile(){
-        return false;
+    /**
+     * Verifica que el usuario tenga el tipo de perfil con el que esta deseando ingresar y lo retorna si 
+     * lo encuentra, de lo contrario retorna null
+     * @param selectedLoginProfile
+     * @return UsuarioPerfil
+     */
+    public UsuarioPerfil getUserProfile(Perfil selectedLoginProfile){
+        for(UsuarioPerfil registeredProfile : selectedUser.getPerfiles()){
+            if(registeredProfile.getTipoPerfil() == selectedLoginProfile){
+                return registeredProfile;
+            }
+        }
+        return null;
     }
     
-    public boolean isProfileActive(){
-        return false;
+    /**
+     * Lleva el registro de cada login que hace el usuario, cada vez que inicia sesion
+     * se tiene que aumentar el valor en 1 y tambien actualizar la info en la DB
+     * @throws SQLException
+     * @throws SNMPExceptions 
+     */
+    public void addNewLogin() throws SQLException, SNMPExceptions{
+        selectedUser.setLogins(selectedUser.getLogins() + 1);
+        //Se llama al update
+        updateUser(selectedUser);
     }
 
 }

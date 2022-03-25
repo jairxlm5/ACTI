@@ -5,8 +5,12 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Enum.Perfil;
+import Model.PerfilDB;
 import Model.Usuario;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,9 +31,19 @@ public class LoginBean {
     }
     
     
-    /*Mae estoy creando este metodo para bretear los Beans*/
-    public Perfil[] getPerfiles(){
-        return Perfil.values();
+    /*Bro yo modifique este metodo para probar la conexion a la base de datos
+     y si funciona */
+    public ArrayList<Perfil> getPerfiles(){
+        ArrayList<Perfil> perfiles = new ArrayList<Perfil>();
+        try{
+            PerfilDB perfilDB = new PerfilDB();
+            perfiles = perfilDB.getAllPerfiles();
+        } catch (SQLException e){
+            
+        } catch (SNMPExceptions s){
+            
+        }
+        return perfiles;
     }
     
     
