@@ -10,6 +10,7 @@ import DAO.SNMPExceptions;
 import Enum.Perfil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,6 +24,13 @@ public class UsuarioPerfilDB {
     private static final DataAccess dataAccess = new DataAccess();
     //private static UsuarioDB usuarioDB = new UsuarioDB();
 
+    /**
+     * Obtiene todos los perfiles de un usuario
+     * @param userID
+     * @return LinkedList
+     * @throws SNMPExceptions
+     * @throws SQLException 
+     */
     public LinkedList<UsuarioPerfil> getAccountsByUser(String userID) throws SNMPExceptions, SQLException {
         LinkedList<UsuarioPerfil> accountList = new LinkedList<>();
         String sqlSelect = "";
@@ -126,9 +134,13 @@ public class UsuarioPerfilDB {
      * hacer esto
      *
      * @param selectedProfile
+     * @throws SQLException
+     * @throws SNMPExceptions
+     * @throws ParseException
      */
-    public void activateAccount(UsuarioPerfil selectedProfile) throws SQLException, SNMPExceptions{
+    public void activateAccount(UsuarioPerfil selectedProfile) throws SQLException, SNMPExceptions, ParseException{
         selectedProfile.setAprobado(true);
+        selectedProfile.setFechaAprobacion(Utils.getCurrentDate());
         //Llamar al Update
         updateUserProfile(selectedProfile);
     }
@@ -137,11 +149,15 @@ public class UsuarioPerfilDB {
      * Este metodo se encarga de desactivar la cuenta de un usuario y llamar al
      * metodo que hace el update en la DB, solo el usuario Administrador puede
      * hacer esto
-     *
+     * 
      * @param selectedProfile
+     * @throws SQLException
+     * @throws SNMPExceptions
+     * @throws ParseException 
      */
-    public void deactivateAccount(UsuarioPerfil selectedProfile) throws SQLException, SNMPExceptions{
+    public void deactivateAccount(UsuarioPerfil selectedProfile) throws SQLException, SNMPExceptions, ParseException{
         selectedProfile.setAprobado(false);
+        selectedProfile.setFechaAprobacion(Utils.getCurrentDate());
         //Llamar al Update
         updateUserProfile(selectedProfile);
     }
