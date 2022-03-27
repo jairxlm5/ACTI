@@ -20,6 +20,13 @@ public class TelefonoDB {
     private static final DataAccess dataAccess = new DataAccess();
     private UsuarioDB usuarioDB = new UsuarioDB();
     
+    /**
+     * Retorna una lista con todos los telefonos registrados para un usuario
+     * @param userID
+     * @return LinkedList
+     * @throws SNMPExceptions
+     * @throws SQLException 
+     */
     public LinkedList<Telefono> getUserPhoneNumbers(String userID) throws SNMPExceptions, SQLException{
         LinkedList<Telefono> telefonos = new LinkedList<>();
         String sqlSelect = "";
@@ -45,5 +52,30 @@ public class TelefonoDB {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
         return telefonos;
+    }
+    
+    /**
+     * Guarda un telefono para un usuario en la DB
+     * @param phone
+     * @throws SQLException
+     * @throws SNMPExceptions 
+     */
+    public void savePhone(Telefono phone) throws SQLException, SNMPExceptions{
+        String sqlCommand = "";
+        try{
+            StringBuilder str = new StringBuilder();
+            str.append("Insert Into Telefono (Numero_Telefonico, Usuario, Tipo_Telefono) Values (");
+            str.append("'").append(phone.getNumero()).append("', ");
+            str.append("'").append(phone.getIdUsuario()).append("', ");
+            str.append(phone.getTipo().ordinal()).append(")");
+            
+            sqlCommand = str.toString();
+            dataAccess.executeSQLCommand(sqlCommand);
+        } catch (SQLException e){
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        }
+        catch (Exception e){
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
     }
 }

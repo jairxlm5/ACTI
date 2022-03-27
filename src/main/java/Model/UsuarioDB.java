@@ -78,14 +78,16 @@ public class UsuarioDB {
                     }
                 }
             }
-            
+
             //Se guardan los distintos perfiles para el usuario
             for (UsuarioPerfil profile : newUser.getPerfiles()) {
                 usuarioPerfilDB.saveUserProfile(profile);
             }
             //Se guardan los telefonos que el usuario registro 
-            
-            
+            for(Telefono phone : newUser.getTelefonos()){
+                telefonoDB.savePhone(phone);
+            }
+
         } catch (SQLException e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
         } catch (Exception e) {
@@ -166,14 +168,15 @@ public class UsuarioDB {
         }
         return user;
     }
-    
+
     /**
      * Actualiza la informacion del usuario en la DB, realiza el Update
-     * @param userToUpdate 
+     *
+     * @param userToUpdate
      */
-    public void updateUser(Usuario userToUpdate) throws SQLException, SNMPExceptions{
+    public void updateUser(Usuario userToUpdate) throws SQLException, SNMPExceptions {
         String sqlCommand = "";
-        try{
+        try {
             StringBuilder str = new StringBuilder();
             str.append("Update Usuario Set ");
             str.append("TipoID = ").append(userToUpdate.getTipoID().ordinal()).append(", ");
@@ -190,8 +193,9 @@ public class UsuarioDB {
             str.append("Provincia = ").append(userToUpdate.getProvincia().getId()).append(", ");
             str.append("Distrito = ").append(userToUpdate.getDistrito().getId()).append(", ");
             str.append("Barrio = ").append(userToUpdate.getBarrio().getId()).append(", ");
+            str.append("Logins = ").append(userToUpdate.getLogins()).append(", ");
             str.append("Where ID Like ").append(userToUpdate.getIdentificacion());
-            
+
             sqlCommand = str.toString();
             //Se ejecuta la instruccion SQL
             dataAccess.executeSQLCommand(sqlCommand);
@@ -200,30 +204,6 @@ public class UsuarioDB {
         } catch (Exception e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
-    }
-
-    /**
-     * Encripta la clave con un Hash para guardarse de esa manera en la DB
-     *
-     * @param password
-     * @return
-     * @throws Exception
-     */
-    public String getHashedPaswd(String password) throws Exception {
-        //Primero obtener los bytes
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hashedBytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-
-        //Luego obtener el hash en codigo hexadecimal y convertirlo a String
-        StringBuilder hexString = new StringBuilder(2 * hashedBytes.length);
-        for (int i = 0; i < hashedBytes.length; i++) {
-            String hex = Integer.toHexString(0xff & hashedBytes[i]);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
-        }
-        return hexString.toString();
     }
 
     /**
@@ -250,6 +230,7 @@ public class UsuarioDB {
 
     /**
      * Genera el codigo de seguridad de 6 digitos para el usuario
+     *
      * @return
      */
     public int generateSecurityCode() {
@@ -272,16 +253,17 @@ public class UsuarioDB {
     }
 
     /**
-     * Verifica que la clave ingresada el iniciar sesion sea la misma que la 
+     * Verifica que la clave ingresada el iniciar sesion sea la misma que la
      * guardada en la base de datos
+     *
      * @param passwordInserted
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public boolean isLoginPasswordCorrect(String passwordInserted) throws Exception {
         if (selectedUser != null) {
             //Se obtiene el Hash de la clave ingresada en el inicio de sesion
-            passwordInserted = getHashedPaswd(passwordInserted);
+            passwordInserted = Utils.getHashedPaswd(passwordInserted);
             //Se tiene que extraer el Hash de los bytes de la clave guardada en la DB
             String passwordInDB = new String(selectedUser.getClave(), StandardCharsets.UTF_8);
             return passwordInserted.equals(passwordInDB);
@@ -289,32 +271,97 @@ public class UsuarioDB {
             throw new Exception("Usuario no ha sido seleccionado");
         }
     }
-    
+
     /**
-     * Verifica que el usuario tenga el tipo de perfil con el que esta deseando ingresar y lo retorna si 
-     * lo encuentra, de lo contrario retorna null
+     * Verifica que el usuario tenga el tipo de perfil con el que esta deseando
+     * ingresar y lo retorna si lo encuentra, de lo contrario retorna null
+     *
      * @param selectedLoginProfile
      * @return UsuarioPerfil
      */
-    public UsuarioPerfil getUserProfile(Perfil selectedLoginProfile){
-        for(UsuarioPerfil registeredProfile : selectedUser.getPerfiles()){
-            if(registeredProfile.getTipoPerfil() == selectedLoginProfile){
+    public UsuarioPerfil getUserProfile(Perfil selectedLoginProfile) {
+        for (UsuarioPerfil registeredProfile : selectedUser.getPerfiles()) {
+            if (registeredProfile.getTipoPerfil() == selectedLoginProfile) {
                 return registeredProfile;
             }
         }
         return null;
     }
-    
+
     /**
-     * Lleva el registro de cada login que hace el usuario, cada vez que inicia sesion
-     * se tiene que aumentar el valor en 1 y tambien actualizar la info en la DB
+     * Lleva el registro de cada login que hace el usuario, cada vez que inicia
+     * sesion se tiene que aumentar el valor en 1 y tambien actualizar la info
+     * en la DB
+     *
      * @throws SQLException
-     * @throws SNMPExceptions 
+     * @throws SNMPExceptions
      */
-    public void addNewLogin() throws SQLException, SNMPExceptions{
+    public void addNewLogin() throws SQLException, SNMPExceptions {
         selectedUser.setLogins(selectedUser.getLogins() + 1);
         //Se llama al update
         updateUser(selectedUser);
     }
 
+    /**
+     * Verifica que cuando el usuario cambia su clave, esta cumpla con los
+     * requerimientos que el sistema pide
+     *
+     * @param password
+     * @return String
+     */
+    public String passwordPassRequirements(String password) {
+        //La clave debe tener minimo 8 caracteres
+        if (password.length() < 8) {
+            return "La contraseña debe tener minimo 8 caracteres";
+        }
+
+        //La clave debe tener un maximo de 12 caracteres
+        if (password.length() > 12) {
+            return "La contraseña debe tener maximo 12 caracteres";
+        }
+
+        int letters = 0;
+        int nums = 0;
+        int mayusculas = 0;
+        int minusculas = 0;
+
+        for (Character caracter : password.toCharArray()) {
+            //Si es un digito
+            if (Character.isDigit(caracter)) {
+                nums += 1;
+            } else {
+                //Si es una letra
+                if (Character.isLetter(caracter)) {
+                    letters += 1;
+                    if (Character.isUpperCase(caracter)) {
+                        mayusculas += 1;
+                    } else {
+                        minusculas += 1;
+                    }
+                } else {
+                    //Es un caracter especial y estos no se permiten
+                    return "La contraseña no debe tener caracteres especiales";
+                }
+            }
+
+        }
+
+        //la clave debe tener letras
+        if (letters == 0) {
+            return "La contraseña debe tener letras";
+        }
+        //La clave debe tener numeros
+        if (nums == 0) {
+            return "La contraseña debe incluir numeros";
+        }
+        //La clave debe incluir letras mayusculas y minusculas
+        if (mayusculas == 0) {
+            return "La contraseña debe incluir letras mayúsculas";
+        }
+        if (minusculas == 0){
+            return "La contraseña debe incluir letras minúsculas";
+        }
+
+        return "Passed"; //Este es el mensaje que retorna si la clave cumple con todos los requerimientos
+    }
 }
