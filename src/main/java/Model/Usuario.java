@@ -32,6 +32,8 @@ public class Usuario {
     private int codSeguridad;
     private byte[] clave;
     private int logins;
+    private Date fechaAprobacion;
+    private boolean aprobado;
 
     public Usuario(String identificacion, String nombre, String apellido1, String apellido2, Date fechaNacimiento, Provincia provincia, 
                     Canton canton, Distrito distrito, Barrio barrio, String otrasDirecciones, String correo, Sede sede, 
@@ -53,7 +55,8 @@ public class Usuario {
     }
 
     public Usuario(){
-        
+        this.perfiles = new LinkedList<>();
+        this.telefonos = new LinkedList<>();
     }
 
     public String getIdentificacion() {
@@ -198,6 +201,22 @@ public class Usuario {
 
     public void setLogins(int logins) {
         this.logins = logins;
+    }
+
+    public Date getFechaAprobacion() {
+        return fechaAprobacion;
+    }
+
+    public void setFechaAprobacion(Date fechaAprobacion) {
+        this.fechaAprobacion = fechaAprobacion;
+    }
+
+    public boolean isAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
     }
     
     public String toString(){

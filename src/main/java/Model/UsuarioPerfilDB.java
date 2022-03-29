@@ -35,25 +35,21 @@ public class UsuarioPerfilDB {
         LinkedList<UsuarioPerfil> accountList = new LinkedList<>();
         String sqlSelect = "";
         try {
-            sqlSelect = "Select Usuario, Tipo_Perfil, Fecha_Solicitud, Fecha_Aprobacion, Num_Solicitud, "
-                    + "Aprobacion From Solicitud_Usuario_Perfil Where Usuario like " + userID;
+            sqlSelect = "Select Usuario, Tipo_Perfil, Fecha_Solicitud, Num_Solicitud "
+                    + "From Solicitud_Usuario_Perfil Where Usuario like " + userID;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             while (rs.next()) {
                 String user = rs.getString("Usuario");
                 Perfil tipoPerfil = Perfil.values()[rs.getInt("Tipo_Perfil")];
                 Date fechaSolicitud = rs.getDate("Fecha_Solicitud");
-                Date fechaAprobacion = rs.getDate("Fecha_Aprobacion");
                 int numSolicitud = rs.getInt("Num_Solicitud");
-                boolean aprobado = rs.getBoolean("Aprobacion");
 
                 //Se crea el objeto
                 UsuarioPerfil userAccount = new UsuarioPerfil();
                 userAccount.setIdUsuario(user);
                 userAccount.setTipoPerfil(tipoPerfil);
                 userAccount.setFechaSolicitud(fechaSolicitud);
-                userAccount.setFechaAprobacion(fechaAprobacion);
                 userAccount.setNumSolicitud(numSolicitud);
-                userAccount.setAprobado(aprobado);
 
                 //Se agrega a la lista
                 accountList.add(userAccount);
@@ -76,12 +72,10 @@ public class UsuarioPerfilDB {
         try {
             StringBuilder str = new StringBuilder();
             str.append("Insert Into Solicitud_Usuario_Perfil "
-                    + "(Usuario, Tipo_Perfil, Fecha_Solicitud, Fecha_Aprobacion, Aprobacion) Values (");
+                    + "(Usuario, Tipo_Perfil, Fecha_Solicitud) Values (");
             str.append("'").append(profile.getIdUsuario()).append("', ");
             str.append(profile.getTipoPerfil().ordinal()).append(", ");
-            str.append(profile.getFechaSolicitud()).append(", ");
-            str.append(profile.getFechaAprobacion()).append(", ");
-            str.append(profile.isAprobado()).append(")");
+            str.append(profile.getFechaSolicitud()).append(")");
             
             sqlCommand = str.toString();
             //Se ejecuta el SQL
@@ -98,6 +92,7 @@ public class UsuarioPerfilDB {
      * Actualiza la informacion de un perfil en la DB
      * @param profileToUpdate 
      */
+    /*
     public void updateUserProfile(UsuarioPerfil profileToUpdate) throws SQLException, SNMPExceptions{
         String sqlCommand = "";
         try{
@@ -116,49 +111,5 @@ public class UsuarioPerfilDB {
         } catch (Exception e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
-    }
-
-    /**
-     * Retorna True si el perfil esta activo
-     *
-     * @param selectedLoginProfile
-     * @return
-     */
-    public boolean isProfileActive(UsuarioPerfil selectedLoginProfile) {
-        return selectedLoginProfile.isAprobado();
-    }
-
-    /**
-     * Este metodo se encarga de activar la cuenta de un usuario y llamar al
-     * metodo que hace el update en la DB, solo el usuario Administrador puede
-     * hacer esto
-     *
-     * @param selectedProfile
-     * @throws SQLException
-     * @throws SNMPExceptions
-     * @throws ParseException
-     */
-    public void activateAccount(UsuarioPerfil selectedProfile) throws SQLException, SNMPExceptions, ParseException{
-        selectedProfile.setAprobado(true);
-        selectedProfile.setFechaAprobacion(Utils.getCurrentDate());
-        //Llamar al Update
-        updateUserProfile(selectedProfile);
-    }
-
-    /**
-     * Este metodo se encarga de desactivar la cuenta de un usuario y llamar al
-     * metodo que hace el update en la DB, solo el usuario Administrador puede
-     * hacer esto
-     * 
-     * @param selectedProfile
-     * @throws SQLException
-     * @throws SNMPExceptions
-     * @throws ParseException 
-     */
-    public void deactivateAccount(UsuarioPerfil selectedProfile) throws SQLException, SNMPExceptions, ParseException{
-        selectedProfile.setAprobado(false);
-        selectedProfile.setFechaAprobacion(Utils.getCurrentDate());
-        //Llamar al Update
-        updateUserProfile(selectedProfile);
-    }
+    }*/
 }

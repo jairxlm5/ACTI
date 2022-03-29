@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -30,6 +31,7 @@ public class UsuarioDB {
     private AdministrativoDB adminDB = new AdministrativoDB();
     private FuncionarioDB funcDB = new FuncionarioDB();
     private TecnicoDB tecDB = new TecnicoDB();
+    private SedeDB sedeDB = new SedeDB();
 
     //Objeto Usuario para usar en la logica
     private Usuario selectedUser = null;
@@ -55,36 +57,38 @@ public class UsuarioDB {
             str.append(newUser.getProvincia().getId()).append(",");
             str.append(newUser.getDistrito().getId()).append(",");
             str.append(newUser.getBarrio().getId()).append(", ");
-            str.append(0).append(")");
+            str.append(0).append(", ");
+            str.append(newUser.isAprobado()).append(", ");
+            str.append(newUser.getFechaAprobacion()).append(")");
 
             sqlCommand = str.toString();
             //Se ejecuta la sentencia SQL
             dataAccess.executeSQLCommand(sqlCommand);
 
-            //Dependiendo del tipo de Usuario se inserta en su respectiva tabla
-            if (newUser instanceof Administrativo) {
-                AdministrativoDB adminDB = new AdministrativoDB();
-                adminDB.addNewAdmin(newUser.getIdentificacion());
-            } else {
-                if (newUser instanceof Funcionario) {
-                    FuncionarioDB funcDB = new FuncionarioDB();
-                    funcDB.addNewFunc(newUser.getIdentificacion());
-                } else {
-                    if (newUser instanceof Tecnico) {
-                        TecnicoDB tecDB = new TecnicoDB();
-                        tecDB.addNewTec(newUser.getIdentificacion());
-                    } else {
-                        throw new Exception("El usuario " + newUser.getIdentificacion() + " no eligio un perfil");
-                    }
-                }
-            }
-
             //Se guardan los distintos perfiles para el usuario
             for (UsuarioPerfil profile : newUser.getPerfiles()) {
+                //Se revisa el tipo de perfil, se construye el respectivo tipo y se guarda
+                switch (profile.getTipoPerfil()) {
+                    case Administrativo:
+                        AdministrativoDB adminDB = new AdministrativoDB();
+                        adminDB.addNewAdmin(newUser.getIdentificacion());
+                        activateAccount(newUser);
+                        break;
+                    case Funcionario:
+                        FuncionarioDB funcDB = new FuncionarioDB();
+                        funcDB.addNewFunc(newUser.getIdentificacion());
+                        break;
+                    case Tecnico:
+                        TecnicoDB tecDB = new TecnicoDB();
+                        tecDB.addNewTec(newUser.getIdentificacion());
+                        break;
+                    default:
+                        throw new Exception("El usuario " + newUser.getIdentificacion() + " no eligio un perfil");
+                }
                 usuarioPerfilDB.saveUserProfile(profile);
             }
             //Se guardan los telefonos que el usuario registro 
-            for(Telefono phone : newUser.getTelefonos()){
+            for (Telefono phone : newUser.getTelefonos()) {
                 telefonoDB.savePhone(phone);
             }
 
@@ -115,7 +119,10 @@ public class UsuarioDB {
                 int codSeguridad = rs.getInt("Codigo_Seguridad");
                 byte[] clave = rs.getBytes("Clave");
                 int logins = rs.getInt("Logins");
+                boolean aprobado = rs.getBoolean("Aprobacion");
+                Date fechaAprobacion = rs.getDate("Fecha_Aprobacion");
                 //Asignacion de objetos al usuario
+                Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Provincia prov = ProvinciaDB.getProvinceFromDB(rs.getInt("Provincia"));
                 Canton canton = CantonDB.getCantonFromDB(rs.getInt("Canton"));
                 Distrito distrito = DistritoDB.getDistrictFromDB(rs.getInt("Distrito"));
@@ -147,6 +154,7 @@ public class UsuarioDB {
                 user.setFechaNacimiento(fechaNacimiento);
                 user.setOtrasDirecciones(otrasDirecciones);
                 user.setCorreo(correo);
+                user.setSede(sede);
                 user.setCodSeguridad(codSeguridad);
                 user.setClave(clave);
                 user.setLogins(logins);
@@ -156,6 +164,8 @@ public class UsuarioDB {
                 user.setBarrio(barrio);
                 user.setPerfiles(perfiles);
                 user.setTelefonos(telefonos);
+                user.setAprobado(aprobado);
+                user.setFechaAprobacion(fechaAprobacion);
 
                 //Se asigna al objeto selectedUser
                 selectedUser = user;
@@ -194,6 +204,8 @@ public class UsuarioDB {
             str.append("Distrito = ").append(userToUpdate.getDistrito().getId()).append(", ");
             str.append("Barrio = ").append(userToUpdate.getBarrio().getId()).append(", ");
             str.append("Logins = ").append(userToUpdate.getLogins()).append(", ");
+            str.append("Aprobacion = ").append(userToUpdate.isAprobado()).append(", ");
+            str.append("Fecha_Aprobacion = ").append(userToUpdate.getFechaAprobacion()).append(" ");
             str.append("Where ID Like ").append(userToUpdate.getIdentificacion());
 
             sqlCommand = str.toString();
@@ -358,10 +370,86 @@ public class UsuarioDB {
         if (mayusculas == 0) {
             return "La contraseña debe incluir letras mayúsculas";
         }
-        if (minusculas == 0){
+        if (minusculas == 0) {
             return "La contraseña debe incluir letras minúsculas";
         }
 
         return "Passed"; //Este es el mensaje que retorna si la clave cumple con todos los requerimientos
+    }
+    
+    /**
+     * Retorna True si el perfil esta activo
+     *
+     * @param selectedLoginProfile
+     * @return
+     */
+    public boolean isProfileActive() {
+        return selectedUser.isAprobado();
+    }
+    
+    /**
+     * Este metodo se encarga de activar la cuenta de un usuario y llamar al
+     * metodo que hace el update en la DB, solo el usuario Administrador puede
+     * hacer esto
+     *
+     * @param userToActivate 
+     * @throws SQLException
+     * @throws SNMPExceptions
+     * @throws ParseException
+     */
+    public void activateAccount(Usuario userToActivate) throws SQLException, SNMPExceptions, ParseException{
+        userToActivate.setAprobado(true);
+        userToActivate.setFechaAprobacion(Utils.getCurrentDate());
+        //Llamar al Update
+        updateUser(userToActivate);
+    }
+    
+    /**
+     * Este metodo se encarga de desactivar la cuenta de un usuario y llamar al
+     * metodo que hace el update en la DB, solo el usuario Administrador puede
+     * hacer esto
+     * 
+     * @param user
+     * @throws SQLException
+     * @throws SNMPExceptions
+     * @throws ParseException 
+     */
+    public void deactivateAccount(Usuario user) throws SQLException, SNMPExceptions, ParseException{
+        user.setAprobado(false);
+        //Llamar al Update
+        updateUser(user);
+    }
+    
+    /**
+     * Calcula la edad del usuario en base a su fecha de nacimiento
+     * @param fechaNacimiento
+     * @return int
+     */
+    public int calculateAge(Date fechaNacimiento){
+        return 0;
+    }
+    
+    /**
+     * Obtiene una lista con todos los usuarios que no estan aprobados para iniciar sesion
+     * @return ArrayList
+     * @throws SQLException
+     * @throws SNMPExceptions 
+     */
+    public ArrayList<Usuario> getDisabledUsersFromDB() throws SQLException, SNMPExceptions{
+        ArrayList<Usuario> disabledUsers = new ArrayList<>();
+        String sqlSelect = "";
+        try{
+            sqlSelect = "Select ID From Usuario Where Aprobacion =" + false;
+            ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
+            while(rs.next()){
+                Usuario user = getUserFromDB(rs.getString("ID"));
+                disabledUsers.add(user);
+            }
+        } catch (SQLException e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        } catch (Exception e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
+        return disabledUsers;
     }
 }
