@@ -18,7 +18,7 @@ public class SolicitudFuncionariosBean {
     //Este objeto almacena el usuario seleccionado
     private Usuario selectedUser;
     //Lista con todos los usuarios registrados en el sistema
-    private ArrayList<UsuarioPerfil> disabledUsers;
+    private ArrayList<Usuario> disabledUsers;
     
     //Tuve que meter este ArrayList para lo del primer avance luego podemos ver como bretearlo 
     private ArrayList<Funcionario> funcionarios = new ArrayList<>();
@@ -52,12 +52,12 @@ public class SolicitudFuncionariosBean {
      * Trae todos los usuarios que no tienen su cuenta habilitada
      * @return ArrayList<Usuario>
      */
-    public ArrayList<UsuarioPerfil> getDisabledUsers() {
+    public ArrayList<Usuario> getDisabledUsers() {
         this.disabledUsers = new ArrayList<>();
-        ArrayList<UsuarioPerfil> allUsers = new ArrayList<>();
+        ArrayList<Usuario> allUsers = new ArrayList<>();
         //Se almacena el resultado de la consulta en la lista allUsers
         
-        for (UsuarioPerfil user : allUsers) {
+        for (Usuario user : allUsers) {
             //Si el usuario no esta aprobado se agrega a la lista
             if(!user.isAprobado()){
                 this.disabledUsers.add(user);
@@ -74,7 +74,7 @@ public class SolicitudFuncionariosBean {
         this.selectedUser = selectedUser;
     }
 
-    public void setDisabledUsers(ArrayList<UsuarioPerfil> disabledUsers) {
+    public void setDisabledUsers(ArrayList<Usuario> disabledUsers) {
         this.disabledUsers = disabledUsers;
     }
 
