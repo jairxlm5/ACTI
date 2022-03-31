@@ -10,63 +10,64 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-            <form>
-            
+        <form>
 
+            <div class="container">
+                <h1> Reporte de solicitud de Activos </h1>
 
-        <!-- Mi bro, no se que informacion vamos anecesitar desplegar aqui  -->
-        
-        <!-- Bro, yo creo que es desplegar todas las solicitudes de Activos tanto
-        traslados como prestamos y ver cuales estan aprobados y cuales no, asi lo entiendo yo
-        pero no se si eso es lo que nos estan pidiendo-->
-        
-        <!-- Podriamos usar 2 tablas, Aprobado y No Aprobado, porque creo que en el otro
-        reporte se dividen en Prestamos Traslados Asignados-->
+                <p:dataTable var="activo" value="#{ReporteSolicitudActivos.activos}"
+                             emptyMessage="No existe un activo con los filtros dados."
+                             filteredValue="#{ReporteSolicitudActivos.activosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
 
+                    <f:facet name="header">
+                        <span>Lista de Activos solicitados.</span>
+                    </f:facet>
 
-        <div class="container">
-            <h1> Reporte de solicitud de Activos </h1>
-            
-            <p:dataTable var="activo" value="#{ReporteSolicitudActivos.activos}">
-            <p:column headerText="ID">
-                <h:outputText value="#{activo.idActivo}" />
-            </p:column>
+                    <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}">
+                        <h:outputText value="#{activo.idActivo}" />
+                    </p:column>
 
-            <p:column headerText="Nombre">
-                <h:outputText value="#{activo.nombre}" />
-            </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{activo.nombre}" />
+                    </p:column>
 
-            <p:column headerText="Descripcion">
-                <h:outputText value="#{activo.descripcion}" />
-            </p:column>
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{activo.descripcion}" />
+                    </p:column>
 
-            <p:column headerText="Valor">
-                <h:outputText value="#{activo.valor}" />
-            </p:column>
-                         
-              <p:column headerText="Sede">
-                  <h:outputText value="#{activo.sede}" />
-            </p:column>
-                         
-                         
-              <p:column headerText="Fecha de Adquisicion">
-                  <h:outputText value="#{activo.fechaAdquisicion}" />
-            </p:column>      
-                         
-                            <p:column headerText="Funcionario">
-                                <h:outputText value="#{activo.funcionario}" />
-            </p:column>     
-        </p:dataTable>
-            
-            
-            <br></br><br></br><br></br>
-             <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-            <p:button class="btn" value="Ayuda" ></p:button>
-        </div>
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{activo.valor}" />
+                    </p:column>
 
+                    <p:column headerText="Sede">
+                        <h:outputText value="#{activo.sede}" />
+                    </p:column>
 
+                    <p:column headerText="Fecha de Adquisicion">
+                        <h:outputText value="#{activo.fechaAdquisicion}" />
+                    </p:column>      
 
-  </form>
+                    <p:column headerText="Funcionario">
+                        <h:outputText value="#{activo.funcionario}" />
+                    </p:column>
+
+                    <f:facet name="paginatorTopLeft">
+                        <p:commandButton type="button" icon="pi pi-refresh"/>
+                    </f:facet>
+
+                </p:dataTable>
+
+                <br></br><br></br><br></br>
+                <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
+                <p:button class="btn" value="Ayuda" ></p:button>
+            </div>
+
+        </form>
     </h:body>
 </html>
 

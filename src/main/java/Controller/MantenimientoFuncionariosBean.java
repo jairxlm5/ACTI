@@ -48,6 +48,7 @@ public class MantenimientoFuncionariosBean {
     //Solo estan para desplegar informacion
   
       private ArrayList<Funcionario> funcionarios;
+       private ArrayList<Funcionario> funcionariosFiltrados;
     //Bro necesitaba la tabla funcionarios para poder cargar la data
     
     
@@ -70,6 +71,7 @@ public class MantenimientoFuncionariosBean {
         this.perfiles = new LinkedList<>();
         this.telefonos = new LinkedList<>();
         this.funcionarios = new ArrayList();
+         this.funcionariosFiltrados = new ArrayList();
         this.identificacion = "";
         this.nombre = "";
         this.apellido1 = "";
@@ -381,6 +383,14 @@ public class MantenimientoFuncionariosBean {
 
     public void setFuncionarios(ArrayList<Funcionario> funcionarios) {
         this.funcionarios = funcionarios;
+    }
+
+    public ArrayList<Funcionario> getFuncionariosFiltrados() {
+        return funcionariosFiltrados;
+    }
+
+    public void setFuncionariosFiltrados(ArrayList<Funcionario> funcionariosFiltrados) {
+        this.funcionariosFiltrados = funcionariosFiltrados;
     }
     
     
