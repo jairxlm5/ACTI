@@ -22,6 +22,7 @@ public class ReporteActivosPTA {
     //Bro para trabajar los beans en este primer entregable lo que hice fue hacer un array de activos 
     //Luego decidimos como bretearlo 
     private ArrayList<Activo> activos;
+    private ArrayList<Activo> activosfiltrados;
     
     
     //ArrayLists con la info para desplegar en las tablas
@@ -167,6 +168,15 @@ public class ReporteActivosPTA {
     public void setActivos(ArrayList<Activo> activos) {
         this.activos = activos;
     }
+
+    public ArrayList<Activo> getActivosfiltrados() {
+        return activosfiltrados;
+    }
+
+    public void setActivosfiltrados(ArrayList<Activo> activosfiltrados) {
+        this.activosfiltrados = activosfiltrados;
+    }
+    
     
     
 }

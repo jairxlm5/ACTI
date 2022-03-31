@@ -34,6 +34,7 @@ public class CheckActivosAsignados {
     private String nombreSede; //Se llena solo, con la info que trae la consulta
     //ArrayList que se llena con la lista activos asignados al funcionario o a la sede elegida
     private ArrayList<Activo> activosAsignados;
+    private ArrayList<Activo> activosAsignadosFiltrados;
     //Estos son los datos a desplegar en las columnas de la tabla
     private String idActivo;
     private String nombreActivo;
@@ -251,6 +252,14 @@ public class CheckActivosAsignados {
 
     public void setOpcionElegida(SelectItem opcionElegida) {
         this.opcionElegida = opcionElegida;
+    }
+
+    public ArrayList<Activo> getActivosAsignadosFiltrados() {
+        return activosAsignadosFiltrados;
+    }
+
+    public void setActivosAsignadosFiltrados(ArrayList<Activo> activosAsignadosFiltrados) {
+        this.activosAsignadosFiltrados = activosAsignadosFiltrados;
     }
      
     

@@ -18,6 +18,7 @@ import java.util.Date;
 public class AprobacionPrestamoBean {
     //ArrayList que se llena con la lista de solicitudes de prestamos de activos
     private ArrayList<Prestamo> solicitudesDePrestamo;
+    private ArrayList<Prestamo> solicitudesDePrestamoFiltradas;
     //Estos son los datos a desplegar en las columnas de la tabla
     private Activo activo;
     private Usuario funcionarioSolicitante, tecnicoAprobante;
@@ -129,6 +130,14 @@ public class AprobacionPrestamoBean {
 
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
+    }
+
+    public ArrayList<Prestamo> getSolicitudesDePrestamoFiltradas() {
+        return solicitudesDePrestamoFiltradas;
+    }
+
+    public void setSolicitudesDePrestamoFiltradas(ArrayList<Prestamo> solicitudesDePrestamoFiltradas) {
+        this.solicitudesDePrestamoFiltradas = solicitudesDePrestamoFiltradas;
     }
     
 }

@@ -19,6 +19,7 @@ import java.util.Date;
 public class AprobacionTrasladoBean {
     //ArrayList que se llena con la lista de solicitudes de traslados de activos
     private ArrayList<Traslado> solicitudesDeTraslado;
+    private ArrayList<Traslado> solicitudesDeTrasladoFiltradas;
     //Estos son los datos a desplegar en las columnas de la tabla
     private Activo activo;
     private Usuario funcionarioSolicitante, tecnicoAprobante;
@@ -148,6 +149,15 @@ public class AprobacionTrasladoBean {
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
     }
+
+    public ArrayList<Traslado> getSolicitudesDeTrasladoFiltradas() {
+        return solicitudesDeTrasladoFiltradas;
+    }
+
+    public void setSolicitudesDeTrasladoFiltradas(ArrayList<Traslado> solicitudesDeTrasladoFiltradas) {
+        this.solicitudesDeTrasladoFiltradas = solicitudesDeTrasladoFiltradas;
+    }
+    
     
     
 }

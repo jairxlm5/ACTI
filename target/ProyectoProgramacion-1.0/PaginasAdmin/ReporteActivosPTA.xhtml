@@ -8,64 +8,68 @@
     <h:head>
         <title>ReporteActivosPTA</title>
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
-        
+
     </h:head>
     <h:body>
-        
-            <form>
-            
 
+        <form>
+            <h1> Reporte de Activos </h1>
 
-<!-- Donde dice ejemplo es donde va el bean -->
+            <div class="container">
 
-    <h1> Reporte de Activos </h1>
+                <p:dataTable var="activo" value="#{ReporteActivosPTA.activos}"
+                             emptyMessage="No existe un activo con los filtros dados."
+                             filteredValue="#{ReporteActivosPTA.activosfiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
 
-        <div class="container">
+                    <f:facet name="header">
+                        <span>Lista de Activos PTA.</span>
+                    </f:facet>
 
-       
-            
-    
-            <p:dataTable var="activo" value="#{ReporteActivosPTA.activos}">
-            <p:column headerText="ID">
-                <h:outputText value="#{activo.idActivo}" />
-            </p:column>
+                    <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}">
+                        <h:outputText value="#{activo.idActivo}" />
+                    </p:column>
 
-            <p:column headerText="Nombre">
-                <h:outputText value="#{activo.nombre}" />
-            </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{activo.nombre}" />
+                    </p:column>
 
-            <p:column headerText="Descripcion">
-                <h:outputText value="#{activo.descripcion}" />
-            </p:column>
+                    <p:column headerText="Descripcion">
+                        <h:outputText value="#{activo.descripcion}" />
+                    </p:column>
 
-            <p:column headerText="Valor">
-                <h:outputText value="#{activo.valor}" />
-            </p:column>
-                         
-              <p:column headerText="Sede">
-                  <h:outputText value="#{activo.sede}" />
-            </p:column>
-                         
-                         
-              <p:column headerText="Fecha de Adquisicion">
-                  <h:outputText value="#{activo.fechaAdquisicion}" />
-            </p:column>      
-                         
-                            <p:column headerText="Funcionario">
-                                <h:outputText value="#{activo.funcionario}" />
-            </p:column>     
-        </p:dataTable>
-                
-                  
+                    <p:column headerText="Valor">
+                        <h:outputText value="#{activo.valor}" />
+                    </p:column>
 
-            
-            <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-            <p:button class="btn" value="Ayuda" ></p:button>
-        </div>
+                    <p:column headerText="Sede">
+                        <h:outputText value="#{activo.sede}" />
+                    </p:column>
 
+                    <p:column headerText="Fecha de Adquisicion">
+                        <h:outputText value="#{activo.fechaAdquisicion}" />
+                    </p:column>      
 
+                    <p:column headerText="Funcionario">
+                        <h:outputText value="#{activo.funcionario}" />
+                    </p:column>
 
-  </form>
+                    <f:facet name="paginatorTopLeft">
+                        <p:commandButton type="button" icon="pi pi-refresh"/>
+                    </f:facet>
+
+                </p:dataTable>
+
+                <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
+                <p:button class="btn" value="Ayuda" ></p:button>
+
+            </div>
+
+        </form>
     </h:body>
 </html>
 

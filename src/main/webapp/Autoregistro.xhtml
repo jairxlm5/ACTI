@@ -13,7 +13,7 @@
 
         <h:form>
             <div class="Contenedor-AutoR">
-                       <br></br><br></br>       
+                <br></br><br></br>       
                 <h1>Formulario</h1>
                 <br></br><br></br>       
                 <div class="Contenedor-inputs">
@@ -65,24 +65,21 @@
 
 
 
-                 
-                        <p:selectOneMenu value="#{AutoregistroBean.perfilSeleccionado}">
-                            <f:selectItems value="#{AutoregistroBean.getPerfiles()}" />
-                       
+
+                    <p:selectOneMenu value="#{AutoregistroBean.perfilSeleccionado}">
+                        <f:selectItems value="#{AutoregistroBean.getPerfiles()}" />
+
                     </p:selectOneMenu>
                     <br></br><br></br>  
-                    
+
                     <p:button class="botones" value="Aceptar"></p:button>
-                         <br></br>
-                          <br></br>
+
                     <p:button class="botones" value="Cancelar" ></p:button>
-                         <br></br>
-                          <br></br>
-                         <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>
-                
+                    <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>
+
                 </div>
             </div>
-      
+
         </h:form>
 
 

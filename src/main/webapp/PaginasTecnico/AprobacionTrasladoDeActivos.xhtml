@@ -6,71 +6,83 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
-        <title>Aprovacion-Traslado-Activos</title>
-         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
+        <title>Aprobacion-Traslado-Activos</title>
+        <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-            <form>
-            
-       
+        <form>
 
-<!-- Para el traslado del activo ocupara un combo que diga en que sede esta 
-segun su ID y otro para poner a que sede va -->
+            <!-- Para el traslado del activo ocupara un combo que diga en que sede esta 
+            segun su ID y otro para poner a que sede va -->
 
-  <div class="container">
+            <div class="container">
 
-        <h1>Aprobacion de Traslado de activos </h1>
-           <div class="BaseDeDATOS">
-               <p:dataTable var="traslado" value="#{AprobacionTrasladoBean.solicitudesDeTraslado}">
-                    <p:column headerText="ID Activo">
+                <h1>Aprobacion de Traslado de activos </h1>
+
+                <p:dataTable var="traslado" value="#{AprobacionTrasladoBean.solicitudesDeTraslado}"
+                             emptyMessage="No existe una solicitud de traslado con los filtros dados."
+                             filteredValue="#{AprobacionTrasladoBean.solicitudesDeTrasladoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
+                             rows="10"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
+
+                    <f:facet name="header">
+                        <span>Lista de traslado de activos solicitados.</span>
+                    </f:facet>
+
+                    <p:column headerText="ID Activo" sortBy="#{traslado.activo.idActivo}" filterBy="#{traslado.activo.idActivo}">
                         <h:outputText value="#{traslado.activo.idActivo}" />
-                  
+
                     </p:column>
 
                     <p:column headerText="Nombre">
                         <h:outputText value="#{traslado.activo.nombre}" />
-                     
+
                     </p:column>
 
                     <p:column headerText="Descripcion">
                         <h:outputText value="#{traslado.activo.descripcion}" />
-                     
+
                     </p:column>
 
                     <p:column headerText="Valor">
                         <h:outputText value="#{traslado.activo.valor}" />
-                    
+
                     </p:column>
 
                     <p:column headerText="Sede Actual">
                         <h:outputText value="#{traslado.sedeOrigen}" />
-                       
+
                     </p:column>
 
-                     <p:column headerText="Sede Solicitada">
-                         <h:outputText value="#{traslado.sedeDestino}" />
-                     
+                    <p:column headerText="Sede Solicitada">
+                        <h:outputText value="#{traslado.sedeDestino}" />
+
                     </p:column>
 
-                      <p:column headerText="Solicitante">
-                          <h:outputText value="#{traslado.funcionarioSolicitante}" />
-                        
+                    <p:column headerText="Solicitante">
+                        <h:outputText value="#{traslado.funcionarioSolicitante}" />
+
                     </p:column>    
-                    
+
                     <p:column headerText="Aprobar Traslado">
                         <p:button value="Aprobar "></p:button>
                         <p:button value="Rechazar"></p:button>
                     </p:column> 
 
+                    <f:facet name="paginatorTopLeft">
+                        <p:commandButton type="button" icon="pi pi-refresh"/>
+                    </f:facet>
 
+                </p:dataTable>
 
-                </p:dataTable>  
-            <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
-            <p:button class="btn" value="Ayuda" ></p:button>
-  
-        </div>
+                <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
+                <p:button class="btn" value="Ayuda" ></p:button>
+
             </div>
-  </form>
+        </form>
     </h:body>
 </html>
 

@@ -10,66 +10,62 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-            <form>
-            
-  
-<!-- No termino de entender, los activos asignados a que? Me imagino que a 
-una sede-->
+        <form>
 
-<!-- Pienso que tal vez se puede hacer una opcion para ver activos asignados por Funcionario
-y tambien por Sede-->
-
-        <div class="container">
+            <div class="container">
                 <h1>Sus activos Asignados</h1>
 
-                
-                
-                
                 <div class="VaraDeLaBaseDeDatos">
-                    
-                    
-                    
-                    
-                    <!-- Mandar lo de opcion seleccionada esta dificil bro -->
-                    
-                    <p:dataTable var="activo" value="${CheckActivosAsignados.activosAsignados}">
-            <p:column headerText="ID">
-                <h:outputText value="#{activo.idActivo}" />
-            </p:column>
 
-            <p:column headerText="Nombre">
-                <h:outputText value="#{activo.nombre}" />
-            </p:column>
+                    <p:dataTable var="activo" value="${CheckActivosAsignados.activosAsignados}"
+                                 emptyMessage="No existe un activo con los filtros dados."
+                                 filteredValue="#{CheckActivosAsignados.activosAsignadosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
 
-            <p:column headerText="Descripcion">
-                <h:outputText value="#{activo.descripcion}"/>
-            </p:column>
+                        <f:facet name="header">
+                            <span>Lista de Activos asignados.</span>
+                        </f:facet>
 
-            <p:column headerText="Valor">
-                <h:outputText value="#{activo.valor}" />
-            </p:column>
-                         
-              <p:column headerText="Sede">
-                  <h:outputText value="#{activo.sede}" />
-            </p:column>
+                        <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}" >
+                            <h:outputText value="#{activo.idActivo}" />
+                        </p:column>
 
-              <p:column headerText="Fecha de Adquisicion">
-                  <h:outputText value="#{activo.fechaAdquisicion}" />
-            </p:column>      
-                         
-        </p:dataTable>
-                    
-                    
-            <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml" ></p:button>
-            <p:button class="btn" value="Ayuda" ></p:button>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{activo.nombre}" />
+                        </p:column>
+
+                        <p:column headerText="Descripcion">
+                            <h:outputText value="#{activo.descripcion}"/>
+                        </p:column>
+
+                        <p:column headerText="Valor">
+                            <h:outputText value="#{activo.valor}" />
+                        </p:column>
+
+                        <p:column headerText="Sede">
+                            <h:outputText value="#{activo.sede}" />
+                        </p:column>
+
+                        <p:column headerText="Fecha de Adquisicion">
+                            <h:outputText value="#{activo.fechaAdquisicion}" />
+                        </p:column>      
+
+                        <f:facet name="paginatorTopLeft">
+                            <p:commandButton type="button" icon="pi pi-refresh"/>
+                        </f:facet>
+
+                    </p:dataTable>
+
+                    <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml" ></p:button>
+                    <p:button class="btn" value="Ayuda" ></p:button>
+
                 </div>
-                
-               
-        </div>
-
-
-
-  </form>
+            </div>
+        </form>
     </h:body>
 </html>
 
