@@ -14,10 +14,16 @@ import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Random;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -376,7 +382,7 @@ public class UsuarioDB {
 
         return "Passed"; //Este es el mensaje que retorna si la clave cumple con todos los requerimientos
     }
-    
+
     /**
      * Retorna True si el perfil esta activo
      *
@@ -386,62 +392,76 @@ public class UsuarioDB {
     public boolean isProfileActive() {
         return selectedUser.isAprobado();
     }
-    
+
     /**
      * Este metodo se encarga de activar la cuenta de un usuario y llamar al
      * metodo que hace el update en la DB, solo el usuario Administrador puede
      * hacer esto
      *
-     * @param userToActivate 
+     * @param userToActivate
      * @throws SQLException
      * @throws SNMPExceptions
      * @throws ParseException
      */
-    public void activateAccount(Usuario userToActivate) throws SQLException, SNMPExceptions, ParseException{
+    public void activateAccount(Usuario userToActivate) throws SQLException, SNMPExceptions, ParseException {
         userToActivate.setAprobado(true);
         userToActivate.setFechaAprobacion(Utils.getCurrentDate());
         //Llamar al Update
         updateUser(userToActivate);
     }
-    
+
     /**
      * Este metodo se encarga de desactivar la cuenta de un usuario y llamar al
      * metodo que hace el update en la DB, solo el usuario Administrador puede
      * hacer esto
-     * 
+     *
      * @param user
      * @throws SQLException
      * @throws SNMPExceptions
-     * @throws ParseException 
+     * @throws ParseException
      */
-    public void deactivateAccount(Usuario user) throws SQLException, SNMPExceptions, ParseException{
+    public void deactivateAccount(Usuario user) throws SQLException, SNMPExceptions, ParseException {
         user.setAprobado(false);
         //Llamar al Update
         updateUser(user);
     }
-    
+
     /**
      * Calcula la edad del usuario en base a su fecha de nacimiento
+     *
      * @param fechaNacimiento
      * @return int
+     * @throws ParseException
+     * @throws NullPointerException
      */
-    public int calculateAge(Date fechaNacimiento){
-        return 0;
+    public int calculateAge(Date fechaNacimiento) throws ParseException, NullPointerException{
+        try {
+            //Las fechas se tienen que convertir a LocalDate
+            LocalDate currentDate = Utils.getCurrentDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate birthdate = fechaNacimiento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            
+            return Period.between(birthdate, currentDate).getYears();
+            
+        } catch (NullPointerException err){
+            throw new NullPointerException("La fecha de nacimiento no se digitó");
+        }
     }
-    
+
     /**
-     * Obtiene una lista con todos los usuarios que no estan aprobados para iniciar sesion
+     * Obtiene una lista con todos los usuarios que no estan aprobados para
+     * iniciar sesion
+     *
      * @return ArrayList
      * @throws SQLException
-     * @throws SNMPExceptions 
+     * @throws SNMPExceptions
      */
-    public ArrayList<Usuario> getDisabledUsersFromDB() throws SQLException, SNMPExceptions{
+    public ArrayList<Usuario> getDisabledUsersFromDB() throws SQLException, SNMPExceptions {
         ArrayList<Usuario> disabledUsers = new ArrayList<>();
         String sqlSelect = "";
-        try{
+        try {
             sqlSelect = "Select ID From Usuario Where Aprobacion =" + false;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
-            while(rs.next()){
+            while (rs.next()) {
                 Usuario user = getUserFromDB(rs.getString("ID"));
                 disabledUsers.add(user);
             }
@@ -451,5 +471,30 @@ public class UsuarioDB {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
         return disabledUsers;
+    }
+    
+    /**
+     * Obtiene el usuario que inició sesion en el sistema
+     * @return Usuario
+     */
+    public Usuario getLogedInUser(){
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        Map<String, Object> session = context.getSessionMap();
+        Usuario currentUser = (Usuario)session.get("UsuarioActual");
+        return currentUser;
+    }
+    
+    /**
+     * Guarda la información del usuario que inició sesion en el sistema para poder
+     * accederse desde cualquier parte del programa
+     * @param user
+     * @throws NullPointerException 
+     */
+    public void setLogedInUser(Usuario user) throws NullPointerException{
+        if(user != null)
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("UsuarioActual", user);
+        else{
+            throw new NullPointerException("El usuario viene sin datos");
+        }
     }
 }
