@@ -7,71 +7,75 @@
 
     <h:head>
         <title>Solicitud-Funcionarios-Nuevos</title>
-             <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
+        <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-            <form>
-            
-   
+        <form>
 
-        <!--Mae seria como que los funcionarios aprobados ya no aparezcan en el data Table-->
+            <div class="container">
 
+                <h1>Solicitud de funcionarios nuevos </h1>
+                <div class="VarasDeLaDB">
 
-        <div class="container">
+                    <p:dataTable var="funcionario" value="#{SolicitudFuncionariosBean.funcionarios}"
+                                 emptyMessage="No existe una solicitud con los filtros dados."
+                                 filteredValue="#{SolicitudFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
 
-            <h1>Solicitud de funcionarios nuevos </h1>
+                        <f:facet name="header">
+                            <span>Lista de solicitudes de nuevos Funcionarios.</span>
+                        </f:facet>
 
+                        <p:column headerText="Identificacion" sortBy="#{funcionario.identificacion}" filterBy="#{funcionario.identificacion}">
+                            <h:outputText value="#{funcionario.identificacion}"/>
+                        </p:column>
 
-            <div class="VarasDeLaDB">
-                
-                <p:dataTable var="funcionario" value="#{SolicitudFuncionariosBean.funcionarios}">
-         <p:column headerText="Identificacion">
-                <h:outputText value="#{funcionario.identificacion}" />
-            </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{funcionario.nombre}" />
+                        </p:column>
 
-            <p:column headerText="Nombre">
-                <h:outputText value="#{funcionario.nombre}" />
-            </p:column>
+                        <p:column headerText="Primer Apellido">
+                            <h:outputText value="#{funcionario.apellido1}" />
+                        </p:column>
 
-            <p:column headerText="Primer Apellido">
-                <h:outputText value="#{funcionario.apellido1}" />
-            </p:column>
+                        <p:column headerText="Segundo Apellido">
+                            <h:outputText value="#{funcionario.apellido2}" />
+                        </p:column>
 
-            <p:column headerText="Segundo Apellido">
-                <h:outputText value="#{funcionario.apellido2}" />
-            </p:column>
-                         
-              <p:column headerText="Fecha de Nacimiento">
-                  <h:outputText value="#{funcionario.fechaNacimiento}" />
-            </p:column>
-                         
-                         
-              <p:column headerText="Telefono">
-                  <h:outputText value="#{funcionario.telefonos}" />
-            </p:column>      
-    
-     <p:column headerText="Correo">
-         <h:outputText value="#{funcionario.correo}" />
-                         
-            </p:column>   
-                            <p:column headerText="Aprobacion">
+                        <p:column headerText="Fecha de Nacimiento">
+                            <h:outputText value="#{funcionario.fechaNacimiento}" />
+                        </p:column>
+
+                        <p:column headerText="Telefono">
+                            <h:outputText value="#{funcionario.telefonos}" />
+                        </p:column>      
+
+                        <p:column headerText="Correo">
+                            <h:outputText value="#{funcionario.correo}" />
+
+                        </p:column>   
+                        <p:column headerText="Aprobacion">
                             <p:button value="Aceptar"></p:button>
                             <p:button value="Rechazar"></p:button>
-            </p:column> 
-                         
-                         
-                         
-        </p:dataTable>
-            
-             <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-            <p:button class="btn" value="Ayuda" ></p:button>
+                        </p:column>
+
+                        <f:facet name="paginatorTopLeft">
+                            <p:commandButton type="button" icon="pi pi-refresh"/>
+                        </f:facet>
+
+                    </p:dataTable>
+
+                    <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
+                    <p:button class="btn" value="Ayuda" ></p:button>
+
+                </div>
             </div>
 
-        </div>
-
-
-
-  </form>
+        </form>
     </h:body>
 </html>
 

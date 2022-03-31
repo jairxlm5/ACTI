@@ -24,6 +24,7 @@ public class ReporteSolicitudActivos {
     //Bro para trabajar los beans en este primer entregable lo que hice fue hacer un array de activos 
     //Luego decidimos como bretearlo 
     private ArrayList<Activo> activos;
+    private ArrayList<Activo> activosFiltrados;
     
     //Informacion para las columnas de las tablas de cada activo en los ArrayList
     private Activo activo;
@@ -127,6 +128,15 @@ public class ReporteSolicitudActivos {
     public void setActivos(ArrayList<Activo> activos) {
         this.activos = activos;
     }
+
+    public ArrayList<Activo> getActivosFiltrados() {
+        return activosFiltrados;
+    }
+
+    public void setActivosFiltrados(ArrayList<Activo> activosFiltrados) {
+        this.activosFiltrados = activosFiltrados;
+    }
+    
     
     
 }

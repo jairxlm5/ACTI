@@ -22,7 +22,7 @@ public class SolicitudFuncionariosBean {
     
     //Tuve que meter este ArrayList para lo del primer avance luego podemos ver como bretearlo 
     private ArrayList<Funcionario> funcionarios = new ArrayList<>();
-    
+    private ArrayList<Funcionario> funcionariosFiltrados = new ArrayList<>();
     
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
@@ -92,6 +92,14 @@ public class SolicitudFuncionariosBean {
 
     public void setFuncionarios(ArrayList<Funcionario> funcionarios) {
         this.funcionarios = funcionarios;
+    }
+
+    public ArrayList<Funcionario> getFuncionariosFiltrados() {
+        return funcionariosFiltrados;
+    }
+
+    public void setFuncionariosFiltrados(ArrayList<Funcionario> funcionariosFiltrados) {
+        this.funcionariosFiltrados = funcionariosFiltrados;
     }
     
     
