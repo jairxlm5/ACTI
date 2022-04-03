@@ -14,9 +14,9 @@ import java.util.Date;
 public class Prestamo extends MovimientoActivo{
     private Date fechaRetorno;
 
-    public Prestamo(Date fechaRetorno, Activo activo, Funcionario funcionarioSolicitante, Date fecha_Solicitud, String motivo,
-                         boolean aprobado, Tecnico tecnicoAprobante) {
-        super(activo, funcionarioSolicitante, fecha_Solicitud, motivo, aprobado, tecnicoAprobante);
+    public Prestamo(Date fechaRetorno, Activo activo,  Date fecha_Solicitud, String motivo,
+                         boolean aprobado) {
+        super(activo, fecha_Solicitud, motivo, aprobado);
         this.fechaRetorno = fechaRetorno;
     }
     

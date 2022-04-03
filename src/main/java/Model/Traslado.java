@@ -15,9 +15,9 @@ public class Traslado extends MovimientoActivo{
     private Date fechaTraslado;
     private Sede sedeOrigen, sedeDestino;
 
-    public Traslado(Date fechaTraslado, Sede sedeOrigen, Sede sedeDestino, Activo activo, Funcionario funcionarioSolicitante, Date fecha_Solicitud, String motivo,
-                       boolean aprobado, Tecnico tecnicoAprobante) {
-        super(activo, funcionarioSolicitante, fecha_Solicitud, motivo, aprobado, tecnicoAprobante);
+    public Traslado(Date fechaTraslado, Sede sedeOrigen, Sede sedeDestino, Activo activo, Date fecha_Solicitud, String motivo,
+                       boolean aprobado) {
+        super(activo, fecha_Solicitud, motivo, aprobado);
         this.fechaTraslado = fechaTraslado;
         this.sedeOrigen = sedeOrigen;
         this.sedeDestino = sedeDestino;
