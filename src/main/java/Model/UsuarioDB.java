@@ -5,6 +5,7 @@
  */
 package Model;
 
+import Utils.Utils;
 import DAO.DataAccess;
 import DAO.SNMPExceptions;
 import Enum.Perfil;
@@ -19,6 +20,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
@@ -273,17 +275,17 @@ public class UsuarioDB {
     /**
      * Verifica que la clave ingresada el iniciar sesion sea la misma que la
      * guardada en la base de datos
-     *
+     * @param user
      * @param passwordInserted
      * @return
      * @throws Exception
      */
-    public boolean isLoginPasswordCorrect(String passwordInserted) throws Exception {
-        if (selectedUser != null) {
+    public boolean isLoginPasswordCorrect(Usuario user, String passwordInserted) throws Exception {
+        if (user != null) {
             //Se obtiene el Hash de la clave ingresada en el inicio de sesion
             passwordInserted = Utils.getHashedPaswd(passwordInserted);
             //Se tiene que extraer el Hash de los bytes de la clave guardada en la DB
-            String passwordInDB = new String(selectedUser.getClave(), StandardCharsets.UTF_8);
+            String passwordInDB = new String(user.getClave(), StandardCharsets.UTF_8);
             return passwordInserted.equals(passwordInDB);
         } else {
             throw new Exception("Usuario no ha sido seleccionado");
@@ -293,12 +295,12 @@ public class UsuarioDB {
     /**
      * Verifica que el usuario tenga el tipo de perfil con el que esta deseando
      * ingresar y lo retorna si lo encuentra, de lo contrario retorna null
-     *
+     * @param user
      * @param selectedLoginProfile
      * @return UsuarioPerfil
      */
-    public UsuarioPerfil getUserProfile(Perfil selectedLoginProfile) {
-        for (UsuarioPerfil registeredProfile : selectedUser.getPerfiles()) {
+    public UsuarioPerfil getUserProfile(Usuario user, Perfil selectedLoginProfile) {
+        for (UsuarioPerfil registeredProfile : user.getPerfiles()) {
             if (registeredProfile.getTipoPerfil() == selectedLoginProfile) {
                 return registeredProfile;
             }
@@ -310,14 +312,14 @@ public class UsuarioDB {
      * Lleva el registro de cada login que hace el usuario, cada vez que inicia
      * sesion se tiene que aumentar el valor en 1 y tambien actualizar la info
      * en la DB
-     *
+     * @param user
      * @throws SQLException
      * @throws SNMPExceptions
      */
-    public void addNewLogin() throws SQLException, SNMPExceptions {
-        selectedUser.setLogins(selectedUser.getLogins() + 1);
+    public void addNewLogin(Usuario user) throws SQLException, SNMPExceptions {
+        user.setLogins(user.getLogins() + 1);
         //Se llama al update
-        updateUser(selectedUser);
+        updateUser(user);
     }
 
     /**
@@ -386,11 +388,11 @@ public class UsuarioDB {
     /**
      * Retorna True si el perfil esta activo
      *
-     * @param selectedLoginProfile
-     * @return
+     * @param user
+     * @return boolean
      */
-    public boolean isProfileActive() {
-        return selectedUser.isAprobado();
+    public boolean isUserActive(Usuario user) {
+        return user.isAprobado();
     }
 
     /**
@@ -474,26 +476,56 @@ public class UsuarioDB {
     }
     
     /**
-     * Obtiene el usuario que inició sesion en el sistema
+     * Retorna el nombre del tipo de perfil con el que el usuario ingreso
+     * @return String
+     */
+    public String getLogedInProfile(){
+        String perfil = this.getCurrentSession().get("Perfil").toString();
+        return perfil;
+    }
+    
+    /**
+     * Retorna el usuario que esta activo en el sistema
      * @return Usuario
      */
     public Usuario getLogedInUser(){
+        Usuario currentUser = (Usuario)this.getCurrentSession().get("UsuarioActual");
+        return currentUser;
+    }
+    
+    /**
+     * Retorna la informacion de la sesion actual
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> getCurrentSession(){
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         Map<String, Object> session = context.getSessionMap();
-        Usuario currentUser = (Usuario)session.get("UsuarioActual");
-        return currentUser;
+        return session;
     }
     
     /**
      * Guarda la información del usuario que inició sesion en el sistema para poder
      * accederse desde cualquier parte del programa
      * @param user
+     * @param perfilSeleccionado 
      * @throws NullPointerException 
      */
-    public void setLogedInUser(Usuario user) throws NullPointerException{
-        if(user != null)
+    public void setLogedInUser(Usuario user, Perfil perfilSeleccionado) throws NullPointerException{
+        if(user != null){
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("UsuarioActual", user);
-        else{
+            //Tambien se tiene que guardar el tipo de usuario que es
+            switch(perfilSeleccionado){
+                case Administrativo:
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Perfil", "Administrativo");
+                    break;
+                case Funcionario:
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Perfil", "Funcionario");
+                    break;
+                case Tecnico:
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Perfil", "Tecnico");
+            }
+        }
+        else {
             throw new NullPointerException("El usuario viene sin datos");
         }
     }

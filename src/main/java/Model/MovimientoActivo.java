@@ -18,14 +18,12 @@ public class MovimientoActivo {
     private String motivo;
     private boolean aprobado;
     
-    public MovimientoActivo(Activo activo, Funcionario funcionarioSolicitante, Date fecha_Solicitud, String motivo, 
-                                boolean aprobado, Tecnico tecnicoAprobante) {
+    public MovimientoActivo(Activo activo, Date fecha_Solicitud, String motivo, 
+                                boolean aprobado) {
         this.activo = activo;
-        this.funcionarioSolicitante = funcionarioSolicitante;
         this.fecha_Solicitud = fecha_Solicitud;
         this.motivo = motivo;
         this.aprobado = aprobado;
-        this.tecnicoAprobante = tecnicoAprobante;
     }
     
     public MovimientoActivo(){
