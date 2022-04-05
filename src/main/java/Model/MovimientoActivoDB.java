@@ -57,7 +57,7 @@ public class MovimientoActivoDB {
                     //Si llega aca es porque no se especifico si era Prestamo o Traslado
                     //En ese caso se tendria que eliminar el MovimientoActivo que se acaba de registrar
                     deleteMovimientoAct(movAct);
-                    throw new NullPointerException("Se tiene que especificar si la solicitud es de Prestamo o Traslado");
+                    throw new ACTIException("Se tiene que especificar si la solicitud es de Prestamo o Traslado");
                 }
             }
 
@@ -223,12 +223,12 @@ public class MovimientoActivoDB {
      * @throws ACTIException
      */
     public void aproveMovimientoAct(MovimientoActivo movAct) throws SQLException, SNMPExceptions, ACTIException {
-        movAct.setAprobado(true);
         //Se obtiene y asigna el tecnico que aprobo
         String profileInUse = userDB.getLogedInProfile();
 
         //Se tiene que verifica que el usuario sea un tecnico
         if (profileInUse.equals("Tecnico")) {
+            movAct.setAprobado(true);
             movAct.setTecnicoAprobante((Tecnico) userDB.getLogedInUser());
             updateMovimientoAct(movAct);
             
