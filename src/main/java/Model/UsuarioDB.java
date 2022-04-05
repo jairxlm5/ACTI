@@ -6,6 +6,7 @@
 package Model;
 
 import Utils.Utils;
+import Utils.ACTIException;
 import DAO.DataAccess;
 import DAO.SNMPExceptions;
 import Enum.Perfil;
@@ -137,21 +138,6 @@ public class UsuarioDB {
                 Barrio barrio = BarrioDB.getBarrioFromDB(rs.getInt("Barrio"));
                 LinkedList<UsuarioPerfil> perfiles = usuarioPerfilDB.getAccountsByUser(id);
                 LinkedList<Telefono> telefonos = telefonoDB.getUserPhoneNumbers(id);
-
-                //Se tiene que verificar que tipo de Usuario es para crearlo
-                if (adminDB.getAdminFromDB(id) != null) {
-                    user = new Administrativo();
-                } else {
-                    if (funcDB.getFuncFromDB(id) != null) {
-                        user = new Funcionario();
-                    } else {
-                        if (tecDB.getTecFromDB(id) != null) {
-                            user = new Tecnico();
-                        } else {
-                            throw new Exception("Error: El usuario " + id + " no tiene perfil registrado");
-                        }
-                    }
-                }
 
                 //Se asigna la data a las variables
                 user.setIdentificacion(identificacion);
@@ -288,7 +274,7 @@ public class UsuarioDB {
             String passwordInDB = new String(user.getClave(), StandardCharsets.UTF_8);
             return passwordInserted.equals(passwordInDB);
         } else {
-            throw new Exception("Usuario no ha sido seleccionado");
+            throw new ACTIException("Usuario no ha sido seleccionado");
         }
     }
 
@@ -320,6 +306,15 @@ public class UsuarioDB {
         user.setLogins(user.getLogins() + 1);
         //Se llama al update
         updateUser(user);
+    }
+    
+    /**
+     * Retorna true si es el primer login del usuario
+     * @param user
+     * @return boolean
+     */
+    public boolean isFirstLogin(Usuario user){
+        return user.getLogins() == 0;
     }
 
     /**
