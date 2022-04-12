@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Autoregistro</title>
+        <link rel="stylesheet" href="CSS/styleAutoresgitro.css"></link>
+    </h:head>
+    <h:body>
+
+        <h:form>
+            <div class="Contenedor-AutoR">
+                <br></br><br></br>       
+                <h1>Cambiar Contraseña</h1>
+                <br></br><br></br>       
+                <div class="Contenedor-inputs">
+                    
+
+                    <h:outputText value="Codigo de Seguridad: "></h:outputText>
+                    <p:inputText value="#{beanCambiarContra.codigoSeguridad}"></p:inputText>
+                    <br></br>  
+                    <h:outputText class="textos"  value="Contraseña Autogenerada: "></h:outputText>
+                    <p:inputText value="#{beanCambiarContra.claveAutogenerada}"></p:inputText>
+                    <br></br>  
+                    <h:outputText class="textos"  value="Nueva contraseña: "></h:outputText>
+                    <p:inputText value="#{beanCambiarContra.claveNueva}"></p:inputText>
+                    <br></br><br></br>
+
+                    
+                    <br></br><br></br>  
+
+                    <p:button class="botones" value="Aceptar"></p:button>
+
+                    <p:button class="botones" value="Cancelar" ></p:button>
+                    <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>
+
+                </div>
+            </div>
+
+        </h:form>
+
+
+    </h:body>
+</html>
+

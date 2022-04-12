@@ -29,7 +29,7 @@
 
                     <h:outputText value="Sede Origen  :   "></h:outputText>
                     <p:selectOneMenu value="#{SolicitudTrasladoBean.nombreSedeOrigen}">
-                        <f:selectItems value="#{SolicitudTrasladoBean.sedes}" />
+                        <f:selectItems value="#{SolicitudTrasladoBean.getSedesDB()}" />
 
                     </p:selectOneMenu>
 
@@ -37,7 +37,7 @@
 
                     <h:outputText value="Sede Destino:   "></h:outputText>
                     <p:selectOneMenu value="#{SolicitudTrasladoBean.sedeDestino}">
-                        <f:selectItems value="#{SolicitudTrasladoBean.sedes}" />
+                        <f:selectItems value="#{SolicitudTrasladoBean.getSedesDB()}" />
 
                     </p:selectOneMenu>
                     <br></br><br></br>

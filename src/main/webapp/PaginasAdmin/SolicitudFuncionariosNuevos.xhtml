@@ -17,7 +17,7 @@
                 <h1>Solicitud de funcionarios nuevos </h1>
                 <div class="VarasDeLaDB">
 
-                    <p:dataTable var="funcionario" value="#{SolicitudFuncionariosBean.funcionarios}"
+                    <p:dataTable var="funcionario" value="#{SolicitudFuncionariosBean.getSolicitudNewFuncionariosDB()}"
                                  emptyMessage="No existe una solicitud con los filtros dados."
                                  filteredValue="#{SolicitudFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                                  rows="10"

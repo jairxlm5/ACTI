@@ -17,7 +17,7 @@
 
             <div class="container">
 
-                <p:dataTable var="activo" value="#{ReporteActivosPTA.activos}"
+                <p:dataTable var="activo" value="#{ReporteActivosPTA.getActivoDB()}"
                              emptyMessage="No existe un activo con los filtros dados."
                              filteredValue="#{ReporteActivosPTA.activosfiltrados}" filterBy="#{dtFilterView.filterBy}" 
                              rows="10"

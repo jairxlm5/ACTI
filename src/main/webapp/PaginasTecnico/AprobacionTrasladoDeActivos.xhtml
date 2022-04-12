@@ -19,7 +19,7 @@
 
                 <h1>Aprobacion de Traslado de activos </h1>
 
-                <p:dataTable var="traslado" value="#{AprobacionTrasladoBean.solicitudesDeTraslado}"
+                <p:dataTable var="traslado" value="#{AprobacionTrasladoBean.getSolicitudesDeTraslado()}"
                              emptyMessage="No existe una solicitud de traslado con los filtros dados."
                              filteredValue="#{AprobacionTrasladoBean.solicitudesDeTrasladoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
                              rows="10"

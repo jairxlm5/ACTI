@@ -5,10 +5,13 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.ActivoDB;
 import Model.MovimientoActivo;
 import Model.Traslado;
 import Model.Usuario;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -138,5 +141,18 @@ public class ReporteSolicitudActivos {
     }
     
     
+       public ArrayList<Activo> getActivoDB(){
+        ArrayList<Activo> activos = new ArrayList<>();
+        try {
+           ActivoDB activoDB = new ActivoDB();
+           activos = activoDB.getAllActivosSolicitados();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return activos;
+    }
+       
     
 }

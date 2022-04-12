@@ -5,9 +5,12 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Funcionario;
+import Model.FuncionarioDB;
 import Model.Usuario;
 import Model.UsuarioPerfil;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -102,5 +105,18 @@ public class SolicitudFuncionariosBean {
         this.funcionariosFiltrados = funcionariosFiltrados;
     }
     
+    //Este es para poder traerse Las solicitudes de nuevos funcionarios
+        public ArrayList<Funcionario> getSolicitudNewFuncionariosDB(){
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        try {
+            FuncionarioDB funcionarioDB = new FuncionarioDB();
+            funcionarios = funcionarioDB.getAllFuncionariosNuevos();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return funcionarios;
+    }
     
 }

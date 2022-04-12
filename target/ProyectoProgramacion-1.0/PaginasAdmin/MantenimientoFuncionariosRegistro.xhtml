@@ -54,7 +54,7 @@
                     <h:outputText value="Sede:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.sede}">
 
-                        <f:selectItems value="#{MantenimientoFuncionariosBean.sedes}"></f:selectItems>
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.getSedesDB()}"></f:selectItems>
 
                     </p:selectOneMenu>
                     <br></br><br></br><br></br>
@@ -63,25 +63,25 @@
                     <h:outputText value="Provincia:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.provinciaSeleccionada}">
 
-                        <f:selectItems value="#{MantenimientoFuncionariosBean.provincias}"></f:selectItems>
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.getProvinciasDB()}"></f:selectItems>
                     </p:selectOneMenu>
 
 
                     <h:outputText class="textosMargen" value="Canton:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.cantonSeleccionado}">
-                        <f:selectItems value="#{MantenimientoFuncionariosBean.cantones}"></f:selectItems>
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.getCantonesDB()}"></f:selectItems>
                     </p:selectOneMenu>
 
 
                     <h:outputText class="textosMargen"  value="Distrito:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.distritoSeleccionado}">
-                        <f:selectItems value="#{MantenimientoFuncionariosBean.distritoSeleccionado}"></f:selectItems>
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.getDistritosDB()}"></f:selectItems>
                     </p:selectOneMenu>
 
 
                     <h:outputText class="textosMargen" value="Barrio:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.barrioSeleccionado}">
-                        <f:selectItems value="#{MantenimientoFuncionariosBean.barrios}"></f:selectItems>
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.getBarriosDB()}"></f:selectItems>
                     </p:selectOneMenu>
                     <br></br><br></br>
 

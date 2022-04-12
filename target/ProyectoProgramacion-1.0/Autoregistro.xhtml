@@ -55,11 +55,9 @@
 
 
 
-
-
                     <h:outputText value="Sede:   "></h:outputText>
                     <p:selectOneMenu value="#{AutoregistroBean.sede}">
-                        <f:selectItems value="#{AutoregistroBean.sedes}"></f:selectItems>
+                        <f:selectItems value="#{AutoregistroBean.getSedesDB()}"></f:selectItems>
                     </p:selectOneMenu>
                     <br></br><br></br><br></br>
 

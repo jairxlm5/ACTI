@@ -5,8 +5,11 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.Sede;
+import Model.SedeDB;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -87,6 +90,24 @@ public class SolicitudTrasladoBean {
         this.nombreSedeOrigen = "";
         this.validationMessage = "";
     }
+    
+    
+    
+    public ArrayList<Sede> getSedesDB() 
+{
+        ArrayList<Sede> sedes = new ArrayList<>();
+        try {
+            SedeDB sedeDB = new SedeDB();
+            sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return sedes;
+    }
+    
+    
     public String getIdActivo() {
         return idActivo;
     }
