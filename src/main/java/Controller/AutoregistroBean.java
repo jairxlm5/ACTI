@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Enum.Perfil;
 import Enum.TipoIdentificacion;
 import Model.Barrio;
@@ -12,9 +13,11 @@ import Model.Canton;
 import Model.Distrito;
 import Model.Provincia;
 import Model.Sede;
+import Model.SedeDB;
 import Model.Telefono;
 import Model.Usuario;
 import Model.UsuarioPerfil;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,6 +91,20 @@ public class AutoregistroBean {
         this.barrioSeleccionado = null;
         this.telefonos.clear();
         this.perfiles.clear();
+    }
+    
+       public ArrayList<Sede> getSedesDB() 
+{
+        ArrayList<Sede> sedes = new ArrayList<>();
+        try {
+            SedeDB sedeDB = new SedeDB();
+            sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return sedes;
     }
     
     public void saveNewUser(){

@@ -83,4 +83,9 @@
         <managed-bean-class>Controller.ReporteSolicitudActivos</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>beanCambiarContra</managed-bean-name>
+        <managed-bean-class>Controller.beanCambiarContra</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
 </faces-config>

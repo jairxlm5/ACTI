@@ -193,4 +193,58 @@ public class ActivoDB {
         }
         return activos;
     }
+    
+    //Cree esta para ReporteActivosPTA
+       public  ArrayList<Activo> getAllActivos() throws SQLException, SNMPExceptions{
+        ArrayList<Activo> activos = new ArrayList<>();
+        String sqlSelect = "";
+        try{
+            sqlSelect = "Select * From Activo";
+            ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
+            if(rs.next()){
+                String id = rs.getString("ID");
+                String nombre = rs.getString("Nombre");
+                String descripcion = rs.getString("Descripcion");
+                double valor = rs.getDouble("Valor");
+                Sede sede = sedeDB.getSede(rs.getString("Sede"));
+                Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
+                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                
+                Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
+                activos.add(activo);
+            }
+        } catch (SQLException e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        } catch (Exception e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
+        return activos;
+    }
+       //Cree esta para ReporteSolicitudActivos
+       public  ArrayList<Activo> getAllActivosSolicitados() throws SQLException, SNMPExceptions{
+        ArrayList<Activo> activos = new ArrayList<>();
+        String sqlSelect = "";
+        try{
+            sqlSelect = "Select * From Activo";
+            ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
+            if(rs.next()){
+                String id = rs.getString("ID");
+                String nombre = rs.getString("Nombre");
+                String descripcion = rs.getString("Descripcion");
+                double valor = rs.getDouble("Valor");
+                Sede sede = sedeDB.getSede(rs.getString("Sede"));
+                Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
+                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                
+                Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
+                activos.add(activo);
+            }
+        } catch (SQLException e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        } catch (Exception e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
+        return activos;
+    }
+       
 }

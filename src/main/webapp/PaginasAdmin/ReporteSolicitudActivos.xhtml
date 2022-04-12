@@ -15,14 +15,14 @@
             <div class="container">
                 <h1> Reporte de solicitud de Activos </h1>
 
-                <p:dataTable var="activo" value="#{ReporteSolicitudActivos.activos}"
+                <p:dataTable var="activo" value="#{ReporteSolicitudActivos.getActivoDB()}"
                              emptyMessage="No existe un activo con los filtros dados."
                              filteredValue="#{ReporteSolicitudActivos.activosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                              rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
 
                     <f:facet name="header">
                         <span>Lista de Activos solicitados.</span>

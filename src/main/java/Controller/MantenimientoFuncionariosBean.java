@@ -5,17 +5,26 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Enum.Perfil;
 import Model.Barrio;
+import Model.BarrioDB;
 import Model.Canton;
+import Model.CantonDB;
 import Model.Distrito;
+import Model.DistritoDB;
 import Model.Funcionario;
+import Model.FuncionarioDB;
+import Model.PerfilDB;
 import Model.Provincia;
+import Model.ProvinciaDB;
 import Model.Sede;
+import Model.SedeDB;
 import Model.Telefono;
 import Model.Usuario;
 import Model.UsuarioPerfil;
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +37,7 @@ import java.util.LinkedList;
  * @author danielp
  */
 public class MantenimientoFuncionariosBean {
+
     //Este objeto Usuario solo se usa cuando se traen datos de consulta de la base de datos de un Usuario que ya existe
     private Usuario user;
     //Estos son los atributos para relacionarlos con campos de texto en el bean
@@ -42,16 +52,15 @@ public class MantenimientoFuncionariosBean {
     private Barrio barrioSeleccionado;
     private Sede sede;
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
-    private LinkedList<UsuarioPerfil> perfiles;  
+    private LinkedList<UsuarioPerfil> perfiles;
     private LinkedList<Telefono> telefonos;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
-  
-      private ArrayList<Funcionario> funcionarios;
-       private ArrayList<Funcionario> funcionariosFiltrados;
+
+    private ArrayList<Funcionario> funcionarios;
+    private ArrayList<Funcionario> funcionariosFiltrados;
     //Bro necesitaba la tabla funcionarios para poder cargar la data
-    
-    
+
     private ArrayList<Provincia> provincias;
     private ArrayList<Canton> cantones;
     private ArrayList<Distrito> distritos;
@@ -60,18 +69,16 @@ public class MantenimientoFuncionariosBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
-    
-          //Logica necesaria para las fechas
+    //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaNacimiento = myCalendar.getTime();
-    
-    
+
     public MantenimientoFuncionariosBean() {
         this.perfiles = new LinkedList<>();
         this.telefonos = new LinkedList<>();
         this.funcionarios = new ArrayList();
-         this.funcionariosFiltrados = new ArrayList();
+        this.funcionariosFiltrados = new ArrayList();
         this.identificacion = "";
         this.nombre = "";
         this.apellido1 = "";
@@ -81,113 +88,114 @@ public class MantenimientoFuncionariosBean {
         this.validationMessage = "";
         this.fillComboLists();
     }
-    
+
     /**
-     * Obtiene la informacion de un usuario ya registrado en el sistema ya sea para editarlo y simplemente ver
-     * los datos
+     * Obtiene la informacion de un usuario ya registrado en el sistema ya sea
+     * para editarlo y simplemente ver los datos
+     *
      * @return Usuario
      */
-    public Usuario getUser(){
+    public Usuario getUser() {
         return null;
     }
-    
+
     /**
      * Guarda un usuario nuevo
      */
-    public void saveNewUser(){
+    public void saveNewUser() {
         this.validationMessage = "";
         //Primero validar que todos los datos se hayan ingresado
-        if(this.identificacion.trim().length() == 0){
+        if (this.identificacion.trim().length() == 0) {
             this.validationMessage = "Ingrese su Nombre";
             return;
         }
-        if(this.apellido1.trim().length() == 0){
+        if (this.apellido1.trim().length() == 0) {
             this.validationMessage = "Ingrese su Primer Apellido";
             return;
         }
-        if(this.apellido2.trim().length() == 0){
+        if (this.apellido2.trim().length() == 0) {
             this.validationMessage = "Ingrese su Segundo Apellido";
             return;
         }
-        if(this.fechaNacimiento == null){
+        if (this.fechaNacimiento == null) {
             this.validationMessage = "Indique su Fecha de Nacimiento";
             return;
         }
-        if(this.correo.trim().length() == 0){
+        if (this.correo.trim().length() == 0) {
             this.validationMessage = "Ingrese su Correo Electrónico";
             return;
         }
-        if(this.telefonos.isEmpty()){
+        if (this.telefonos.isEmpty()) {
             this.validationMessage = "Debe registrar al menos un teléfono";
             return;
         }
-        if(this.perfiles.isEmpty()){
+        if (this.perfiles.isEmpty()) {
             this.validationMessage = "Debe usar al menos un tipo de perfil";
             return;
         }
         //Se tiene que crear el nuevo usuario
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada, 
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, 
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
         //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
-        
+
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
     }
-    
+
     /**
      * Edita la informacion de un usuario ya existente
      */
-    public void editUser(){
+    public void editUser() {
         //Se tienen que aplicar casi el mismo proceso a cuando se registra un usuario nuevo
         this.validationMessage = "";
         //Primero validar que todos los datos se hayan ingresado
-        if(this.identificacion.trim().length() == 0){
+        if (this.identificacion.trim().length() == 0) {
             this.validationMessage = "Ingrese su Nombre";
             return;
         }
-        if(this.apellido1.trim().length() == 0){
+        if (this.apellido1.trim().length() == 0) {
             this.validationMessage = "Ingrese su Primer Apellido";
             return;
         }
-        if(this.apellido2.trim().length() == 0){
+        if (this.apellido2.trim().length() == 0) {
             this.validationMessage = "Ingrese su Segundo Apellido";
             return;
         }
-        if(this.fechaNacimiento == null){
+        if (this.fechaNacimiento == null) {
             this.validationMessage = "Indique su Fecha de Nacimiento";
             return;
         }
-        if(this.correo.trim().length() == 0){
+        if (this.correo.trim().length() == 0) {
             this.validationMessage = "Ingrese su Correo Electrónico";
             return;
         }
-        if(this.telefonos.isEmpty()){
+        if (this.telefonos.isEmpty()) {
             this.validationMessage = "Debe registrar al menos un teléfono";
             return;
         }
-        if(this.perfiles.isEmpty()){
+        if (this.perfiles.isEmpty()) {
             this.validationMessage = "Debe usar al menos un tipo de perfil";
             return;
         }
         //Se tiene que crear un objeto usuario con la informacion editada
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada, 
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, 
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
-        
+
         //Se actualiza la informacion en la BD
     }
-    
+
     /**
      * Para deshabilitar una cuenta de usuario
      */
-    public void disableUser(){
-        
+    public void disableUser() {
+
     }
-    
+
     /**
      * Limpia la informacion
      */
-    public void cleanData(){
+    public void cleanData() {
         this.identificacion = this.nombre = this.apellido1 = this.apellido2 = this.correo = this.otrasDirecciones = "";
         this.fechaNacimiento = null;
         this.provinciaSeleccionada = null;
@@ -201,22 +209,104 @@ public class MantenimientoFuncionariosBean {
         this.validationMessage = "";
         //Los ArrayLists no se limpian
     }
-    
+
     /**
      * Llena los listas que llenan los combos en el xhtml
      */
-    public void fillComboLists(){
+    public void fillComboLists() {
         this.cantones = new ArrayList<>();
         this.provincias = new ArrayList<>();
         this.sedes = new ArrayList<>();
         this.distritos = new ArrayList<>();
         this.barrios = new ArrayList<>();
     }
-    
-    /*
-      METODOS GET Y SET
-    */
 
+    public ArrayList<Funcionario> getFuncionariosFiltradosDB() {
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        try {
+            FuncionarioDB funcionarioDB = new FuncionarioDB();
+            funcionarios = funcionarioDB.getAllFuncionarios();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return funcionarios;
+    }
+
+    public ArrayList<Provincia> getProvinciasDB() {
+        ArrayList<Provincia> provincias = new ArrayList<>();
+        try {
+            ProvinciaDB provinciaDB = new ProvinciaDB();
+            provincias = ProvinciaDB.getAllProvincesFromDB();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return provincias;
+    }
+    
+    
+    public ArrayList<Canton> getCantonesDB() {
+        ArrayList<Canton> cantones = new ArrayList<>();
+        try {
+            CantonDB  cantonDB = new CantonDB();
+            cantones = CantonDB.getCantonesByProvince(1);
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return cantones;
+    }
+    
+
+    public ArrayList<Distrito> getDistritosDB() {
+        ArrayList<Distrito> distritos = new ArrayList<>();
+        try {
+            DistritoDB distritoDB = new DistritoDB();
+            distritos = distritoDB.getDistrictsByCanton(1);
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return distritos;
+    }
+    
+        public ArrayList<Barrio> getBarriosDB() {
+        ArrayList<Barrio> barrios = new ArrayList<>();
+        try {
+            BarrioDB barrioDB = new BarrioDB();
+            barrios = BarrioDB.getBarriosByDistrito(1);
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return barrios;
+    }
+
+
+    public ArrayList<Sede> getSedesDB() 
+{
+        ArrayList<Sede> sedes = new ArrayList<>();
+        try {
+            SedeDB sedeDB = new SedeDB();
+            sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return sedes;
+    }
+
+
+
+
+// <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
     public String getIdentificacion() {
         return identificacion;
     }
@@ -392,7 +482,6 @@ public class MantenimientoFuncionariosBean {
     public void setFuncionariosFiltrados(ArrayList<Funcionario> funcionariosFiltrados) {
         this.funcionariosFiltrados = funcionariosFiltrados;
     }
-    
-    
-    
+
+// </editor-fold>
 }

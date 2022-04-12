@@ -17,7 +17,7 @@
 
                 <h1>Aprobacion de Prestamos de activos </h1>
 
-                <p:dataTable var="prestamo" value="#{AprobacionPrestamoBean.solicitudesDePrestamo}"
+                <p:dataTable var="prestamo" value="#{AprobacionPrestamoBean.getSolicitudesDePrestamo()}"
                              emptyMessage="No existe un prestamo con los filtros dados."
                              filteredValue="#{AprobacionPrestamoBean.solicitudesDePrestamoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
                              rows="10"

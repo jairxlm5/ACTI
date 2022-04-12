@@ -5,11 +5,16 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.ActivoDB;
+import Model.Funcionario;
+import Model.FuncionarioDB;
 import Model.Prestamo;
 import Model.Sede;
 import Model.Traslado;
 import Model.Usuario;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -57,6 +62,20 @@ public class ReporteActivosPTA {
         getTraslados();
     }
 
+       public ArrayList<Activo> getActivoDB(){
+        ArrayList<Activo> activos = new ArrayList<>();
+        try {
+           ActivoDB activoDB = new ActivoDB();
+           activos = activoDB.getAllActivos();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return activos;
+    }
+       
+       
     public ArrayList<Prestamo> getPrestamos() {
         return prestamos;
     }

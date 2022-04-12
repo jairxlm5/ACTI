@@ -5,9 +5,12 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.Funcionario;
 import Model.Sede;
+import Model.SedeDB;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -176,4 +179,17 @@ public class RegistroActivosBean {
         this.fecha = fecha;
     }
 
+        public ArrayList<Sede> getSedesDB() 
+{
+        ArrayList<Sede> sedes = new ArrayList<>();
+        try {
+            SedeDB sedeDB = new SedeDB();
+            sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return sedes;
+    }
 }
