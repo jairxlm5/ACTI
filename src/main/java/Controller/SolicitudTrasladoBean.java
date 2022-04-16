@@ -50,10 +50,10 @@ public class SolicitudTrasladoBean {
 
     /**
      * Este lo que hace es llenar la info sobre el activo, lo ocupaba para poder
-     * manejarlo en el xhtml mejor 
+     * manejarlo en el xhtml mejor
      */
     public void llenaInfoActivo() {
-       
+
     }
 
     /**
@@ -84,17 +84,13 @@ public class SolicitudTrasladoBean {
         //Se llena la lista con las sedes guardadas en la DB
     }
 
-    
-    public void cancelar(){
-          this.idActivo = "";
+    public void cancelar() {
+        this.idActivo = "";
         this.nombreSedeOrigen = "";
         this.validationMessage = "";
     }
-    
-    
-    
-    public ArrayList<Sede> getSedesDB() 
-{
+
+    public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
             SedeDB sedeDB = new SedeDB();
@@ -106,8 +102,8 @@ public class SolicitudTrasladoBean {
         }
         return sedes;
     }
-    
-    
+
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getIdActivo() {
         return idActivo;
     }
@@ -164,4 +160,5 @@ public class SolicitudTrasladoBean {
         this.infoActivo = infoActivo;
     }
 
+// </editor-fold>
 }

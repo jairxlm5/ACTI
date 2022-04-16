@@ -35,26 +35,22 @@ public class SolicitudFuncionariosBean {
         this.validationMessage = "";
     }
     
-    /**
-     * Para habilitar la cuenta de usuario seleccionada
-     */
+    
+    //Para habilitar la cuenta de usuario seleccionada
     public void enableAccount(){
         if(this.selectedUser != null){
             //Llamado a proceso para habilitar cuenta
         }
     }
     
-    /**
-     * Para rechazar una solicitud de cuenta
-     */
+    
+    //Para rechazar una solicitud de cuenta
     public void rejectRequest(){
         
     }
     
-    /**
-     * Trae todos los usuarios que no tienen su cuenta habilitada
-     * @return ArrayList<Usuario>
-     */
+ 
+     //Trae todos los usuarios que no tienen su cuenta habilitada
     public ArrayList<Usuario> getDisabledUsers() {
         this.disabledUsers = new ArrayList<>();
         ArrayList<Usuario> allUsers = new ArrayList<>();
@@ -68,8 +64,24 @@ public class SolicitudFuncionariosBean {
         }
         return disabledUsers;
     }
+    
+    
+    //Este es para poder traerse Las solicitudes de nuevos funcionarios
+        public ArrayList<Funcionario> getSolicitudNewFuncionariosDB(){
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        try {
+            FuncionarioDB funcionarioDB = new FuncionarioDB();
+            funcionarios = funcionarioDB.getAllFuncionariosNuevos();
+        } catch (SQLException e) {
 
-    public Usuario getSelectedUser() {
+        } catch (SNMPExceptions s) {
+
+        }
+        return funcionarios;
+    }
+    
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+ public Usuario getSelectedUser() {
         return selectedUser;
     }
 
@@ -105,18 +117,8 @@ public class SolicitudFuncionariosBean {
         this.funcionariosFiltrados = funcionariosFiltrados;
     }
     
-    //Este es para poder traerse Las solicitudes de nuevos funcionarios
-        public ArrayList<Funcionario> getSolicitudNewFuncionariosDB(){
-        ArrayList<Funcionario> funcionarios = new ArrayList<>();
-        try {
-            FuncionarioDB funcionarioDB = new FuncionarioDB();
-            funcionarios = funcionarioDB.getAllFuncionariosNuevos();
-        } catch (SQLException e) {
+// </editor-fold>
 
-        } catch (SNMPExceptions s) {
-
-        }
-        return funcionarios;
-    }
+   
     
 }

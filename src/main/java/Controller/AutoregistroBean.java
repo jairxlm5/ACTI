@@ -24,12 +24,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author danielp
  */
 public class AutoregistroBean {
+
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private TipoIdentificacion tipoIdSeleccionado;
     private String identificacion;
@@ -58,13 +60,13 @@ public class AutoregistroBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
     private Perfil perfilSeleccionado;
-    
-               //Logica necesaria para las fechas
+
+    //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaNacimiento = myCalendar.getTime();
-    
-    public AutoregistroBean(){
+
+    public AutoregistroBean() {
         this.telefonos = new LinkedList<>();
         this.perfiles = new LinkedList<>();
         this.sedes = new ArrayList<>();
@@ -80,8 +82,8 @@ public class AutoregistroBean {
         this.otrasDirecciones = "";
         this.validationMessage = "";
     }
-    
-    public void cleanData(){
+
+    public void cleanData() {
         this.identificacion = this.nombre = this.apellido1 = this.apellido2 = this.otrasDirecciones = this.correo = this.validationMessage = "";
         this.fechaNacimiento = null;
         this.edad = 0;
@@ -92,9 +94,8 @@ public class AutoregistroBean {
         this.telefonos.clear();
         this.perfiles.clear();
     }
-    
-       public ArrayList<Sede> getSedesDB() 
-{
+
+    public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
             SedeDB sedeDB = new SedeDB();
@@ -106,66 +107,67 @@ public class AutoregistroBean {
         }
         return sedes;
     }
-    
-    public void saveNewUser(){
+
+    public void saveNewUser() {
         this.validationMessage = "";
+
         //Primero validar que todos los datos se hayan ingresado
-        if(this.identificacion.trim().length() == 0){
+        if (this.identificacion.trim().length() == 0) {
             this.validationMessage = "Ingrese su Nombre";
             return;
         }
-        if(this.apellido1.trim().length() == 0){
+        if (this.apellido1.trim().length() == 0) {
             this.validationMessage = "Ingrese su Primer Apellido";
             return;
         }
-        if(this.apellido2.trim().length() == 0){
+        if (this.apellido2.trim().length() == 0) {
             this.validationMessage = "Ingrese su Segundo Apellido";
             return;
         }
-        if(this.fechaNacimiento == null){
+        if (this.fechaNacimiento == null) {
             this.validationMessage = "Indique su Fecha de Nacimiento";
             return;
         }
-        if(this.correo.trim().length() == 0){
+        if (this.correo.trim().length() == 0) {
             this.validationMessage = "Ingrese su Correo Electrónico";
             return;
         }
-        if(this.telefonos.isEmpty()){
+        if (this.telefonos.isEmpty()) {
             this.validationMessage = "Debe registrar al menos un teléfono";
             return;
         }
-        if(this.perfiles.isEmpty()){
+        if (this.perfiles.isEmpty()) {
             this.validationMessage = "Debe usar al menos un tipo de perfil";
             return;
         }
         //Se tiene que crear el nuevo usuario
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada, 
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, 
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
-        
+        this.validationMessage = "Todo salio bien con la creacion del usuario";
         //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
-        
+
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
     }
-    
-     /*Mae estoy creando este metodo para bretear los Beans*/
-    public Perfil[] getPerfiles(){
+
+    //Devuelve los perfiles del enum
+    public Perfil[] getPerfiles() {
         return Perfil.values();
     }
-    
-      /*Mae estoy creando este metodo para bretear los Beans*/
-    public TipoIdentificacion[] getTipoIdentificacion(){
+
+    //Devuelve los tipos de identificacion del enum
+    public TipoIdentificacion[] getTipoIdentificacion() {
         return TipoIdentificacion.values();
     }
-    
-    
+
     /**
      * Llena los ArrayList que a su vez llenan los combos en la pagina xhtml
      */
-    public void fillCombos(){
-        
+    public void fillCombos() {
+
     }
 
+    //<editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getIdentificacion() {
         return identificacion;
     }
@@ -245,12 +247,11 @@ public class AutoregistroBean {
     public void setSedes(ArrayList<Sede> sedes) {
         this.sedes = sedes;
     }
-    
 
     public void setPerfiles(LinkedList<UsuarioPerfil> perfiles) {
         this.perfiles = perfiles;
     }
-    
+
     public String getValidationMessage() {
         return validationMessage;
     }
@@ -354,8 +355,6 @@ public class AutoregistroBean {
     public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
         this.perfilSeleccionado = perfilSeleccionado;
     }
-    
-    
-    
+
+// </editor-fold>
 }
-    

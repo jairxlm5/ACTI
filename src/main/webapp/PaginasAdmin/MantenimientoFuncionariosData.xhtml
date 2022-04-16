@@ -34,7 +34,7 @@
 
                     <div class="centradoTextos">
 
-                        <p:dataTable var="funcionario" value="#{MantenimientoFuncionariosBean.getFuncionariosFiltradosDB()}" widgetVar="tablaFuncionarios"
+                        <p:dataTable var="funcionario" value="#{MantenimientoFuncionariosBean.getFuncionariosDB()}" widgetVar="tablaFuncionarios"
                                      emptyMessage="No existe un funcionario con los filtros dados."
                                      filteredValue="#{MantenimientoFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                                      rows="10"

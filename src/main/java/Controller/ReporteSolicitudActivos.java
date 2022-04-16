@@ -20,15 +20,16 @@ import java.util.Date;
  * @author danielp
  */
 public class ReporteSolicitudActivos {
+
     //ArrayLists con la info para desplegar en las tablas
     private ArrayList<MovimientoActivo> solicitudesAprobadas;
     private ArrayList<MovimientoActivo> solicitudesNoAprobadas;
-    
+
     //Bro para trabajar los beans en este primer entregable lo que hice fue hacer un array de activos 
     //Luego decidimos como bretearlo 
     private ArrayList<Activo> activos;
     private ArrayList<Activo> activosFiltrados;
-    
+
     //Informacion para las columnas de las tablas de cada activo en los ArrayList
     private Activo activo;
     private Usuario funcionarioSolicitante, tecnicoAprobante;
@@ -42,8 +43,8 @@ public class ReporteSolicitudActivos {
         this.tipoSolicitud = "";
         fillData();
     }
-    
-    public void fillData(){
+
+    public void fillData() {
         this.solicitudesAprobadas = new ArrayList<>();
         this.solicitudesNoAprobadas = new ArrayList<>();
         this.activos = new ArrayList<>();
@@ -52,6 +53,8 @@ public class ReporteSolicitudActivos {
         getSolicitudesNoAprobadas();
     }
 
+    
+    
     public ArrayList<MovimientoActivo> getSolicitudesAprobadas() {
         return solicitudesAprobadas;
     }
@@ -67,8 +70,23 @@ public class ReporteSolicitudActivos {
     public void setSolicitudesNoAprobadas(ArrayList<MovimientoActivo> solicitudesNoAprobadas) {
         this.solicitudesNoAprobadas = solicitudesNoAprobadas;
     }
+    
+        public ArrayList<Activo> getActivoDB() {
+        ArrayList<Activo> activos = new ArrayList<>();
+        try {
+            ActivoDB activoDB = new ActivoDB();
+            activos = activoDB.getAllActivosSolicitados();
+        } catch (SQLException e) {
 
-    public Activo getActivo() {
+        } catch (SNMPExceptions s) {
+
+        }
+        return activos;
+    }
+
+    
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+public Activo getActivo() {
         return activo;
     }
 
@@ -139,20 +157,9 @@ public class ReporteSolicitudActivos {
     public void setActivosFiltrados(ArrayList<Activo> activosFiltrados) {
         this.activosFiltrados = activosFiltrados;
     }
-    
-    
-       public ArrayList<Activo> getActivoDB(){
-        ArrayList<Activo> activos = new ArrayList<>();
-        try {
-           ActivoDB activoDB = new ActivoDB();
-           activos = activoDB.getAllActivosSolicitados();
-        } catch (SQLException e) {
 
-        } catch (SNMPExceptions s) {
+// </editor-fold>
 
-        }
-        return activos;
-    }
-       
     
+
 }

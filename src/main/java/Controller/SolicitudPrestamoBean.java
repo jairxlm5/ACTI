@@ -16,9 +16,10 @@ import java.util.GregorianCalendar;
  * @author danielp
  */
 public class SolicitudPrestamoBean {
+
     //Estos son los atributos para relacionarlos con campos de texto en el bean, los primeros 2 los tiene que ingresar
     //el usuario, los ultimos 3 son solo para desplegar informacion
-    private String idActivo; 
+    private String idActivo;
 
     private String nombre;
     private String descripcion;
@@ -26,12 +27,11 @@ public class SolicitudPrestamoBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
-    
-           //Logica necesaria para las fechas
+    //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaRetorno = myCalendar.getTime();
-    
+
     public SolicitudPrestamoBean() {
         this.idActivo = "";
         this.nombre = "";
@@ -42,45 +42,46 @@ public class SolicitudPrestamoBean {
 
     /**
      * Trae la informacion del activo elegido
+     *
      * @return Activo
      */
-    
-    public void cancelar(){
-           this.idActivo = "";
+    public void cancelar() {
+        this.idActivo = "";
         this.nombre = "";
         this.descripcion = "";
         this.nombreSede = "";
         this.validationMessage = "";
 
     }
+
     public Activo getActivoFromDB() {
         return null;
     }
-    
+
     /**
      * Llama a los metodos que procesan la solicitud
      */
-    public void processRequest(){
+    public void processRequest() {
         this.validationMessage = "";
         //Validaciones de datos de entrada
-        if(this.idActivo.trim().length() == 0){
+        if (this.idActivo.trim().length() == 0) {
             this.validationMessage = "Ingrese el codigo del activo";
             return;
         }
-        if(this.fechaRetorno == null){
+        if (this.fechaRetorno == null) {
             this.validationMessage = "Por favor ingrese la fecha en que va a regresar el activo";
             return;
         }
-        
+
         Activo activoElegido = getActivoFromDB();
-        if(activoElegido != null){
+        if (activoElegido != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
-        } 
-        else{
+        } else {
             this.validationMessage = "El activo no exite o no esta registrado en el sistema";
         }
     }
-    
+
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getIdActivo() {
         return idActivo;
     }
@@ -129,5 +130,5 @@ public class SolicitudPrestamoBean {
         this.validationMessage = validationMessage;
     }
 
-    
+// </editor-fold>
 }

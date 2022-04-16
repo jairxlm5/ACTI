@@ -12,8 +12,13 @@ import Model.Funcionario;
 import Model.FuncionarioDB;
 import Model.Sede;
 import Model.Usuario;
+import com.sun.accessibility.internal.resources.accessibility;
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +57,7 @@ public class CheckActivosAsignados {
     private String validationMessage;
     //Variable extra para usarse internamente
     private Map<String, Integer> mapOpciones;
-    
+
     public CheckActivosAsignados() {
         this.activosAsignados = new ArrayList<>();
         this.idUsuario = "";
@@ -67,32 +72,51 @@ public class CheckActivosAsignados {
         this.mapOpciones.put("Funcionario", 2);
         llenaListaOpciones();
     }
-    
+
     public ArrayList<Activo> consulta() {
         validationMessage = "";
         return getActivosAsignados(mapOpciones.get(this.opcionElegida.getLabel()));
     }
-    
+
     public ArrayList<Activo> getActivosAsignados() {
+
+        for (int i = 0; i < 100; i++) {
+            Activo activo = new Activo();
+            Funcionario func = new Funcionario();
+            func.setNombre("Daniel");
+            activo.setFuncionario(null);
+            activo.setDescripcion("addsd");
+            Date fecha = new Date();
+            activo.setFechaAdquisicion(fecha);
+            activo.setIdActivo("" + i);
+            activo.setNombre("Activo Numero" + i);
+            activo.setValor(500);
+            Sede sede = new Sede();
+            sede.setCodigo("100");
+            sede.setNombre("Central");
+            sede.setUbicacion("Alajuela");
+            activo.setSede(sede);
+            activosAsignados.add(activo);
+        }
         return activosAsignados;
     }
-    
+
     //Obtiene los activos por funcionario para CheckActivosAsignados
     public ArrayList<Activo> getActivosAsignadosXFuncionario() {
         //Se hace la consulta por Funcionario
         if (this.funcionario != null) {
             if (this.funcionario instanceof Funcionario) {
                 //Llamado a la consulta y se asigna el resultado a activosAsignados
-                
+
                 try {
                     ActivoDB activoDB = new ActivoDB();
                     activosAsignados = activoDB.getActivosByFunc(funcionario);
                 } catch (SQLException e) {
-                    
+
                 } catch (SNMPExceptions s) {
-                    
+
                 }
-                
+
                 return activosAsignados;
             } else {
                 validationMessage = "Esa persona no es un funcionario";
@@ -101,15 +125,15 @@ public class CheckActivosAsignados {
         }
         validationMessage = "Esa persona no existe o no esta registrada en el sistema";
         return null;
-        
+
     }
-    
+
     public ArrayList<Activo> getActivosAsignados(int opcionSeleccionada) {
         if (opcionSeleccionada == 1) {
             //Se hace la consulta por Sede
             if (this.sede != null) {
                 //Llamado a la consulta y se asigna el resultado a activosAsignados
-                
+
                 return activosAsignados;
             }
             validationMessage = "La Sede no existe";
@@ -120,7 +144,7 @@ public class CheckActivosAsignados {
                 if (this.funcionario != null) {
                     if (this.funcionario instanceof Funcionario) {
                         //Llamado a la consulta y se asigna el resultado a activosAsignados
-                        
+
                         return activosAsignados;
                     } else {
                         validationMessage = "Esa persona no es un funcionario";
@@ -135,159 +159,160 @@ public class CheckActivosAsignados {
             }
         }
     }
-    
+
     public void llenaListaOpciones() {
         this.opcionesParaConsulta = new ArrayList<>();
         this.opcionesParaConsulta.add(new SelectItem(1, "Sede"));
         this.opcionesParaConsulta.add(new SelectItem(2, "Funcionario"));
     }
-    
+
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public Usuario getFuncionarioConsultado() {
         return funcionarioConsultado;
     }
-    
+
     public void setFuncionarioConsultado(Usuario funcionarioConsultado) {
         this.funcionarioConsultado = funcionarioConsultado;
     }
-    
+
     public Sede getSedeConsultada() {
         return sedeConsultada;
     }
-    
+
     public void setSedeConsultada(Sede sedeConsultada) {
         this.sedeConsultada = sedeConsultada;
     }
-    
+
     public String getIdUsuario() {
         return idUsuario;
     }
-    
+
     public void setIdUsuario(String idUsuario) {
         this.idUsuario = idUsuario;
     }
-    
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
-    
+
     public void setNombreUsuario(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;
     }
-    
+
     public String getCodigoSede() {
         return codigoSede;
     }
-    
+
     public void setCodigoSede(String codigoSede) {
         this.codigoSede = codigoSede;
     }
-    
+
     public String getNombreSede() {
         return nombreSede;
     }
-    
+
     public void setNombreSede(String nombreSede) {
         this.nombreSede = nombreSede;
     }
-    
+
     public void setActivosAsignados(ArrayList<Activo> activosAsignados) {
         this.activosAsignados = activosAsignados;
     }
-    
+
     public String getIdActivo() {
         return idActivo;
     }
-    
+
     public void setIdActivo(String idActivo) {
         this.idActivo = idActivo;
     }
-    
+
     public String getNombreActivo() {
         return nombreActivo;
     }
-    
+
     public void setNombreActivo(String nombreActivo) {
         this.nombreActivo = nombreActivo;
     }
-    
+
     public String getDescripcion() {
         return descripcion;
     }
-    
+
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
     public double getValor() {
         return valor;
     }
-    
+
     public void setValor(double valor) {
         this.valor = valor;
     }
-    
+
     public Date getFechaAdquisicion() {
         return fechaAdquisicion;
     }
-    
+
     public void setFechaAdquisicion(Date fechaAdquisicion) {
         this.fechaAdquisicion = fechaAdquisicion;
     }
-    
+
     public Sede getSede() {
         return sede;
     }
-    
+
     public void setSede(Sede sede) {
         this.sede = sede;
     }
-    
+
     public Funcionario getFuncionario() {
         return funcionario;
     }
-    
+
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
-    
+
     public String getValidationMessage() {
         return validationMessage;
     }
-    
+
     public void setValidationMessage(String validationMessage) {
         this.validationMessage = validationMessage;
     }
-    
+
     public Map<String, Integer> getMapOpciones() {
         return mapOpciones;
     }
-    
+
     public void setMapOpciones(Map<String, Integer> mapOpciones) {
         this.mapOpciones = mapOpciones;
     }
-    
+
     public ArrayList<SelectItem> getOpcionesParaConsulta() {
         return opcionesParaConsulta;
     }
-    
+
     public void setOpcionesParaConsulta(ArrayList<SelectItem> opcionesParaConsulta) {
         this.opcionesParaConsulta = opcionesParaConsulta;
     }
-    
+
     public SelectItem getOpcionElegida() {
         return opcionElegida;
     }
-    
+
     public void setOpcionElegida(SelectItem opcionElegida) {
         this.opcionElegida = opcionElegida;
     }
-    
+
     public ArrayList<Activo> getActivosAsignadosFiltrados() {
         return activosAsignadosFiltrados;
     }
-    
+
     public void setActivosAsignadosFiltrados(ArrayList<Activo> activosAsignadosFiltrados) {
         this.activosAsignadosFiltrados = activosAsignadosFiltrados;
     }
-    
+// </editor-fold>
 }

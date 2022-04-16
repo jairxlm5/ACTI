@@ -5,10 +5,15 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.Prestamo;
+import Model.PrestamoDB;
 import Model.Sede;
 import Model.Traslado;
+import Model.TrasladoDB;
 import Model.Usuario;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,6 +22,7 @@ import java.util.Date;
  * @author danielp
  */
 public class AprobacionTrasladoBean {
+
     //ArrayList que se llena con la lista de solicitudes de traslados de activos
     private ArrayList<Traslado> solicitudesDeTraslado;
     private ArrayList<Traslado> solicitudesDeTrasladoFiltradas;
@@ -35,31 +41,44 @@ public class AprobacionTrasladoBean {
         this.solicitudesDeTraslado = new ArrayList<>();
         this.validationMessage = "";
     }
-    
+
     /**
      * Metodo que llama a los metodos que aprueban un traslado de activo
      */
-    public void aprobarTraslado(){
-        
-    }
-    
-    /**
-     * Metodo que rechaza el traslado
-     */
-    public void rechazarTraslado(){
-        
+    public void aprobarTraslado() {
+
     }
 
     /**
-     * Retorna una lista con todas las solicitudes de traslados que no han sido aprobadas
+     * Metodo que rechaza el traslado
+     */
+    public void rechazarTraslado() {
+
+    }
+
+    /**
+     * Retorna una lista con todas las solicitudes de traslados que no han sido
+     * aprobadas
+     *
      * @return ArrayList
      */
     public ArrayList<Traslado> getSolicitudesDeTraslado() {
         //Esta variable se llena con los datos que vienen de la DB
         ArrayList<Traslado> trasladosDB = new ArrayList<>();
-        for(Traslado traslado : trasladosDB){
+
+        try {
+            TrasladoDB trasladoDB = new TrasladoDB();
+            trasladosDB = trasladoDB.getAllTraslados();
+
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+
+        for (Traslado traslado : trasladosDB) {
             //Se agregan solo los traslados que no se han aprobado
-            if(!traslado.isAprobado()){
+            if (!traslado.isAprobado()) {
                 this.solicitudesDeTraslado.add(traslado);
             }
         }
@@ -70,6 +89,7 @@ public class AprobacionTrasladoBean {
         this.solicitudesDeTraslado = solicitudesDeTraslado;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public Activo getActivo() {
         return activo;
     }
@@ -157,7 +177,6 @@ public class AprobacionTrasladoBean {
     public void setSolicitudesDeTrasladoFiltradas(ArrayList<Traslado> solicitudesDeTrasladoFiltradas) {
         this.solicitudesDeTrasladoFiltradas = solicitudesDeTrasladoFiltradas;
     }
-    
-    
-    
+// </editor-fold>
+
 }

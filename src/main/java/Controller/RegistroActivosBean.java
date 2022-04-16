@@ -22,6 +22,7 @@ import java.util.GregorianCalendar;
  * @author danielp
  */
 public class RegistroActivosBean {
+
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String idActivo;
     private String nombre;
@@ -36,13 +37,11 @@ public class RegistroActivosBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
 
-       //Logica necesaria para las fechas
+    //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fecha = myCalendar.getTime();
-    
-    
-    
+
     public RegistroActivosBean() {
         this.sedes = new ArrayList<>();
         this.idActivo = "";
@@ -86,27 +85,24 @@ public class RegistroActivosBean {
             this.validationMessage = "Por favor indique la sede a la que pertenece el activo";
             return;
         }
-        
+
         Funcionario funcAsignado = getFuncionarioFromDB();
         if (funcAsignado != null) {
             //Se construye el objeto activo
             Activo activo = new Activo(idActivo, nombre, descripcion, valor, fechaAdquisicion, sedeSeleccionada, funcAsignado);
 
             //Se registra el activo en la BD
-            
-        } else{
+        } else {
             this.validationMessage = "El funcionario elegido no existe o no esta registrado en el sistema";
         }
 
     }
-    
-    public void fillComboList(){
-        
+
+    public void fillComboList() {
+
     }
 
-    /*
-      METODOS GET Y SET
-     */
+// <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getIdActivo() {
         return idActivo;
     }
@@ -179,8 +175,7 @@ public class RegistroActivosBean {
         this.fecha = fecha;
     }
 
-        public ArrayList<Sede> getSedesDB() 
-{
+    public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
             SedeDB sedeDB = new SedeDB();
@@ -192,4 +187,6 @@ public class RegistroActivosBean {
         }
         return sedes;
     }
+// </editor-fold>
+
 }

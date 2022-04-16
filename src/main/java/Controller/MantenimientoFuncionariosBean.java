@@ -69,6 +69,11 @@ public class MantenimientoFuncionariosBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
+    //Variables para poder filtrar los lugares
+    private int prov;
+    private int cant;
+    private int dist;
+    private int barr;
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
@@ -221,7 +226,7 @@ public class MantenimientoFuncionariosBean {
         this.barrios = new ArrayList<>();
     }
 
-    public ArrayList<Funcionario> getFuncionariosFiltradosDB() {
+    public ArrayList<Funcionario> getFuncionariosDB() {
         ArrayList<Funcionario> funcionarios = new ArrayList<>();
         try {
             FuncionarioDB funcionarioDB = new FuncionarioDB();
@@ -246,12 +251,11 @@ public class MantenimientoFuncionariosBean {
         }
         return provincias;
     }
-    
-    
+
     public ArrayList<Canton> getCantonesDB() {
         ArrayList<Canton> cantones = new ArrayList<>();
         try {
-            CantonDB  cantonDB = new CantonDB();
+            CantonDB cantonDB = new CantonDB();
             cantones = CantonDB.getCantonesByProvince(1);
         } catch (SQLException e) {
 
@@ -260,7 +264,6 @@ public class MantenimientoFuncionariosBean {
         }
         return cantones;
     }
-    
 
     public ArrayList<Distrito> getDistritosDB() {
         ArrayList<Distrito> distritos = new ArrayList<>();
@@ -274,8 +277,8 @@ public class MantenimientoFuncionariosBean {
         }
         return distritos;
     }
-    
-        public ArrayList<Barrio> getBarriosDB() {
+
+    public ArrayList<Barrio> getBarriosDB() {
         ArrayList<Barrio> barrios = new ArrayList<>();
         try {
             BarrioDB barrioDB = new BarrioDB();
@@ -288,9 +291,7 @@ public class MantenimientoFuncionariosBean {
         return barrios;
     }
 
-
-    public ArrayList<Sede> getSedesDB() 
-{
+    public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
             SedeDB sedeDB = new SedeDB();
@@ -303,10 +304,51 @@ public class MantenimientoFuncionariosBean {
         return sedes;
     }
 
+    public void AsignaCantones() {
 
+    }
 
+    public void AsignaDistrito() {
+
+    }
+
+    public void AsignaBarrio() {
+
+    }
 
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
+    public void setBarr(int barr) {
+        this.barr = barr;
+    }
+
+    public int getProv() {
+        return prov;
+    }
+
+    public void setProv(int prov) {
+        this.prov = prov;
+    }
+
+    public int getCant() {
+        return cant;
+    }
+
+    public void setCant(int cant) {
+        this.cant = cant;
+    }
+
+    public int getDist() {
+        return dist;
+    }
+
+    public void setDist(int dist) {
+        this.dist = dist;
+    }
+
+    public int getBarr() {
+        return barr;
+    }
+
     public String getIdentificacion() {
         return identificacion;
     }
