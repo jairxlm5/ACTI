@@ -57,11 +57,15 @@ public class ProvinciaDB {
             while(rs.next()){
                 int idProv = rs.getInt("ID");
                 String nombre = rs.getString("Nombre");
-                //Se trae los cantones que tiene
-                ArrayList<Canton> cantones = CantonDB.getCantonesByProvince(idProv);
+                
+                
+                //Le tuve que comentar lo de obtener cantones daba error
+                
+                
+             //   ArrayList<Canton> cantones = CantonDB.getCantonesByProvince(idProv);
                 
                 Provincia prov = new Provincia(idProv, nombre);
-                prov.setCantones(cantones);
+                //prov.setCantones(cantones);
                 provs.add(prov);
             }
         }

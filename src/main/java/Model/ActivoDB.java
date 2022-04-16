@@ -208,8 +208,9 @@ public class ActivoDB {
                 double valor = rs.getDouble("Valor");
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
-                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
-                
+               Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+
+               
                 Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
                 activos.add(activo);
             }

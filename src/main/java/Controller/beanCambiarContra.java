@@ -10,6 +10,7 @@ package Controller;
  * @author JAW
  */
 public class beanCambiarContra {
+
     String claveAutogenerada;
     String codigoSeguridad;
     String claveNueva;
@@ -22,6 +23,8 @@ public class beanCambiarContra {
 
     public beanCambiarContra() {
     }
+
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
 
     public String getClaveAutogenerada() {
         return claveAutogenerada;
@@ -46,6 +49,6 @@ public class beanCambiarContra {
     public void setClaveNueva(String claveNueva) {
         this.claveNueva = claveNueva;
     }
-    
-    
+
+// </editor-fold>
 }

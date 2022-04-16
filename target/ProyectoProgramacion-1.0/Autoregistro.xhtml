@@ -70,10 +70,13 @@
                     </p:selectOneMenu>
                     <br></br><br></br>  
 
-                    <p:button class="botones" value="Aceptar"></p:button>
+                    <p:button class="botones" value="Aceptar" onclick="#{AutoregistroBean.saveNewUser()}"></p:button>
 
-                    <p:button class="botones" value="Cancelar" ></p:button>
+                    <p:button class="botones" value="Cancelar" onclick="#{AutoregistroBean.cleanData()}" ></p:button>
                     <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>
+                    
+                    
+                   
 
                 </div>
             </div>

@@ -75,8 +75,10 @@ public class ReporteActivosPTA {
         return activos;
     }
        
+      
+       // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
        
-    public ArrayList<Prestamo> getPrestamos() {
+           public ArrayList<Prestamo> getPrestamos() {
         return prestamos;
     }
 
@@ -198,4 +200,7 @@ public class ReporteActivosPTA {
     
     
     
+
+// </editor-fold>
+
 }

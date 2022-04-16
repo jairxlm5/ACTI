@@ -17,7 +17,7 @@
 
                 <div class="VaraDeLaBaseDeDatos">
 
-                    <p:dataTable var="activo" value="${CheckActivosAsignados.getActivosAsignadosXFuncionario()}"
+                    <p:dataTable var="activo" value="${CheckActivosAsignados.getActivosAsignados()}"
                                  emptyMessage="No existe un activo con los filtros dados."
                                  filteredValue="#{CheckActivosAsignados.activosAsignadosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                                  rows="10"
@@ -60,7 +60,7 @@
 
                     </p:dataTable>
 
-                    <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml" ></p:button>
+                    <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml"></p:button>
                     <p:button class="btn" value="Ayuda" ></p:button>
 
                 </div>

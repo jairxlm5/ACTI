@@ -5,9 +5,14 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.Prestamo;
+import Model.PrestamoDB;
+import Model.Sede;
+import Model.SedeDB;
 import Model.Usuario;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,6 +21,7 @@ import java.util.Date;
  * @author danielp
  */
 public class AprobacionPrestamoBean {
+
     //ArrayList que se llena con la lista de solicitudes de prestamos de activos
     private ArrayList<Prestamo> solicitudesDePrestamo;
     private ArrayList<Prestamo> solicitudesDePrestamoFiltradas;
@@ -33,36 +39,63 @@ public class AprobacionPrestamoBean {
         this.solicitudesDePrestamo = new ArrayList<>();
         this.validationMessage = "";
     }
-    
+
     /**
      * Metodo que llama a los metodos que aprueban un prestamo de activo
      */
-    public void apruebaPrestamo(){
-         
-    }
-    
-    /**
-     * Rechaza el prestamo
-     */
-    public void rechazaPrestamo(){
-        
+    public void apruebaPrestamo() {
+
     }
 
     /**
-     * Retorna una lista con todas las solicitudes de prestamos que no han sido aprobadas
+     * Rechaza el prestamo
+     */
+    public void rechazaPrestamo() {
+
+    }
+
+    /**
+     * Retorna una lista con todas las solicitudes de prestamos que no han sido
+     * aprobadas
+     *
      * @return ArrayList
      */
     public ArrayList<Prestamo> getSolicitudesDePrestamo() {
         //Esta variable se llena con los datos que vienen de la DB
         ArrayList<Prestamo> prestamosDB = new ArrayList<>();
-        for(Prestamo prestamo : prestamosDB){
+
+        try {
+            PrestamoDB prestamoDB = new PrestamoDB();
+            prestamosDB = prestamoDB.getAllPrestamos();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+
+        for (Prestamo prestamo : prestamosDB) {
             //Se agregan solo los prestamos que no han sido aprobados
-            if(!prestamo.isAprobado()){
+            if (!prestamo.isAprobado()) {
                 this.solicitudesDePrestamo.add(prestamo);
             }
         }
         return solicitudesDePrestamo;
     }
+    
+
+    public ArrayList<Sede> getSedesDB() {
+        ArrayList<Sede> sedes = new ArrayList<>();
+        try {
+            SedeDB sedeDB = new SedeDB();
+            sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return sedes;
+    }
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
 
     public void setSolicitudesDePrestamo(ArrayList<Prestamo> solicitudesDePrestamo) {
         this.solicitudesDePrestamo = solicitudesDePrestamo;
@@ -139,5 +172,6 @@ public class AprobacionPrestamoBean {
     public void setSolicitudesDePrestamoFiltradas(ArrayList<Prestamo> solicitudesDePrestamoFiltradas) {
         this.solicitudesDePrestamoFiltradas = solicitudesDePrestamoFiltradas;
     }
-    
+// </editor-fold>
+
 }

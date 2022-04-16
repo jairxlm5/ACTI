@@ -11,46 +11,31 @@
     </h:head>
     <h:body>
         <h:form>
-            
+            <div class="Contenedor-login">
+                <h1>Login</h1>
+                <div class="Contenedor-inputs">
+                    <i class="fas fa-user"></i>
+                    <p:inputText value="#{LoginBean.username}" placeholder="Username" style="color: white"></p:inputText>   
+                </div>
 
-        <div class="Contenedor-login">
-            <h1>Login</h1>
-            
-            <div class="Contenedor-inputs">
-                <i class="fas fa-user"></i>
-                <p:inputText value="#{LoginBean.username}" placeholder="Username" style="color: white"></p:inputText>
-                
+                <div class="Contenedor-inputs">
+                    <i class="fas fa-lock"></i>
+                    <p:password value="#{LoginBean.password}" placeholder="Contraseña" style="color: white"></p:password>
+                </div>
+
+                <div class="Contenedor-inputs">
+                    <p:selectOneMenu value="#{LoginBean.perfilSeleccionado}">
+                        <f:selectItems value="#{LoginBean.getPerfilesDB()}" />
+                    </p:selectOneMenu>
+                </div>
+
+                <h:commandButton value="Aceptar" action="#{LoginBean.processLoginData()}" class="btn"></h:commandButton>
+                <br></br>
+                <br></br>
+                <h:outputLabel value="#{LoginBean.validationMessage}" style=""></h:outputLabel>
             </div>
 
-            <div class="Contenedor-inputs">
-                <i class="fas fa-lock"></i>
-                <p:password value="#{LoginBean.password}" placeholder="Contraseña" style="color: white"></p:password>
-                
-            </div>
-
-               <div class="Contenedor-inputs">
-             
-            
-                   
-                   <p:selectOneMenu value="#{LoginBean.perfilSeleccionado}">
-                       <f:selectItems value="#{LoginBean.getPerfiles()}" />
-                    
-                </p:selectOneMenu>
-                
-            </div>
-            
-            <!-- Bro este boton no se porque no esta ejecutando el metodo, ya le hice debug y no se 
-            por que no lo esta ejecutando-->
-            
-            <h:commandButton value="Aceptar" action="#{LoginBean.processLoginData()}" class="btn"></h:commandButton>
-            <br></br>
-            <br></br>
-            <h:outputLabel value="#{LoginBean.validationMessage}" style=""></h:outputLabel>
-              
-              
-        </div>
-
-        <p:button value="¿No tienes cuenta?  ¡Registrate!" href="Autoregistro.xhtml" class="btn"></p:button>
+            <p:button value="¿No tienes cuenta?  ¡Registrate!" href="Autoregistro.xhtml" class="btn"></p:button>
         </h:form>
     </h:body>
 </html>

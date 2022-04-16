@@ -61,8 +61,7 @@
 
 
                     <h:outputText value="Provincia:   "></h:outputText>
-                    <p:selectOneMenu value="#{MantenimientoFuncionariosBean.provinciaSeleccionada}">
-
+                    <p:selectOneMenu onchange="" value="#{MantenimientoFuncionariosBean.provinciaSeleccionada}">
                         <f:selectItems value="#{MantenimientoFuncionariosBean.getProvinciasDB()}"></f:selectItems>
                     </p:selectOneMenu>
 
