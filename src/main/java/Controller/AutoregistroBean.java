@@ -16,7 +16,10 @@ import Model.Sede;
 import Model.SedeDB;
 import Model.Telefono;
 import Model.Usuario;
+import Model.UsuarioDB;
 import Model.UsuarioPerfil;
+import Utils.Utils;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +68,8 @@ public class AutoregistroBean {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaNacimiento = myCalendar.getTime();
+    //Llamado a clases DB
+    UsuarioDB userDB = new UsuarioDB();
 
     public AutoregistroBean() {
         this.telefonos = new LinkedList<>();
@@ -146,8 +151,34 @@ public class AutoregistroBean {
                 perfiles, telefonos);
         this.validationMessage = "Todo salio bien con la creacion del usuario";
         //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
+        int codSeguridad = userDB.generateSecurityCode();
+        newUser.setCodSeguridad(codSeguridad);
+        String generatedPass = userDB.generateFirstPasswd();
+
+        /*try{
+            Utils.sendLoginInfoEmail(newUser, generatedPass);
+        } catch (MessagingException e){
+            this.validationMessage = "Ocurrio un error al enviar el correo, por favor intente de nuevo";
+            return;
+        }*/
+        //Se registran los bytes de la clave
+        try {
+            generatedPass = Utils.getHashedPaswd(generatedPass);
+        } catch (Exception e) {
+            this.validationMessage = "Error al registrar contraseña";
+        }
+        newUser.setClave(generatedPass.getBytes(StandardCharsets.UTF_8));
 
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
+        try {
+            userDB.addNewUser(newUser);
+            this.validationMessage = "Usuario registrado correctamente";
+        } catch (SNMPExceptions e) {
+            this.validationMessage = "Error al registrar usuario" + e.toString() + e.getMessage();
+        } catch (SQLException e) {
+            this.validationMessage = "Error al registrar usuario" + e.toString() + e.getMessage();
+        }
+
     }
 
     //Devuelve los perfiles del enum
