@@ -6,7 +6,6 @@
 package Controller;
 
 import DAO.SNMPExceptions;
-import Enum.Perfil;
 import Model.Barrio;
 import Model.BarrioDB;
 import Model.Canton;
@@ -15,15 +14,14 @@ import Model.Distrito;
 import Model.DistritoDB;
 import Model.Funcionario;
 import Model.FuncionarioDB;
-import Model.PerfilDB;
 import Model.Provincia;
 import Model.ProvinciaDB;
 import Model.Sede;
 import Model.SedeDB;
 import Model.Telefono;
 import Model.Usuario;
+import Model.UsuarioDB;
 import Model.UsuarioPerfil;
-import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +29,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import Utils.Utils;
+import java.nio.charset.StandardCharsets;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -78,6 +79,8 @@ public class MantenimientoFuncionariosBean {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaNacimiento = myCalendar.getTime();
+    //Llamado clases del Model
+    UsuarioDB userDB = new UsuarioDB();
 
     public MantenimientoFuncionariosBean() {
         this.perfiles = new LinkedList<>();
@@ -142,9 +145,8 @@ public class MantenimientoFuncionariosBean {
         Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
                 cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
-        //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
-
-        //Se tiene que guardar toda la informacion del Usuario en la base de datos
+        
+       
     }
 
     /**
