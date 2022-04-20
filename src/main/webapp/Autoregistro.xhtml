@@ -16,6 +16,7 @@
                 <br></br><br></br>       
                 <h1>Formulario</h1>
                 <br></br><br></br>       
+                
                 <div class="Contenedor-inputs">
                     <h:outputText value="Tipo de Identificacion:   "></h:outputText>
                     <p:selectOneMenu value="#{AutoregistroBean.tipoIdSeleccionado}">
@@ -46,7 +47,7 @@
                     <br></br><br></br>
 
                     <h:outputText value="Teléfono: "></h:outputText>
-                    <p:inputText value="#{AutoregistroBean.telefonos}"></p:inputText>
+                    <p:inputText value="#{AutoregistroBean.numeroTelefono}"></p:inputText>
                     <br></br><br></br>
 
                     <h:outputText value="Correo electrónico: "></h:outputText>
@@ -57,7 +58,7 @@
 
                     <h:outputText value="Sede:   "></h:outputText>
                     <p:selectOneMenu value="#{AutoregistroBean.sede}">
-                        <f:selectItems value="#{AutoregistroBean.getSedesDB()}"></f:selectItems>
+                        <f:selectItems value="#{AutoregistroBean.sedes}"></f:selectItems>
                     </p:selectOneMenu>
                     <br></br><br></br><br></br>
 
@@ -68,15 +69,16 @@
                         <f:selectItems value="#{AutoregistroBean.getPerfiles()}" />
 
                     </p:selectOneMenu>
-                    <br></br><br></br>  
+                    <br></br><br></br><br></br> 
 
-                    <p:button class="botones" value="Aceptar" onclick="#{AutoregistroBean.saveNewUser()}"></p:button>
+                    <h:commandButton class="botones" value="Aceptar" action="#{AutoregistroBean.saveNewUser()}"></h:commandButton>
 
                     <p:button class="botones" value="Cancelar" onclick="#{AutoregistroBean.cleanData()}" ></p:button>
                     <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>
                     
-                    
-                   
+                    <br></br>
+                    <br></br>
+                    <h:outputText value="#{AutoregistroBean.messageDisplayed}"></h:outputText>
 
                 </div>
             </div>

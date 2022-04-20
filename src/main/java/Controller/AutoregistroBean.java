@@ -8,6 +8,7 @@ package Controller;
 import DAO.SNMPExceptions;
 import Enum.Perfil;
 import Enum.TipoIdentificacion;
+import Enum.TipoTelefono;
 import Model.Barrio;
 import Model.Canton;
 import Model.Distrito;
@@ -37,9 +38,13 @@ public class AutoregistroBean {
 
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private TipoIdentificacion tipoIdSeleccionado;
+    private TipoTelefono tipoTelefonoSeleccionado;
+    private Perfil perfilSeleccionado;
     private String identificacion;
     private String nombre, apellido1, apellido2;
-    private String correo;
+    private String correo = "correo";
+    private String numeroTelefono;
+
     //A este direccion completa me falta hacerle un metodo que lo llene
     private String direccionCompleta;
     private int edad;
@@ -54,15 +59,17 @@ public class AutoregistroBean {
     private ArrayList<Distrito> distritos;
     private ArrayList<Barrio> barrios;
     private ArrayList<Sede> sedes;
+    
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Provincia provinciaSeleccionada;
     private Canton cantonSeleccionado;
     private Distrito distritoSeleccionado;
     private Barrio barrioSeleccionado;
     private Sede sede;
+
+    private String validationMessage = "Hola Mundo";
     //Mensaje para desplegar info de validaciones
-    private String validationMessage = "";
-    private Perfil perfilSeleccionado;
+    private String messageDisplayed;
 
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -79,13 +86,13 @@ public class AutoregistroBean {
         this.cantones = new ArrayList<>();
         this.distritos = new ArrayList<>();
         this.barrios = new ArrayList<>();
-        this.identificacion = "";
+        /*this.identificacion = "";
         this.nombre = "";
         this.apellido1 = "";
         this.apellido2 = "";
         this.correo = "";
         this.otrasDirecciones = "";
-        this.validationMessage = "";
+        this.validationMessage = "";*/
     }
 
     public void cleanData() {
@@ -100,7 +107,7 @@ public class AutoregistroBean {
         this.perfiles.clear();
     }
 
-    public ArrayList<Sede> getSedesDB() {
+    public void fillSedes() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
             SedeDB sedeDB = new SedeDB();
@@ -110,46 +117,49 @@ public class AutoregistroBean {
         } catch (SNMPExceptions s) {
 
         }
-        return sedes;
     }
 
     public void saveNewUser() {
-        this.validationMessage = "";
+        this.messageDisplayed = "";
 
         //Primero validar que todos los datos se hayan ingresado
         if (this.identificacion.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Nombre";
+            this.messageDisplayed = "Ingrese su Número de Identificación";
+            return;
+        }
+        if(this.nombre.trim().length() == 0){
+            this.messageDisplayed = "Ingrese su Nombre";
             return;
         }
         if (this.apellido1.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Primer Apellido";
+            this.messageDisplayed = "Ingrese su Primer Apellido";
             return;
         }
         if (this.apellido2.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Segundo Apellido";
+            this.messageDisplayed = "Ingrese su Segundo Apellido";
             return;
         }
         if (this.fechaNacimiento == null) {
-            this.validationMessage = "Indique su Fecha de Nacimiento";
+            this.messageDisplayed = "Indique su Fecha de Nacimiento";
             return;
         }
         if (this.correo.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Correo Electrónico";
+            this.messageDisplayed = "Ingrese su Correo Electrónico";
             return;
         }
         if (this.telefonos.isEmpty()) {
-            this.validationMessage = "Debe registrar al menos un teléfono";
+            this.messageDisplayed = "Debe registrar al menos un teléfono";
             return;
         }
         if (this.perfiles.isEmpty()) {
-            this.validationMessage = "Debe usar al menos un tipo de perfil";
+            this.messageDisplayed = "Debe usar al menos un tipo de perfil";
             return;
         }
         //Se tiene que crear el nuevo usuario
         Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
                 cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
-        this.validationMessage = "Todo salio bien con la creacion del usuario";
+        //this.validationMessage = "Todo salio bien con la creacion del usuario";
         //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
         int codSeguridad = userDB.generateSecurityCode();
         newUser.setCodSeguridad(codSeguridad);
@@ -165,18 +175,18 @@ public class AutoregistroBean {
         try {
             generatedPass = Utils.getHashedPaswd(generatedPass);
         } catch (Exception e) {
-            this.validationMessage = "Error al registrar contraseña";
+            this.messageDisplayed = "Error al registrar contraseña";
         }
         newUser.setClave(generatedPass.getBytes(StandardCharsets.UTF_8));
 
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
         try {
             userDB.addNewUser(newUser);
-            this.validationMessage = "Usuario registrado correctamente";
+            this.messageDisplayed = "Usuario registrado correctamente";
         } catch (SNMPExceptions e) {
-            this.validationMessage = "Error al registrar usuario" + e.toString() + e.getMessage();
+            this.messageDisplayed = "Error al registrar usuario" + e.toString() + e.getMessage();
         } catch (SQLException e) {
-            this.validationMessage = "Error al registrar usuario" + e.toString() + e.getMessage();
+            this.messageDisplayed = "Error al registrar usuario" + e.toString() + e.getMessage();
         }
 
     }
@@ -189,6 +199,43 @@ public class AutoregistroBean {
     //Devuelve los tipos de identificacion del enum
     public TipoIdentificacion[] getTipoIdentificacion() {
         return TipoIdentificacion.values();
+    }
+    
+    //Devuelve los tipos de telefonos
+    public TipoTelefono[] getTiposTelefono(){
+        return TipoTelefono.values();
+    }
+    
+    //Agrega un telefono a la lista
+    public void addTelefono(){
+        this.validationMessage = "";
+        if (this.identificacion.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Número de Identificación";
+            return;
+        }
+        if(this.numeroTelefono.trim().length() == 0){
+            this.validationMessage = "Digite el número telefónico";
+            return;
+        }
+        
+        //Se agrega a la lista de telefonos
+        this.telefonos.add(new Telefono(this.numeroTelefono, this.identificacion, this.tipoTelefonoSeleccionado));
+    }
+    
+    //Agrega un perfil a la lista
+    public void addPerfil(){
+        this.validationMessage = "";
+        if (this.identificacion.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Número de Identificación";
+            return;
+        }
+        
+        //Se agrega a la lista de perfiles
+        try{
+            this.perfiles.add(new UsuarioPerfil(this.identificacion, this.perfilSeleccionado, Utils.getCurrentDate()));
+        } catch (Exception e){
+            this.messageDisplayed = "Ocurrió un error al registrar el perfil" + e.getMessage();
+        }
     }
 
     /**
@@ -387,5 +434,29 @@ public class AutoregistroBean {
         this.perfilSeleccionado = perfilSeleccionado;
     }
 
-// </editor-fold>
+    public String getMessageDisplayed() {
+        return messageDisplayed;
+    }
+
+    public void setMessageDisplayed(String messageDisplayed) {
+        this.messageDisplayed = messageDisplayed;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+    
+    public TipoTelefono getTipoTelefonoSeleccionado() {
+        return tipoTelefonoSeleccionado;
+    }
+
+    public void setTipoTelefonoSeleccionado(TipoTelefono tipoTelefonoSeleccionado) {
+        this.tipoTelefonoSeleccionado = tipoTelefonoSeleccionado;
+    }
+
+// </editor-fold>  
 }
