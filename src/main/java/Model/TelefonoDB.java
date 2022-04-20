@@ -18,7 +18,7 @@ import java.util.LinkedList;
  */
 public class TelefonoDB {
     private static final DataAccess dataAccess = new DataAccess();
-    private UsuarioDB usuarioDB = new UsuarioDB();
+    //private UsuarioDB usuarioDB = new UsuarioDB();
     
     /**
      * Retorna una lista con todos los telefonos registrados para un usuario
