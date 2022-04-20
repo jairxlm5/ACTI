@@ -9,6 +9,7 @@ import DAO.SNMPExceptions;
 import Enum.Perfil;
 import Model.PerfilDB;
 import Model.Usuario;
+import Model.UsuarioDB;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,6 +27,9 @@ public class LoginBean {
     private Perfil perfilSeleccionado;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
+
+    //Llamado a las clases DB
+    UsuarioDB userDB = new UsuarioDB();
 
     public LoginBean() {
 
@@ -56,36 +60,58 @@ public class LoginBean {
             return "";
         }
         //Llamado a metodos que validan con la base de datos la informacion indicada por el usuario iniciando sesion
-        //  Usuario user = getUserFromDB(); //Este metodo se trae el usuario de la base de datos
-        /*passwordCorrect();
-        userHasProfile();
-         */
-
-        //Se tiene que guardar la info de la sesion
-        //Dependiendo del tipo de perfil se abren las paginas respectivas
-        switch (perfilSeleccionado) {
-            case Administrativo:
-                return "MenuAdministrativo.xhtml";
-            case Funcionario:
-                //Se tiene que verificar si la cuenta ya esta habilitada
-                return "MenuFuncionario.xhtml";
-            case Tecnico:
-                //Se tiene que validar si la cuenta ya esta habilitada
-                return "MenuTecnico.xhtml";
-            default:
-                this.validationMessage = "Debe indicar el perfil con que desea entrar";
-                return "Login.xhtml";
+        Usuario user = null;
+        try {
+            user = userDB.getUserFromDB(this.username);
+        } catch (Exception e) {
+            this.validationMessage = "Ocurrió un error en el sistema, por favor intente mas tarde";
+            e.printStackTrace();
+            return "";
         }
 
+        try {
+            if (user != null) {
+                //Se verifica que haya ingresado la contraseña correcta
+                if (userDB.isLoginPasswordCorrect(user, this.password)) {
+                    //Se tiene que verificar que el usuario esta habilitado
+                    if (userDB.isUserActive(user)) {
+                        //Dependiendo del tipo de perfil se abren las paginas respectivas
+                        switch (perfilSeleccionado) {
+                            case Administrativo:
+                                userDB.setLogedInUser(user, perfilSeleccionado);
+                                return "MenuAdministrativo.xhtml";
+                            case Funcionario:
+                                userDB.setLogedInUser(user, perfilSeleccionado);
+                                return "MenuFuncionario.xhtml";
+                            case Tecnico:
+                                userDB.setLogedInUser(user, perfilSeleccionado);
+                                return "MenuTecnico.xhtml";
+                            default:
+                                this.validationMessage = "Debe indicar el perfil con que desea entrar";
+                                return "Login.xhtml";
+                        }
+                    } else {
+                        this.validationMessage = "Su cuenta no ha sido habilitada";
+                        return "";
+                    }
+                } else {
+                    this.validationMessage = "Contraseña Incorrecta";
+                    return "";
+                }
+            } else {
+                this.validationMessage = "Usuario no existe o no está registrado";
+                return "";
+            }
+        } catch (Exception e) {
+            this.validationMessage = "Ocurrió un error en el sistema, por favor intente mas tarde";
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void clearData() {
         this.username = this.password = this.validationMessage = "";
         this.perfilSeleccionado = Perfil.PERFIL;
-    }
-
-    public Usuario getUserFromDB() {
-        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
