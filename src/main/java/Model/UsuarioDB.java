@@ -507,6 +507,7 @@ public class UsuarioDB {
      */
     public void setLogedInUser(Usuario user, Perfil perfilSeleccionado) throws NullPointerException{
         if(user != null){
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().clear();
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("UsuarioActual", user);
             //Tambien se tiene que guardar el tipo de usuario que es
             switch(perfilSeleccionado){
