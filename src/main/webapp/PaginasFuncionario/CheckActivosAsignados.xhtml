@@ -10,27 +10,37 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-        <form>
-
+        <h:form id="form">
+   <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>           
             <div class="container">
                 <h1>Sus activos Asignados</h1>
 
                 <div class="VaraDeLaBaseDeDatos">
 
-                    <p:dataTable var="activo" value="${CheckActivosAsignados.getActivosAsignados()}"
-                                 emptyMessage="No existe un activo con los filtros dados."
-                                 filteredValue="#{CheckActivosAsignados.activosAsignadosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+            
+        
+                    
+    <div class="card">
+
+            
+        <p:dataTable var="activo" value="${CheckActivosAsignados.getActivosAsignados()}" selectionMode="single"
+                     selection="#{CheckActivosAsignados.activoSelecionado}" rowKey="#{activo.idActivo}" emptyMessage="No existe un activo con los filtros dados."
+                     filteredValue="#{CheckActivosAsignados.activosAsignadosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                                  rows="10"
                                  paginator="true"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
-
-                        <f:facet name="header">
+                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
+            
+                       
+            <p:ajax event="rowSelect" listener="#{CheckActivosAsignados.onRowSelect}" update=":form:msgs"/>
+            <p:ajax event="rowUnselect" listener="#{CheckActivosAsignados.onRowUnselect}" update=":form:msgs"/>
+            
+             <f:facet name="header">
                             <span>Lista de Activos asignados.</span>
                         </f:facet>
-
-                        <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}" >
+            
+            <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}" >
                             <h:outputText value="#{activo.idActivo}" />
                         </p:column>
 
@@ -54,18 +64,21 @@
                             <h:outputText value="#{activo.fechaAdquisicion}" />
                         </p:column>      
 
-                        <f:facet name="paginatorTopLeft">
-                            <p:commandButton type="button" icon="pi pi-refresh"/>
-                        </f:facet>
-
-                    </p:dataTable>
+        </p:dataTable>
+    </div>
 
                     <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml"></p:button>
                     <p:button class="btn" value="Ayuda" ></p:button>
 
                 </div>
+                
+                
+                
+                
+                
+                
             </div>
-        </form>
+       </h:form>
     </h:body>
 </html>
 
