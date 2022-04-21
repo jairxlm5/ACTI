@@ -23,19 +23,19 @@ public class ProvinciaDB {
         String sqlSelect = "";
         try{
             //Sentencia del Select
-            sqlSelect = "Select From Provincia Where ID = " + id;
+            sqlSelect = "Select * From Provincia Where ID = " + id;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
                 int idProv = rs.getInt("ID");
                 String nombre = rs.getString("Nombre");
                 //Se trae los cantones que tiene
-                ArrayList<Canton> cantones = CantonDB.getCantonesByProvince(id);
+                //ArrayList<Canton> cantones = CantonDB.getCantonesByProvince(id);
                 
                 //Se crea el objeto
                 prov = new Provincia();
                 prov.setId(idProv);
                 prov.setNombre(nombre);
-                prov.setCantones(cantones);
+                //prov.setCantones(cantones);
             }
         }
         catch(SQLException e){

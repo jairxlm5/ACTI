@@ -133,9 +133,9 @@ public class UsuarioDB {
                 //Asignacion de objetos al usuario
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Provincia prov = ProvinciaDB.getProvinceFromDB(rs.getInt("Provincia"));
-                Canton canton = CantonDB.getCantonFromDB(rs.getInt("Canton"));
-                Distrito distrito = DistritoDB.getDistrictFromDB(rs.getInt("Distrito"));
-                Barrio barrio = BarrioDB.getBarrioFromDB(rs.getInt("Barrio"));
+                Canton canton = CantonDB.getCantonFromDB(rs.getInt("Canton"), prov.getId());
+                Distrito distrito = DistritoDB.getDistrictFromDB(rs.getInt("Distrito"), prov.getId(), canton.getId());
+                Barrio barrio = BarrioDB.getBarrioFromDB(rs.getInt("Barrio"), prov.getId(), canton.getId(), distrito.getId());
                 LinkedList<UsuarioPerfil> perfiles = usuarioPerfilDB.getAccountsByUser(id);
                 LinkedList<Telefono> telefonos = telefonoDB.getUserPhoneNumbers(id);
 

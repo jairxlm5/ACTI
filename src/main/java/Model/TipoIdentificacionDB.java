@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class TipoIdentificacionDB {
     private static final DataAccess dataAccess = new DataAccess();
     
-    private ArrayList<TipoIdentificacion> getIdTypes() throws SQLException, SNMPExceptions{
+    public ArrayList<TipoIdentificacion> getIdTypes() throws SQLException, SNMPExceptions{
         ArrayList<TipoIdentificacion> idTypes = new ArrayList<>();
         String sqlSelect = "";
         try{

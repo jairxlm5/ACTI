@@ -267,6 +267,7 @@ public class MantenimientoFuncionariosBean {
         return cantones;
     }
 
+    /*
     public ArrayList<Distrito> getDistritosDB() {
         ArrayList<Distrito> distritos = new ArrayList<>();
         try {
@@ -292,7 +293,7 @@ public class MantenimientoFuncionariosBean {
         }
         return barrios;
     }
-
+*/
     public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
