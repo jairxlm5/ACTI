@@ -18,18 +18,19 @@ import java.util.ArrayList;
 public class CantonDB {
     private static final DataAccess dataAccess = new DataAccess();
     
-    public static Canton getCantonFromDB(int id) throws SNMPExceptions, SQLException{
+    public static Canton getCantonFromDB(int idCanton, int idProv) throws SNMPExceptions, SQLException{
         Canton canton = null;
         String sqlSelect = "";
         try{
-            sqlSelect = "Select IDCanton, Nombre From Canton Where IDCanton = " + id;
+            sqlSelect = "Select IDCanton, Nombre From Canton Where IDCanton = " + idCanton + " and "
+                    + "IDProvincia = " + idProv;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
-                int idCanton = rs.getInt("IDCanton");
+                int id = rs.getInt("IDCanton");
                 String nombre = rs.getString("Nombre");
                 //Se trae los distritos que tiene
-                ArrayList<Distrito> distritos = DistritoDB.getDistrictsByCanton(id);
-                
+               // ArrayList<Distrito> distritos = DistritoDB.getDistrictsByCanton(idCanton);
+                ArrayList<Distrito> distritos = new ArrayList<>();
                 //Se crea el objeto
                 canton = new Canton(idCanton, nombre, distritos);
             }
@@ -53,8 +54,8 @@ public class CantonDB {
               int idCanton = rs.getInt("IDCanton");
               String nombre = rs.getString("Nombre");
               //Se trae los distritos que tiene
-              ArrayList<Distrito> distritos = DistritoDB.getDistrictsByCanton(idCanton);
-              
+              //ArrayList<Distrito> distritos = DistritoDB.getDistrictsByCanton(idCanton);
+              ArrayList<Distrito> distritos = new ArrayList<>();
               //Se crea el objeto
               Canton canton = new Canton(idCanton, nombre, distritos);
               //Se agrega a la lista

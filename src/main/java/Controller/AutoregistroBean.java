@@ -10,12 +10,19 @@ import Enum.Perfil;
 import Enum.TipoIdentificacion;
 import Enum.TipoTelefono;
 import Model.Barrio;
+import Model.BarrioDB;
 import Model.Canton;
+import Model.CantonDB;
 import Model.Distrito;
+import Model.DistritoDB;
+import Model.PerfilDB;
 import Model.Provincia;
+import Model.ProvinciaDB;
 import Model.Sede;
 import Model.SedeDB;
 import Model.Telefono;
+import Model.TipoIdentificacionDB;
+import Model.TipoTelefonoDB;
 import Model.Usuario;
 import Model.UsuarioDB;
 import Model.UsuarioPerfil;
@@ -28,6 +35,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -42,7 +51,7 @@ public class AutoregistroBean {
     private Perfil perfilSeleccionado;
     private String identificacion;
     private String nombre, apellido1, apellido2;
-    private String correo = "correo";
+    private String correo;
     private String numeroTelefono;
 
     //A este direccion completa me falta hacerle un metodo que lo llene
@@ -59,8 +68,12 @@ public class AutoregistroBean {
     private ArrayList<Distrito> distritos;
     private ArrayList<Barrio> barrios;
     private ArrayList<Sede> sedes;
-    
+
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
+    private int provID;
+    private int canID;
+    private int disID;
+    private int barID;
     private Provincia provinciaSeleccionada;
     private Canton cantonSeleccionado;
     private Distrito distritoSeleccionado;
@@ -70,6 +83,8 @@ public class AutoregistroBean {
     private String validationMessage = "Hola Mundo";
     //Mensaje para desplegar info de validaciones
     private String messageDisplayed;
+    private String phoneMessage;
+    private String profileMessage;
 
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -127,7 +142,7 @@ public class AutoregistroBean {
             this.messageDisplayed = "Ingrese su Número de Identificación";
             return;
         }
-        if(this.nombre.trim().length() == 0){
+        if (this.nombre.trim().length() == 0) {
             this.messageDisplayed = "Ingrese su Nombre";
             return;
         }
@@ -153,6 +168,22 @@ public class AutoregistroBean {
         }
         if (this.perfiles.isEmpty()) {
             this.messageDisplayed = "Debe usar al menos un tipo de perfil";
+            return;
+        }
+        if (this.provinciaSeleccionada == null) {
+            this.messageDisplayed = "Debe seleccionar una provincia";
+            return;
+        }
+        if (this.cantonSeleccionado == null) {
+            this.messageDisplayed = "Debe seleccionar un cantón";
+            return;
+        }
+        if (this.distritoSeleccionado == null) {
+            this.messageDisplayed = "Debe seleccionar un distrito";
+            return;
+        }
+        if (this.barrioSeleccionado == null) {
+            this.messageDisplayed = "Debe seleccionar un barrio";
             return;
         }
         //Se tiene que crear el nuevo usuario
@@ -192,58 +223,126 @@ public class AutoregistroBean {
     }
 
     //Devuelve los perfiles del enum
-    public Perfil[] getPerfiles() {
-        return Perfil.values();
+    public ArrayList<Perfil> getPerfiles() {
+        ArrayList<Perfil> perfiles = new ArrayList<Perfil>();
+        try {
+            PerfilDB perfilDB = new PerfilDB();
+            perfiles = perfilDB.getAllPerfiles();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return perfiles;
     }
 
     //Devuelve los tipos de identificacion del enum
-    public TipoIdentificacion[] getTipoIdentificacion() {
-        return TipoIdentificacion.values();
+    public ArrayList<TipoIdentificacion> getTipoIdentificacion() {
+        ArrayList<TipoIdentificacion> tiposID = new ArrayList<>();
+        try {
+            TipoIdentificacionDB tipoIdDB = new TipoIdentificacionDB();
+            tiposID = tipoIdDB.getIdTypes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return tiposID;
     }
-    
+
     //Devuelve los tipos de telefonos
-    public TipoTelefono[] getTiposTelefono(){
-        return TipoTelefono.values();
+    public ArrayList<TipoTelefono> getTiposTelefono() {
+        ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
+        try {
+            TipoTelefonoDB phoneTypeDB = new TipoTelefonoDB();
+            phoneTypes = phoneTypeDB.getPhoneTypes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return phoneTypes;
     }
-    
+
     //Agrega un telefono a la lista
-    public void addTelefono(){
-        this.validationMessage = "";
+    public void addTelefono() {
+        this.phoneMessage= "";
         if (this.identificacion.trim().length() == 0) {
-            this.messageDisplayed = "Ingrese su Número de Identificación";
+            this.phoneMessage = "Ingrese su Número de Identificación";
             return;
         }
-        if(this.numeroTelefono.trim().length() == 0){
-            this.validationMessage = "Digite el número telefónico";
+        if (this.numeroTelefono.trim().length() == 0) {
+            this.phoneMessage = "Digite el número telefónico";
             return;
         }
-        
+
         //Se agrega a la lista de telefonos
         this.telefonos.add(new Telefono(this.numeroTelefono, this.identificacion, this.tipoTelefonoSeleccionado));
+        this.phoneMessage = "Teléfono Agregado";
     }
-    
-   
+
     //Agrega un perfil a la lista
-    public void addPerfil(){
-        this.validationMessage = "";
+    public void addPerfil() {
+        this.profileMessage = "";
         if (this.identificacion.trim().length() == 0) {
-            this.messageDisplayed = "Ingrese su Número de Identificación";
+            this.profileMessage = "Ingrese su Número de Identificación";
             return;
         }
-        
+
         //Se agrega a la lista de perfiles
-        try{
+        try {
             this.perfiles.add(new UsuarioPerfil(this.identificacion, this.perfilSeleccionado, Utils.getCurrentDate()));
-        } catch (Exception e){
-            this.messageDisplayed = "Ocurrió un error al registrar el perfil" + e.getMessage();
+            this.profileMessage = "Perfil agregado";
+        } catch (Exception e) {
+            this.profileMessage = "Ocurrió un error al registrar el perfil" + e.getMessage();
         }
     }
 
-    /**
-     * Llena los ArrayList que a su vez llenan los combos en la pagina xhtml
-     */
-    public void fillCombos() {
+    public ArrayList<Provincia> getProvincias() {
+        try {
+            return ProvinciaDB.getAllProvincesFromDB();
+        } catch (Exception e) {
 
+        }
+        return new ArrayList<>();
+    }
+
+    public void fillCantones(AjaxBehaviorEvent event) {
+        try {
+            //Se construye la provincia
+            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
+            this.cantones = CantonDB.getCantonesByProvince(this.provinciaSeleccionada.getId());
+            System.out.println("Cantones cargados");
+            
+        } catch (Exception e) {
+            
+        }
+    }
+
+    public void fillDistritos(AjaxBehaviorEvent event) {
+        try {
+            //Se construye el canton
+            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
+            this.distritos = DistritoDB.getDistrictsByCanton(this.cantonSeleccionado.getId(),provID);
+            System.out.println("Distritos Agregados");
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void fillBarrios(AjaxBehaviorEvent event) {
+        try {
+            //Se construye el distrito
+            this.distritoSeleccionado = DistritoDB.getDistrictFromDB(disID, provID, canID);
+            this.barrios = BarrioDB.getBarriosByDistrito(this.distritoSeleccionado.getId(), 
+                                       provID, canID);
+            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
+            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
+            this.barrioSeleccionado = BarrioDB.getBarrioFromDB(this.barID, this.provID, this.canID, this.disID);
+            System.out.println("Datos de ubicacion agregados");
+        } catch (Exception e) {
+
+        }
     }
 
     //<editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
@@ -355,10 +454,6 @@ public class AutoregistroBean {
         this.sede = sede;
     }
 
-    public ArrayList<Provincia> getProvincias() {
-        return provincias;
-    }
-
     public void setProvincias(ArrayList<Provincia> provincias) {
         this.provincias = provincias;
     }
@@ -450,7 +545,7 @@ public class AutoregistroBean {
     public void setNumeroTelefono(String numeroTelefono) {
         this.numeroTelefono = numeroTelefono;
     }
-    
+
     public TipoTelefono getTipoTelefonoSeleccionado() {
         return tipoTelefonoSeleccionado;
     }
@@ -459,5 +554,53 @@ public class AutoregistroBean {
         this.tipoTelefonoSeleccionado = tipoTelefonoSeleccionado;
     }
 
+    public int getProvID() {
+        return provID;
+    }
+
+    public void setProvID(int provID) {
+        this.provID = provID;
+    }
+    
+    public int getCanID() {
+        return canID;
+    }
+
+    public void setCanID(int canID) {
+        this.canID = canID;
+    }
+
+    public int getDisID() {
+        return disID;
+    }
+
+    public void setDisID(int disID) {
+        this.disID = disID;
+    }
+
+    public int getBarID() {
+        return barID;
+    }
+
+    public void setBarID(int barID) {
+        this.barID = barID;
+    }
+    
+    public String getPhoneMessage() {
+        return phoneMessage;
+    }
+
+    public void setPhoneMessage(String phoneMessage) {
+        this.phoneMessage = phoneMessage;
+    }
+    
+    public String getProfileMessage() {
+        return profileMessage;
+    }
+
+    public void setProfileMessage(String profileMessage) {
+        this.profileMessage = profileMessage;
+    }
 // </editor-fold>  
+    
 }

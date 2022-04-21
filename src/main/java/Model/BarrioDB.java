@@ -18,12 +18,13 @@ import java.util.ArrayList;
 public class BarrioDB {
     private static final DataAccess dataAccess = new DataAccess();
     
-    public static Barrio getBarrioFromDB(int id) throws SQLException, SNMPExceptions{
+    public static Barrio getBarrioFromDB(int id, int idProv, int idCant, int idDis) throws SQLException, SNMPExceptions{
         Barrio barrio = null;
         String sqlSelect = "";
         try{
             //Se crea la sentencia del Select
-            sqlSelect = "Select IDBarrio, Nombre From Barrio Where IDBarrio = " + id;
+            sqlSelect = "Select IDBarrio, Nombre From Barrio Where IDBarrio = " + id + " and "
+            + "IDProvincia = " + idProv + " and IDCanton = " + idCant + " and IDDistrito = " + idDis;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             
             if(rs.next()){
@@ -43,12 +44,13 @@ public class BarrioDB {
         return barrio;
     }
     
-    public static ArrayList<Barrio> getBarriosByDistrito(int idDistrito) throws SNMPExceptions, SQLException{
+    public static ArrayList<Barrio> getBarriosByDistrito(int idDistrito, int idProv, int idCant) throws SNMPExceptions, SQLException{
         ArrayList<Barrio> barrios = new ArrayList<>();
         String sqlSelect = "";
         try{
             //Sentencia del Select
-            sqlSelect = "Select IDBarrio, Nombre From Barrio Where IDDistrito = " + idDistrito;
+            sqlSelect = "Select IDBarrio, Nombre From Barrio Where IDDistrito = " + idDistrito + " and "
+                    + "IDProvincia = " + idProv + " and IDCanton =" + idCant ;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             
             while(rs.next()){
