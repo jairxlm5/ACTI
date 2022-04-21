@@ -22,7 +22,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -57,6 +61,7 @@ public class CheckActivosAsignados {
     private String validationMessage;
     //Variable extra para usarse internamente
     private Map<String, Integer> mapOpciones;
+    private Activo activoSelecionado;
 
     public CheckActivosAsignados() {
         this.activosAsignados = new ArrayList<>();
@@ -71,6 +76,7 @@ public class CheckActivosAsignados {
         this.mapOpciones.put("Sede", 1);
         this.mapOpciones.put("Funcionario", 2);
         llenaListaOpciones();
+        
     }
 
     public ArrayList<Activo> consulta() {
@@ -166,6 +172,27 @@ public class CheckActivosAsignados {
         this.opcionesParaConsulta.add(new SelectItem(2, "Funcionario"));
     }
 
+    //Cosas para que funcione el zombie (En testeo)
+    
+    public Activo getActivoSelecionado() {
+        return activoSelecionado;
+    }
+
+    public void setActivoSelecionado(Activo activoSelecionado) {
+        this.activoSelecionado = activoSelecionado;
+    }
+
+     public void onRowSelect(SelectEvent<Activo> event) {
+        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getIdActivo()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent<Activo> event) {
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getIdActivo()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public Usuario getFuncionarioConsultado() {
         return funcionarioConsultado;

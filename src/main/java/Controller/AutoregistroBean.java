@@ -222,6 +222,7 @@ public class AutoregistroBean {
         this.telefonos.add(new Telefono(this.numeroTelefono, this.identificacion, this.tipoTelefonoSeleccionado));
     }
     
+   
     //Agrega un perfil a la lista
     public void addPerfil(){
         this.validationMessage = "";
