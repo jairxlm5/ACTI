@@ -9,6 +9,7 @@ import DAO.SNMPExceptions;
 import Enum.Perfil;
 import Enum.TipoIdentificacion;
 import Enum.TipoTelefono;
+import Model.Activo;
 import Model.Barrio;
 import Model.BarrioDB;
 import Model.Canton;
@@ -37,8 +38,14 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import Utils.Utils;
 import java.nio.charset.StandardCharsets;
+
 import javax.faces.event.AjaxBehaviorEvent;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.mail.MessagingException;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -84,6 +91,7 @@ public class MantenimientoFuncionariosBean {
 
     private ArrayList<Funcionario> funcionarios;
     private ArrayList<Funcionario> funcionariosFiltrados;
+    
     //Bro necesitaba la tabla funcionarios para poder cargar la data
 
     private ArrayList<Provincia> provincias;
@@ -106,6 +114,9 @@ public class MantenimientoFuncionariosBean {
     private Date fechaNacimiento = myCalendar.getTime();
     //Llamado clases del Model
     UsuarioDB userDB = new UsuarioDB();
+    Funcionario funcionarioSelecionado = new Funcionario();
+    //Este funcionario es el que voy a agarrar para aplicar los botones de la db 
+    Funcionario funcionarioParaMantenimiento = new Funcionario();
 
     public MantenimientoFuncionariosBean() {
         this.perfiles = new LinkedList<>();
@@ -530,12 +541,27 @@ public class MantenimientoFuncionariosBean {
         return messageDisplayed;
     }
 
+
     public void setMessageDisplayed(String messageDisplayed) {
         this.messageDisplayed = messageDisplayed;
     }
 
     public String getPhoneMessage() {
         return phoneMessage;
+    }
+    
+    public ArrayList<Sede> getSedesDB() {
+        ArrayList<Sede> sedes = new ArrayList<>();
+        try {
+            SedeDB sedeDB = new SedeDB();
+            sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return sedes;
+
     }
 
     public void setPhoneMessage(String phoneMessage) {
@@ -549,6 +575,39 @@ public class MantenimientoFuncionariosBean {
     public void setProfileMessage(String profileMessage) {
         this.profileMessage = profileMessage;
     }
+    
+    
+ 
+     public void onRowSelect(SelectEvent<Funcionario> event) {
+        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getNombre()));
+        
+        
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent<Funcionario> event) {
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getNombre()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public Funcionario getFuncionarioSelecionado() {
+        return funcionarioSelecionado;
+    }
+
+    public void setFuncionarioSelecionado(Funcionario funcionarioSelecionado) {
+        this.funcionarioSelecionado = funcionarioSelecionado;
+    }
+
+    public Funcionario getFuncionarioParaMantenimiento() {
+        return funcionarioParaMantenimiento;
+    }
+
+    public void setFuncionarioParaMantenimiento(Funcionario funcionarioParaMantenimiento) {
+        this.funcionarioParaMantenimiento = funcionarioParaMantenimiento;
+    }
+    
+    
+    
 
 
     

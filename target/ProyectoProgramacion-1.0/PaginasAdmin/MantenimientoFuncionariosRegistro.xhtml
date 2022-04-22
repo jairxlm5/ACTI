@@ -16,8 +16,8 @@
 
             <div class="container">
 
-                <div class="containerDB">
-                    <h1>Mantenimiento de Funcionarios</h1>
+                <div class="containerDB" align="center">
+                    <h1>Mantenimiento de Funcionarios</h1>          
                     <br></br><br></br>
                 </div>
                 <!--Con la info de usuario-->
@@ -43,12 +43,12 @@
                     <p:inputTextarea value="#{MantenimientoFuncionariosBean.direccionCompleta}"></p:inputTextarea>
                     <br></br><br></br>
 
-                           <h:outputText value="Teléfono: "></h:outputText>
-                           <p:inputText value="#{MantenimientoFuncionariosBean.numeroTelefono}"></p:inputText>
-                           <p:selectOneMenu value="#{MantenimientoFuncionariosBean.tipoTelefonoSeleccionado}">
-                               <f:selectItems value="#{MantenimientoFuncionariosBean.tiposTelefono}"></f:selectItems>
+                    <h:outputText value="Teléfono: "></h:outputText>
+                    <p:inputText value="#{MantenimientoFuncionariosBean.numeroTelefono}"></p:inputText>
+                    <p:selectOneMenu value="#{MantenimientoFuncionariosBean.tipoTelefonoSeleccionado}">
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.tiposTelefono}"></f:selectItems>
                     </p:selectOneMenu>
-                    
+
                     <h:commandButton class="botones" value="Agregar Teléfono" action="#{AutoregistroBean.addTelefono()}"></h:commandButton>
                     <h:outputText class="textos" value="#{AutoregistroBean.phoneMessage}"></h:outputText>
                     <br></br><br></br>>
@@ -65,43 +65,52 @@
                     <br></br><br></br>
 
 
-                   <h:outputText value="Provincia:   "></h:outputText>
-                   <p:selectOneMenu value="#{MantenimientoFuncionariosBean.provID}">
-                       <f:selectItems value="#{MantenimientoFuncionariosBean.provincias}" var="prov" itemValue="#{prov.id}"></f:selectItems>
-                       <f:ajax listener="#{MantenimientoFuncionariosBean.fillCantones(event)}"></f:ajax>
+
+                    <h:outputText value="Provincia:   "></h:outputText>
+                    <p:selectOneMenu value="#{MantenimientoFuncionariosBean.provID}">
+                        <f:selectItems value="#{MantenimientoFuncionariosBean.provincias}" var="prov" itemValue="#{prov.id}"></f:selectItems>
+                        <f:ajax listener="#{MantenimientoFuncionariosBean.fillCantones(event)}"></f:ajax>
                     </p:selectOneMenu>
-                   
+
                     <h:outputText class="textos" value="Cantón:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.canID}">
                         <f:selectItems value="#{MantenimientoFuncionariosBean.cantones}" var="can" itemValue="#{can.id}"></f:selectItems>
                         <f:ajax listener="#{MantenimientoFuncionariosBean.fillDistritos(event)}"></f:ajax>
                     </p:selectOneMenu>
-                    
+
                     <h:outputText class="textos" value="Distrito:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.disID}">
                         <f:selectItems value="#{MantenimientoFuncionariosBean.distritos}" var="dis" itemValue="#{dis.id}"></f:selectItems>
                         <f:ajax listener="#{MantenimientoFuncionariosBean.fillBarrios(event)}"></f:ajax>
                     </p:selectOneMenu>
-                    
+
                     <h:outputText class="textos" value="Barrio:   "></h:outputText>
                     <p:selectOneMenu value="#{MantenimientoFuncionariosBean.barID}">
                         <f:selectItems value="#{MantenimientoFuncionariosBean.barrios}" var="bar" itemValue="#{bar.id}"></f:selectItems>
                         <f:ajax listener="#{MantenimientoFuncionariosBean.fillBarrios(event)}"></f:ajax>
                     </p:selectOneMenu>
                     <br></br><br></br>
-                    
-                    
+
+
                     <h:outputText value="#{MantenimientoFuncionariosBean.messageDisplayed}"></h:outputText>
-                    
-                        <h:commandButton class="botonMante" value="Guardar" action="#{MantenimientoFuncionariosBean.guardarFuncionario()}"></h:commandButton>
-                        <p:button class="botonMante" value="Nuevo"></p:button>
+
+
                 </div>
 
+                <h:commandButton class="botonMante" value="Guardar" action="#{MantenimientoFuncionariosBean.guardarFuncionario()}"></h:commandButton>
+                <p:button class="botonMante" value="Nuevo"></p:button>
+                <br></br><br></br>
+
                 <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                <p:button class="btn" value="Ayuda" ></p:button>
+                <p:button class="btn" value="Ayuda"></p:button>
                 <p:button class="btn" value="Consultar Funcionarios" href="MantenimientoFuncionariosData.xhtml" ></p:button>
+                <br></br><br></br>
 
             </div>
+
+
+
+
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         </form>
