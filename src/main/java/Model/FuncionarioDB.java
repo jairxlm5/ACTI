@@ -38,7 +38,25 @@ public class FuncionarioDB {
     public ArrayList<Funcionario> getAllFuncionarios() throws SNMPExceptions, SQLException {
         ArrayList<Funcionario> funcionarios = new ArrayList<Funcionario>();
        
-        
+            String sqlSelect = "";
+        Funcionario funcUser = null;
+        try{
+            sqlSelect = "Select * From Funcionario ";
+            ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
+            if(rs.next()){
+                String id = rs.getString("ID");
+                funcUser = new Funcionario();
+                funcUser.setIdentificacion(id);
+                funcionarios.add(funcUser);
+            }
+        }
+        catch(SQLException e){
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        }
+        catch(Exception e){
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
+      
         
         return funcionarios;
     }
