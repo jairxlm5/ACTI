@@ -6,6 +6,9 @@
 package Controller;
 
 import DAO.SNMPExceptions;
+import Enum.Perfil;
+import Enum.TipoIdentificacion;
+import Enum.TipoTelefono;
 import Model.Barrio;
 import Model.BarrioDB;
 import Model.Canton;
@@ -14,11 +17,14 @@ import Model.Distrito;
 import Model.DistritoDB;
 import Model.Funcionario;
 import Model.FuncionarioDB;
+import Model.PerfilDB;
 import Model.Provincia;
 import Model.ProvinciaDB;
 import Model.Sede;
 import Model.SedeDB;
 import Model.Telefono;
+import Model.TipoIdentificacionDB;
+import Model.TipoTelefonoDB;
 import Model.Usuario;
 import Model.UsuarioDB;
 import Model.UsuarioPerfil;
@@ -31,6 +37,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import Utils.Utils;
 import java.nio.charset.StandardCharsets;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.mail.MessagingException;
 
 /**
@@ -47,11 +54,28 @@ public class MantenimientoFuncionariosBean {
     private String otrasDirecciones;
     private String correo;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
+    private int provID;
+    private int canID;
+    private int disID;
+    private int barID;
     private Provincia provinciaSeleccionada;
     private Canton cantonSeleccionado;
     private Distrito distritoSeleccionado;
     private Barrio barrioSeleccionado;
+    
     private Sede sede;
+    private String sedeID;
+    private String direccionCompleta;
+      private String numeroTelefono;
+       private TipoTelefono tipoTelefonoSeleccionado;
+         private ArrayList<TipoTelefono> tipoTelefono = new ArrayList<TipoTelefono>();
+    private Perfil perfilSeleccionado;
+ 
+           private String messageDisplayed;
+    private String phoneMessage;
+    private String profileMessage;
+    FuncionarioDB funcionarioDB = new FuncionarioDB();
+       
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
     private LinkedList<UsuarioPerfil> perfiles;
     private LinkedList<Telefono> telefonos;
@@ -67,6 +91,7 @@ public class MantenimientoFuncionariosBean {
     private ArrayList<Distrito> distritos;
     private ArrayList<Barrio> barrios;
     private ArrayList<Sede> sedes;
+  
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
@@ -94,7 +119,16 @@ public class MantenimientoFuncionariosBean {
         this.correo = "";
         this.otrasDirecciones = "";
         this.validationMessage = "";
-        this.fillComboLists();
+        
+         this.telefonos = new LinkedList<>();
+        this.perfiles = new LinkedList<>();
+        this.sedes = new ArrayList<>();
+        this.provincias = new ArrayList<>();
+        this.cantones = new ArrayList<>();
+        this.distritos = new ArrayList<>();
+        this.barrios = new ArrayList<>();
+        this.fillSedes();
+       
     }
 
     /**
@@ -203,36 +237,149 @@ public class MantenimientoFuncionariosBean {
      * Limpia la informacion
      */
     public void cleanData() {
-        this.identificacion = this.nombre = this.apellido1 = this.apellido2 = this.correo = this.otrasDirecciones = "";
-        this.fechaNacimiento = null;
-        this.provinciaSeleccionada = null;
-        this.cantonSeleccionado = null;
-        this.distritoSeleccionado = null;
-        this.barrioSeleccionado = null;
-        this.sede = null;
-        this.perfiles.clear();
-        this.telefonos.clear();
-        this.user = null;
-        this.validationMessage = "";
-        //Los ArrayLists no se limpian
+        //lo deje asi para arreglar una vara
     }
 
-    /**
-     * Llena los listas que llenan los combos en el xhtml
-     */
-    public void fillComboLists() {
-        this.cantones = new ArrayList<>();
-        this.provincias = new ArrayList<>();
-        this.sedes = new ArrayList<>();
-        this.distritos = new ArrayList<>();
-        this.barrios = new ArrayList<>();
-    }
-
-    public ArrayList<Funcionario> getFuncionariosDB() {
-        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+    
+    //Devuelve los perfiles del enum
+    public ArrayList<Perfil> getPerfiles() {
+        ArrayList<Perfil> perfiles = new ArrayList<Perfil>();
         try {
-            FuncionarioDB funcionarioDB = new FuncionarioDB();
-            funcionarios = funcionarioDB.getAllFuncionarios();
+            PerfilDB perfilDB = new PerfilDB();
+            perfiles = perfilDB.getAllPerfiles();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return perfiles;
+    }
+
+    //Devuelve los tipos de identificacion del enum
+    public ArrayList<TipoIdentificacion> getTipoIdentificacion() {
+        ArrayList<TipoIdentificacion> tiposID = new ArrayList<>();
+        try {
+            TipoIdentificacionDB tipoIdDB = new TipoIdentificacionDB();
+            tiposID = tipoIdDB.getIdTypes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return tiposID;
+    }
+
+    //Devuelve los tipos de telefonos
+    public ArrayList<TipoTelefono> getTiposTelefono() {
+        ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
+        try {
+            TipoTelefonoDB phoneTypeDB = new TipoTelefonoDB();
+            phoneTypes = phoneTypeDB.getPhoneTypes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return phoneTypes;
+    }
+
+    //Agrega un telefono a la lista
+    public void addTelefono() {
+        this.phoneMessage= "";
+        if (this.identificacion.trim().length() == 0) {
+            this.phoneMessage = "Ingrese su Número de Identificación";
+            return;
+        }
+        if (this.numeroTelefono.trim().length() == 0) {
+            this.phoneMessage = "Digite el número telefónico";
+            return;
+        }
+
+        //Se agrega a la lista de telefonos
+        this.telefonos.add(new Telefono(this.numeroTelefono, this.identificacion, this.tipoTelefonoSeleccionado));
+        this.phoneMessage = "Teléfono Agregado";
+    }
+
+    //Agrega un perfil a la lista
+    public void addPerfil() {
+        this.profileMessage = "";
+        if (this.identificacion.trim().length() == 0) {
+            this.profileMessage = "Ingrese su Número de Identificación";
+            return;
+        }
+
+        //Se agrega a la lista de perfiles
+        try {
+            this.perfiles.add(new UsuarioPerfil(this.identificacion, this.perfilSeleccionado, Utils.getCurrentDate()));
+            this.profileMessage = "Perfil agregado";
+        } catch (Exception e) {
+            this.profileMessage = "Ocurrió un error al registrar el perfil" + e.getMessage();
+        }
+    }
+
+    public ArrayList<Provincia> getProvincias() {
+        try {
+            return ProvinciaDB.getAllProvincesFromDB();
+        } catch (Exception e) {
+
+        }
+        return new ArrayList<>();
+    }
+
+    public void fillCantones(AjaxBehaviorEvent event) {
+        try {
+            //Se construye la provincia
+            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
+            this.cantones = CantonDB.getCantonesByProvince(this.provinciaSeleccionada.getId());
+            System.out.println("Cantones cargados");
+            
+        } catch (Exception e) {
+            
+        }
+    }
+
+    public void fillDistritos(AjaxBehaviorEvent event) {
+        try {
+            //Se construye el canton
+            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
+            this.distritos = DistritoDB.getDistrictsByCanton(this.cantonSeleccionado.getId(),provID);
+            System.out.println("Distritos Agregados");
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void fillBarrios(AjaxBehaviorEvent event) {
+        try {
+            //Se construye el distrito
+            this.distritoSeleccionado = DistritoDB.getDistrictFromDB(disID, provID, canID);
+            this.barrios = BarrioDB.getBarriosByDistrito(this.distritoSeleccionado.getId(), 
+                                       provID, canID);
+            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
+            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
+            this.barrioSeleccionado = BarrioDB.getBarrioFromDB(this.barID, this.provID, this.canID, this.disID);
+            System.out.println("Datos de ubicacion agregados");
+        } catch (Exception e) {
+
+        }
+    }
+    
+    public void fillSedes(){
+        try {
+            SedeDB sedeDB = new SedeDB();
+            this.sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+    }
+
+    public ArrayList<Funcionario> getFuncionariosDB(){
+        try {
+            FuncionarioDB funcDB = new FuncionarioDB();
+            this.funcionarios = funcDB.getAllFuncionarios();
+         
         } catch (SQLException e) {
 
         } catch (SNMPExceptions s) {
@@ -240,85 +387,172 @@ public class MantenimientoFuncionariosBean {
         }
         return funcionarios;
     }
+    
+    
+      public void GuardarFuncionario() {
+        this.messageDisplayed = "";
 
-    public ArrayList<Provincia> getProvinciasDB() {
-        ArrayList<Provincia> provincias = new ArrayList<>();
+        //Primero validar que todos los datos se hayan ingresado
+        if (this.identificacion.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Número de Identificación";
+            return;
+        }
+        if (this.nombre.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Nombre";
+            return;
+        }
+        if (this.apellido1.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Primer Apellido";
+            return;
+        }
+        if (this.apellido2.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Segundo Apellido";
+            return;
+        }
+        if (this.fechaNacimiento == null) {
+            this.messageDisplayed = "Indique su Fecha de Nacimiento";
+            return;
+        }
+        if (this.correo.trim().length() == 0) {
+            this.messageDisplayed = "Ingrese su Correo Electrónico";
+            return;
+        }
+        if (this.telefonos.isEmpty()) {
+            this.messageDisplayed = "Debe registrar al menos un teléfono";
+            return;
+        }
+        if (this.provinciaSeleccionada == null) {
+            this.messageDisplayed = "Debe seleccionar una provincia";
+            return;
+        }
+        if (this.cantonSeleccionado == null) {
+            this.messageDisplayed = "Debe seleccionar un cantón";
+            return;
+        }
+        if (this.distritoSeleccionado == null) {
+            this.messageDisplayed = "Debe seleccionar un distrito";
+            return;
+        }
+        if (this.barrioSeleccionado == null) {
+            this.messageDisplayed = "Debe seleccionar un barrio";
+            return;
+        }
+        SedeDB sedeDB = new SedeDB();
+        try{
+            this.sede = sedeDB.getSede(this.sedeID);
+        } catch (Exception e){
+            
+        }
+        if(this.sede == null){
+            this.messageDisplayed = "Debe seleccionar una sede";
+            return;
+        }
+        
+        //Se tiene que crear el nuevo Funcionario
+        
+          Funcionario newFuncionario = new Funcionario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                  cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, perfiles, telefonos);
+          
+                   
+       
+        //Se tiene que guardar toda la informacion del Usuario en la base de datos Pero no se que dato manarle al metodo NewFunc
         try {
-            ProvinciaDB provinciaDB = new ProvinciaDB();
-            provincias = ProvinciaDB.getAllProvincesFromDB();
+            funcionarioDB.addNewFunc("Aqui va el id User");
+            this.messageDisplayed = "Funcionario agregado exitosamente.";
+        } catch (SNMPExceptions e) {
+            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
+        } catch (SQLException e) {
+            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
+        }
+
+    }
+
+    
+    
+    public Perfil getPerfilSeleccionado() {
+        return perfilSeleccionado;
+    }
+
+    public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
+        this.perfilSeleccionado = perfilSeleccionado;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public TipoTelefono getTipoTelefonoSeleccionado() {
+        return tipoTelefonoSeleccionado;
+    }
+
+    public void setTipoTelefonoSeleccionado(TipoTelefono tipoTelefonoSeleccionado) {
+        this.tipoTelefonoSeleccionado = tipoTelefonoSeleccionado;
+    }
+
+   public ArrayList<TipoTelefono> getTipoTelefono() {
+         ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
+        try {
+            TipoTelefonoDB phoneTypeDB = new TipoTelefonoDB();
+            phoneTypes = phoneTypeDB.getPhoneTypes();
         } catch (SQLException e) {
 
         } catch (SNMPExceptions s) {
 
         }
-        return provincias;
+        tipoTelefono= phoneTypes;
+        return tipoTelefono;
+    }
+       
+    
+
+    public void setTipoTelefono(ArrayList<TipoTelefono> tipoTelefono) {
+        this.tipoTelefono = tipoTelefono;
     }
 
-    public ArrayList<Canton> getCantonesDB() {
-        ArrayList<Canton> cantones = new ArrayList<>();
-        try {
-            CantonDB cantonDB = new CantonDB();
-            cantones = CantonDB.getCantonesByProvince(1);
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return cantones;
+    public String getMessageDisplayed() {
+        return messageDisplayed;
     }
 
-    /*
-    public ArrayList<Distrito> getDistritosDB() {
-        ArrayList<Distrito> distritos = new ArrayList<>();
-        try {
-            DistritoDB distritoDB = new DistritoDB();
-            distritos = distritoDB.getDistrictsByCanton(1);
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return distritos;
+    public void setMessageDisplayed(String messageDisplayed) {
+        this.messageDisplayed = messageDisplayed;
     }
 
-    public ArrayList<Barrio> getBarriosDB() {
-        ArrayList<Barrio> barrios = new ArrayList<>();
-        try {
-            BarrioDB barrioDB = new BarrioDB();
-            barrios = BarrioDB.getBarriosByDistrito(1);
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return barrios;
-    }
-*/
-    public ArrayList<Sede> getSedesDB() {
-        ArrayList<Sede> sedes = new ArrayList<>();
-        try {
-            SedeDB sedeDB = new SedeDB();
-            sedes = sedeDB.getAllSedes();
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return sedes;
+    public String getPhoneMessage() {
+        return phoneMessage;
     }
 
-    public void AsignaCantones() {
-
+    public void setPhoneMessage(String phoneMessage) {
+        this.phoneMessage = phoneMessage;
     }
 
-    public void AsignaDistrito() {
-
+    public String getProfileMessage() {
+        return profileMessage;
     }
 
-    public void AsignaBarrio() {
-
+    public void setProfileMessage(String profileMessage) {
+        this.profileMessage = profileMessage;
     }
 
+
+    
+    
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
     public void setBarr(int barr) {
         this.barr = barr;
@@ -328,6 +562,80 @@ public class MantenimientoFuncionariosBean {
         return prov;
     }
 
+    
+    
+    public int getProvID() {
+        return provID;
+    }
+
+    public void setProvID(int provID) {
+        this.provID = provID;
+    }
+
+    public int getCanID() {
+        return canID;
+    }
+
+    public void setCanID(int canID) {
+        this.canID = canID;
+    }
+
+    public int getDisID() {
+        return disID;
+    }
+
+    public void setDisID(int disID) {
+        this.disID = disID;
+    }
+
+    public int getBarID() {
+        return barID;
+    }
+
+    public void setBarID(int barID) {
+        this.barID = barID;
+    }
+
+    public String getSedeID() {
+        return sedeID;
+    }
+
+    public void setSedeID(String sedeID) {
+        this.sedeID = sedeID;
+    }
+
+    public String getDireccionCompleta() {
+        return direccionCompleta;
+    }
+
+    public void setDireccionCompleta(String direccionCompleta) {
+        this.direccionCompleta = direccionCompleta;
+    }
+
+    public SimpleDateFormat getSimpleDateFormat() {
+        return simpleDateFormat;
+    }
+
+    public void setSimpleDateFormat(SimpleDateFormat simpleDateFormat) {
+        this.simpleDateFormat = simpleDateFormat;
+    }
+
+    public Calendar getMyCalendar() {
+        return myCalendar;
+    }
+
+    public void setMyCalendar(Calendar myCalendar) {
+        this.myCalendar = myCalendar;
+    }
+
+    public UsuarioDB getUserDB() {
+        return userDB;
+    }
+
+    public void setUserDB(UsuarioDB userDB) {
+        this.userDB = userDB;
+    }
+    
     public void setProv(int prov) {
         this.prov = prov;
     }
@@ -448,10 +756,6 @@ public class MantenimientoFuncionariosBean {
         this.sede = sede;
     }
 
-    public LinkedList<UsuarioPerfil> getPerfiles() {
-        return perfiles;
-    }
-
     public void setPerfiles(LinkedList<UsuarioPerfil> perfiles) {
         this.perfiles = perfiles;
     }
@@ -464,9 +768,6 @@ public class MantenimientoFuncionariosBean {
         this.telefonos = telefonos;
     }
 
-    public ArrayList<Provincia> getProvincias() {
-        return provincias;
-    }
 
     public void setProvincias(ArrayList<Provincia> provincias) {
         this.provincias = provincias;
