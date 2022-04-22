@@ -61,6 +61,7 @@ public class AutoregistroBean {
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
     private LinkedList<Telefono> telefonos;
     private LinkedList<UsuarioPerfil> perfiles;
+    //private LinkedList<Telefono> telefonosIncluidos = new LinkedList<>();
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
     private ArrayList<Provincia> provincias;
@@ -79,6 +80,7 @@ public class AutoregistroBean {
     private Distrito distritoSeleccionado;
     private Barrio barrioSeleccionado;
     private Sede sede;
+    private String sedeID;
 
     private String validationMessage = "Hola Mundo";
     //Mensaje para desplegar info de validaciones
@@ -101,6 +103,7 @@ public class AutoregistroBean {
         this.cantones = new ArrayList<>();
         this.distritos = new ArrayList<>();
         this.barrios = new ArrayList<>();
+        this.fillSedes();
         /*this.identificacion = "";
         this.nombre = "";
         this.apellido1 = "";
@@ -110,28 +113,17 @@ public class AutoregistroBean {
         this.validationMessage = "";*/
     }
 
+    
     public void cleanData() {
-        this.identificacion = this.nombre = this.apellido1 = this.apellido2 = this.otrasDirecciones = this.correo = this.validationMessage = "";
-        this.fechaNacimiento = null;
-        this.edad = 0;
-        this.provinciaSeleccionada = null;
+        //this.identificacion = this.nombre = this.apellido1 = this.apellido2 = this.otrasDirecciones = this.correo = this.validationMessage = "";
+        //this.fechaNacimiento = null;
+        //this.edad = 0;
+        /*this.provinciaSeleccionada = null;
         this.cantonSeleccionado = null;
         this.distritoSeleccionado = null;
-        this.barrioSeleccionado = null;
-        this.telefonos.clear();
-        this.perfiles.clear();
-    }
-
-    public void fillSedes() {
-        ArrayList<Sede> sedes = new ArrayList<>();
-        try {
-            SedeDB sedeDB = new SedeDB();
-            sedes = sedeDB.getAllSedes();
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
+        this.barrioSeleccionado = null;*/
+        //this.telefonos.clear();
+        //this.perfiles.clear();
     }
 
     public void saveNewUser() {
@@ -186,11 +178,23 @@ public class AutoregistroBean {
             this.messageDisplayed = "Debe seleccionar un barrio";
             return;
         }
+        SedeDB sedeDB = new SedeDB();
+        try{
+            this.sede = sedeDB.getSede(this.sedeID);
+        } catch (Exception e){
+            
+        }
+        if(this.sede == null){
+            this.messageDisplayed = "Debe seleccionar una sede";
+            return;
+        }
+        
         //Se tiene que crear el nuevo usuario
         Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
                 cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
-        //this.validationMessage = "Todo salio bien con la creacion del usuario";
+        newUser.setTipoID(this.tipoIdSeleccionado);
+        
         //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
         int codSeguridad = userDB.generateSecurityCode();
         newUser.setCodSeguridad(codSeguridad);
@@ -208,7 +212,7 @@ public class AutoregistroBean {
         } catch (Exception e) {
             this.messageDisplayed = "Error al registrar contraseña";
         }
-        newUser.setClave(generatedPass.getBytes(StandardCharsets.UTF_8));
+        newUser.setClave(generatedPass);
 
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
         try {
@@ -344,6 +348,33 @@ public class AutoregistroBean {
 
         }
     }
+    
+    public void fillSedes(){
+        try {
+            SedeDB sedeDB = new SedeDB();
+            this.sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+    }
+    
+    /*public ArrayList<Sede> getSedes() {
+        try {
+            SedeDB sedeDB = new SedeDB();
+            this.sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return this.sedes;
+    }*/
+    
+    public ArrayList<Sede> getSedes(){
+        return sedes;
+    }
 
     //<editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getIdentificacion() {
@@ -418,10 +449,6 @@ public class AutoregistroBean {
         this.correo = correo;
     }
 
-    public ArrayList<Sede> getSedes() {
-        return sedes;
-    }
-
     public void setSedes(ArrayList<Sede> sedes) {
         this.sedes = sedes;
     }
@@ -446,12 +473,12 @@ public class AutoregistroBean {
         this.tipoIdSeleccionado = tipoIdSeleccionado;
     }
 
-    public Sede getSede() {
-        return sede;
+    public String getSedeID() {
+        return sedeID;
     }
 
-    public void setSede(Sede sede) {
-        this.sede = sede;
+    public void setSedeID(String sedeID) {
+        this.sedeID = sedeID;
     }
 
     public void setProvincias(ArrayList<Provincia> provincias) {
@@ -601,6 +628,16 @@ public class AutoregistroBean {
     public void setProfileMessage(String profileMessage) {
         this.profileMessage = profileMessage;
     }
+    
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
+    }
+    
 // </editor-fold>  
+
     
 }

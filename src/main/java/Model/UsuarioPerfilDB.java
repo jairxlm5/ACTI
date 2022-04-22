@@ -11,6 +11,7 @@ import Enum.Perfil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -23,6 +24,7 @@ public class UsuarioPerfilDB {
 
     private static final DataAccess dataAccess = new DataAccess();
     //private static UsuarioDB usuarioDB = new UsuarioDB();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Obtiene todos los perfiles de un usuario
@@ -75,7 +77,7 @@ public class UsuarioPerfilDB {
                     + "(Usuario, Tipo_Perfil, Fecha_Solicitud) Values (");
             str.append("'").append(profile.getIdUsuario()).append("', ");
             str.append(profile.getTipoPerfil().ordinal()).append(", ");
-            str.append(profile.getFechaSolicitud()).append(")");
+            str.append("'").append(simpleDateFormat.format(profile.getFechaSolicitud())).append("' )");
             
             sqlCommand = str.toString();
             //Se ejecuta el SQL

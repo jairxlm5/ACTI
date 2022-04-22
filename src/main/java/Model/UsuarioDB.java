@@ -16,11 +16,13 @@ import java.security.MessageDigest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -41,6 +43,9 @@ public class UsuarioDB {
     private FuncionarioDB funcDB = new FuncionarioDB();
     private TecnicoDB tecDB = new TecnicoDB();
     private SedeDB sedeDB = new SedeDB();
+    
+    //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     //Objeto Usuario para usar en la logica
     private Usuario selectedUser = null;
@@ -50,27 +55,34 @@ public class UsuarioDB {
         try {
             //Se arma la sentencia del Insert
             StringBuilder str = new StringBuilder();
-            str.append("Insert Into Usuario Values (");
-            str.append("'").append(newUser.getIdentificacion()).append("' ,");
-            str.append(newUser.getTipoID().ordinal()).append(",");
-            str.append("'").append(newUser.getNombre()).append("' ,");
-            str.append("'").append(newUser.getApellido1()).append("' ,");
-            str.append("'").append(newUser.getApellido2()).append("' ,");
-            str.append(newUser.getFechaNacimiento()).append(",");
-            str.append(newUser.getCanton().getId()).append(",");
-            str.append("'").append(newUser.getOtrasDirecciones()).append("' ,");
+            /*str.append("Insert Into Usuario "
+                    + "(ID, TipoID, Nombre, Apellido1, Apellido2, Fecha_De_Nacimiento, Canton, Otras_Direcciones,"
+                    + "+ Correo_Electronico, Sede, Codigo_Seguridad, Clave, Provincia, Distrito, Barrio, Logins, Aprobacion)"+                  
+                    "Values (");*/
+            str.append("Insert Into Usuario (ID, TipoID, Nombre, Apellido1, Apellido2, Fecha_De_Nacimiento, Canton, "
+                    + "Otras_Direcciones, Correo_Electronico, Sede, Codigo_Seguridad, Clave, Provincia, Distrito, "
+                    + "Barrio, Logins) Values (");
+            str.append("'").append(newUser.getIdentificacion()).append("', ");
+            str.append(newUser.getTipoID().ordinal()).append(", ");
+            str.append("'").append(newUser.getNombre()).append("', ");
+            str.append("'").append(newUser.getApellido1()).append("', ");
+            str.append("'").append(newUser.getApellido2()).append("', ");
+            str.append("'").append(simpleDateFormat.format(newUser.getFechaNacimiento())).append("', ");
+            str.append(newUser.getCanton().getId()).append(", ");
+            str.append("'").append(newUser.getOtrasDirecciones()).append("',");
             str.append("'").append(newUser.getCorreo()).append("' ,");
-            str.append("'").append(newUser.getSede().getCodigo()).append("' ,");
-            str.append(newUser.getCodSeguridad()).append(",");
-            str.append(newUser.getClave()).append(",");
-            str.append(newUser.getProvincia().getId()).append(",");
-            str.append(newUser.getDistrito().getId()).append(",");
+            str.append("'").append(newUser.getSede().getCodigo()).append("', ");
+            str.append(newUser.getCodSeguridad()).append(", ");
+            str.append("'").append(newUser.getClave()).append("', ");
+            str.append(newUser.getProvincia().getId()).append(", ");
+            str.append(newUser.getDistrito().getId()).append(", ");
             str.append(newUser.getBarrio().getId()).append(", ");
-            str.append(0).append(", ");
-            str.append(newUser.isAprobado()).append(", ");
-            str.append(newUser.getFechaAprobacion()).append(")");
+            str.append(0).append(" )");
+            /*str.append(0).append("");
+            str.append("'").append(simpleDateFormat.format(newUser.getFechaNacimiento())).append("')");*/
 
             sqlCommand = str.toString();
+            System.out.println(sqlCommand);
             //Se ejecuta la sentencia SQL
             dataAccess.executeSQLCommand(sqlCommand);
 
@@ -82,6 +94,7 @@ public class UsuarioDB {
                         AdministrativoDB adminDB = new AdministrativoDB();
                         adminDB.addNewAdmin(newUser.getIdentificacion());
                         activateAccount(newUser);
+                        System.out.println("Si llego");
                         break;
                     case Funcionario:
                         FuncionarioDB funcDB = new FuncionarioDB();
@@ -113,7 +126,7 @@ public class UsuarioDB {
         Usuario user = null;
         try {
             //Sentencia de Select
-            sqlSelect = "Select * From Usuario Where ID like " + id;
+            sqlSelect = "Select * From Usuario Where ID like '" + id + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if (rs.next()) {
                 //Variables para asignar al usuario
@@ -126,7 +139,7 @@ public class UsuarioDB {
                 String otrasDirecciones = rs.getString("Otras_Direcciones");
                 String correo = rs.getString("Correo_Electronico");
                 int codSeguridad = rs.getInt("Codigo_Seguridad");
-                byte[] clave = rs.getBytes("Clave");
+                String clave = rs.getString("Clave");
                 int logins = rs.getInt("Logins");
                 boolean aprobado = rs.getBoolean("Aprobacion");
                 Date fechaAprobacion = rs.getDate("Fecha_Aprobacion");
@@ -187,20 +200,24 @@ public class UsuarioDB {
             str.append("Nombre = '").append(userToUpdate.getNombre()).append("', ");
             str.append("Apellido1 = '").append(userToUpdate.getApellido1()).append("', ");
             str.append("Apellido2 = '").append(userToUpdate.getApellido2()).append("', ");
-            str.append("Fecha_De_Nacimiento = ").append(userToUpdate.getFechaNacimiento()).append(",");
+            str.append("Fecha_De_Nacimiento = '").append(simpleDateFormat.format(userToUpdate.getFechaNacimiento())).append("',");
             str.append("Canton = ").append(userToUpdate.getCanton().getId()).append(", ");
             str.append("Otras_Direcciones = '").append(userToUpdate.getOtrasDirecciones()).append("', ");
             str.append("Correo_Electronico = '").append(userToUpdate.getCorreo()).append("', ");
             str.append("Sede = '").append(userToUpdate.getSede().getCodigo()).append("', ");
             str.append("Codigo_Seguridad = ").append(userToUpdate.getCodSeguridad()).append(", ");
-            str.append("Clave = ").append(userToUpdate.getClave()).append(", ");
+            str.append("Clave = '").append(userToUpdate.getClave()).append("', ");
             str.append("Provincia = ").append(userToUpdate.getProvincia().getId()).append(", ");
             str.append("Distrito = ").append(userToUpdate.getDistrito().getId()).append(", ");
             str.append("Barrio = ").append(userToUpdate.getBarrio().getId()).append(", ");
             str.append("Logins = ").append(userToUpdate.getLogins()).append(", ");
-            str.append("Aprobacion = ").append(userToUpdate.isAprobado()).append(", ");
-            str.append("Fecha_Aprobacion = ").append(userToUpdate.getFechaAprobacion()).append(" ");
-            str.append("Where ID Like ").append(userToUpdate.getIdentificacion());
+            if(userToUpdate.isAprobado()){
+                str.append("Aprobacion = ").append(1).append(", ");
+            } else {
+                str.append("Aprobacion = ").append(0).append(", ");
+            }
+            str.append("Fecha_Aprobacion = '").append(simpleDateFormat.format(userToUpdate.getFechaAprobacion())).append("' ");
+            str.append("Where ID Like '").append(userToUpdate.getIdentificacion()).append("'");
 
             sqlCommand = str.toString();
             //Se ejecuta la instruccion SQL
@@ -271,7 +288,7 @@ public class UsuarioDB {
             //Se obtiene el Hash de la clave ingresada en el inicio de sesion
             passwordInserted = Utils.getHashedPaswd(passwordInserted);
             //Se tiene que extraer el Hash de los bytes de la clave guardada en la DB
-            String passwordInDB = new String(user.getClave(), StandardCharsets.UTF_8);
+            String passwordInDB = user.getClave();
             return passwordInserted.equals(passwordInDB);
         } else {
             throw new ACTIException("Usuario no ha sido seleccionado");
