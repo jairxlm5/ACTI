@@ -30,7 +30,7 @@ public class Usuario {
     private LinkedList<UsuarioPerfil> perfiles;
     private LinkedList<Telefono> telefonos;
     private int codSeguridad;
-    private byte[] clave;
+    private String clave;
     private int logins;
     private Date fechaAprobacion;
     private boolean aprobado;
@@ -163,11 +163,11 @@ public class Usuario {
         this.codSeguridad = codSeguridad;
     }
 
-    public byte[] getClave() {
+    public String getClave() {
         return clave;
     }
 
-    public void setClave(byte[] clave) {
+    public void setClave(String clave) {
         this.clave = clave;
     }
 

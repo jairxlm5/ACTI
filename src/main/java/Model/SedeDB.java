@@ -29,7 +29,7 @@ public class SedeDB {
         String sqlSelect = "";
         Sede sede = null;
         try{
-            sqlSelect = "Select Codigo, Nombre, Ubicacion From Sede Where Codigo Like " + codigo;
+            sqlSelect = "Select Codigo, Nombre, Ubicacion From Sede Where Codigo Like '" + codigo + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
                 String code = rs.getString("Codigo");
