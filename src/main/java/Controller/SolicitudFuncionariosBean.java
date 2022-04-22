@@ -12,6 +12,10 @@ import Model.Usuario;
 import Model.UsuarioPerfil;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -26,6 +30,7 @@ public class SolicitudFuncionariosBean {
     //Tuve que meter este ArrayList para lo del primer avance luego podemos ver como bretearlo 
     private ArrayList<Funcionario> funcionarios = new ArrayList<>();
     private ArrayList<Funcionario> funcionariosFiltrados = new ArrayList<>();
+    private Funcionario funcionarioSelecionado = new Funcionario();
     
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
@@ -79,6 +84,28 @@ public class SolicitudFuncionariosBean {
         }
         return funcionarios;
     }
+
+        
+    public Funcionario getFuncionarioSelecionado() {
+        return funcionarioSelecionado;
+    }
+
+    public void setFuncionarioSelecionado(Funcionario funcionarioSelecionado) {
+        this.funcionarioSelecionado = funcionarioSelecionado;
+    }
+        
+       public void onRowSelect(SelectEvent<Funcionario> event) {
+        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getNombre()));
+        
+        
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent<Funcionario> event) {
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getNombre()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
     
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
  public Usuario getSelectedUser() {
