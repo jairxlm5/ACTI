@@ -12,10 +12,10 @@
     <h:body>
         <h:form>
             <div class="Contenedor-login">
-                <h1>Login</h1>
+                <h1>Inicie Sesión</h1>
                 <div class="Contenedor-inputs">
                     <i class="fas fa-user"></i>
-                    <p:inputText value="#{LoginBean.username}" placeholder="Username" style="color: white"></p:inputText>   
+                    <p:inputText value="#{LoginBean.username}" placeholder="Usuario" style="color: white"></p:inputText>   
                 </div>
 
                 <div class="Contenedor-inputs">
@@ -29,7 +29,7 @@
                     </p:selectOneMenu>
                 </div>
 
-                <h:commandButton value="Aceptar" action="#{LoginBean.processLoginData()}" class="btn"></h:commandButton>
+                <h:commandButton value="Ingresar" action="#{LoginBean.processLoginData()}" class="btn"></h:commandButton>
                 <br></br>
                 <br></br>
                 <h:outputLabel value="#{LoginBean.validationMessage}" style=""></h:outputLabel>
