@@ -10,23 +10,32 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-        <form>
-
+         <h:form id="form">
+               <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>        
+               
+               
             <div class="container">
 
                 <h1>Solicitud de funcionarios nuevos </h1>
                 <div class="VarasDeLaDB">
 
-                    <p:dataTable var="funcionario" value="#{SolicitudFuncionariosBean.getSolicitudNewFuncionariosDB()}"
-                                 emptyMessage="No existe una solicitud con los filtros dados."
-                                 filteredValue="#{SolicitudFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+           
+                    
+                     <p:dataTable var="funcionario" value="${SolicitudFuncionariosBean.getSolicitudNewFuncionariosDB()}" selectionMode="single"
+                                  selection="#{SolicitudFuncionariosBean.funcionarioSelecionado}" rowKey="#{funcionario.identificacion}"   emptyMessage="No existe una solicitud con los filtros dados."
+                                       
+                     filteredValue="#{SolicitudFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                                  rows="10"
                                  paginator="true"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
-
-                        <f:facet name="header">
+                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+            
+                       
+                         <p:ajax event="rowSelect" listener="#{SolicitudFuncionariosBean.onRowSelect}" update=":form:msgs"/>
+                         <p:ajax event="rowUnselect" listener="#{SolicitudFuncionariosBean.onRowUnselect}" update=":form:msgs"/>
+            
+                                      <f:facet name="header">
                             <span>Lista de solicitudes de nuevos Funcionarios.</span>
                         </f:facet>
 
@@ -66,16 +75,17 @@
                         <f:facet name="paginatorTopLeft">
                             <p:commandButton type="button" icon="pi pi-refresh"/>
                         </f:facet>
-
-                    </p:dataTable>
+            
+        </p:dataTable>
 
                     <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
                     <p:button class="btn" value="Ayuda" ></p:button>
 
                 </div>
+                
             </div>
 
-        </form>
+        </h:form>
     </h:body>
 </html>
 
