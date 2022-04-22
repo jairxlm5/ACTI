@@ -200,12 +200,12 @@ public class AutoregistroBean {
         newUser.setCodSeguridad(codSeguridad);
         String generatedPass = userDB.generateFirstPasswd();
 
-        /*try{
+        try{
             Utils.sendLoginInfoEmail(newUser, generatedPass);
-        } catch (MessagingException e){
-            this.validationMessage = "Ocurrio un error al enviar el correo, por favor intente de nuevo";
+        } catch (Exception e){
+            this.validationMessage = "Ocurrió un error al enviar el correo, por favor intente de nuevo";
             return;
-        }*/
+        }
         //Se registran los bytes de la clave
         try {
             generatedPass = Utils.getHashedPaswd(generatedPass);

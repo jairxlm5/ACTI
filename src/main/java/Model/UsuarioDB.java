@@ -473,7 +473,7 @@ public class UsuarioDB {
         ArrayList<Usuario> disabledUsers = new ArrayList<>();
         String sqlSelect = "";
         try {
-            sqlSelect = "Select ID From Usuario Where Aprobacion =" + false;
+            sqlSelect = "Select ID From Usuario Where Aprobacion =" + 0;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             while (rs.next()) {
                 Usuario user = getUserFromDB(rs.getString("ID"));

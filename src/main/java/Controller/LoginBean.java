@@ -75,20 +75,29 @@ public class LoginBean {
                 if (userDB.isLoginPasswordCorrect(user, this.password)) {
                     //Se tiene que verificar que el usuario esta habilitado
                     if (userDB.isUserActive(user)) {
-                        //Dependiendo del tipo de perfil se abren las paginas respectivas
-                        switch (perfilSeleccionado) {
-                            case Administrativo:
-                                userDB.setLogedInUser(user, perfilSeleccionado);
-                                return "MenuAdministrativo.xhtml";
-                            case Funcionario:
-                                userDB.setLogedInUser(user, perfilSeleccionado);
-                                return "MenuFuncionario.xhtml";
-                            case Tecnico:
-                                userDB.setLogedInUser(user, perfilSeleccionado);
-                                return "MenuTecnico.xhtml";
-                            default:
-                                this.validationMessage = "Debe indicar el perfil con que desea entrar";
-                                return "Login.xhtml";
+                        //Se tiene que verificar si es el primer para que cambie la contraseña
+                        if (userDB.isFirstLogin(user)) {
+                            userDB.addNewLogin(user);
+                            return "CambiarContra.xhtml";
+                        } else {
+                            //Dependiendo del tipo de perfil se abren las paginas respectivas
+                            switch (perfilSeleccionado) {
+                                case Administrativo:
+                                    userDB.setLogedInUser(user, perfilSeleccionado);
+                                    userDB.addNewLogin(user);
+                                    return "MenuAdministrativo.xhtml";
+                                case Funcionario:
+                                    userDB.setLogedInUser(user, perfilSeleccionado);
+                                    userDB.addNewLogin(user);
+                                    return "MenuFuncionario.xhtml";
+                                case Tecnico:
+                                    userDB.setLogedInUser(user, perfilSeleccionado);
+                                    userDB.addNewLogin(user);
+                                    return "MenuTecnico.xhtml";
+                                default:
+                                    this.validationMessage = "Debe indicar el perfil con que desea entrar";
+                                    return "Login.xhtml";
+                            }
                         }
                     } else {
                         this.validationMessage = "Su cuenta no ha sido habilitada";

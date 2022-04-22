@@ -23,16 +23,18 @@
                     <p:inputText value="#{beanCambiarContra.codigoSeguridad}"></p:inputText>
                     <br></br>       <br></br>  
                     <h:outputText class="textos"  value="Contraseña Autogenerada: "></h:outputText>
-                    <p:inputText value="#{beanCambiarContra.claveAutogenerada}"></p:inputText>
+                    <p:password value="#{beanCambiarContra.claveAutogenerada}"></p:password>
                     <br></br>       <br></br>  
                     <h:outputText class="textos"  value="Nueva contraseña: "></h:outputText>
-                    <p:inputText value="#{beanCambiarContra.claveNueva}"></p:inputText>
+                    <p:password value="#{beanCambiarContra.claveNueva}"></p:password>
                     <br></br><br></br>
-
+                     
+                    <h:outputText value="#{beanCambiarContra.message}"></h:outputText>
 
                     <br></br><br></br>  
 
-                    <p:button class="botones" value="Aceptar"></p:button>
+                    
+                    <h:commandButton class="botones" value="Cambiar Contraseña" action="#{beanCambiarContra.changePass()}"></h:commandButton>
 
                     <p:button class="botones" value="Cancelar" ></p:button>
                     <p:button href="Login.xhtml" class="botones" value="Volver" ></p:button>

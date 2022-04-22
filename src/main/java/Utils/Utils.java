@@ -59,7 +59,8 @@ public class Utils {
      */
     public static Date getCurrentDate() throws ParseException {
         Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.parse(dateFormat.format(currentDate));
     }
 
@@ -75,7 +76,7 @@ public class Utils {
         //tiene que pasarlo a este metodo sin encriptar porque el usuario tiene que ver la clave, 
         //y luego de eso entonces ahi si lo tiene que encriptar para guardarlo en la DB
         String reciever = user.getCorreo();
-        String sender = "direccion de correo de ACTI";
+        String sender = "actipruebas@gmail.com";
         String host = "smtp.gmail.com";
         int port = 465;
         Properties props = System.getProperties();
@@ -87,17 +88,24 @@ public class Utils {
 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(sender, "clave del correo de ACTI");
+                return new PasswordAuthentication(sender, "Progra123");
             }
         });
         //session.setDebug(true);
+        
+        String msgContent = "<html>\n"+
+                           "<h1>Hola " + user.getNombre() + "</h1>\n" +
+                             "<br>\n" + 
+                            "<p>Su codigo de seguridad es " + user.getCodSeguridad() + "</p>\n" +
+                            "<p>Su contraseña es: " + generatedPasswd + "</p>\n" + 
+                            "</html>";
 
         try {
             MimeMessage msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(sender));
             msg.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
             msg.setSubject("ACTI: Sus credenciales para inicio de sesion");
-            msg.setContent("<AQUI VA EL CODIGO HTML/>", "text/html");
+            msg.setContent(msgContent, "text/html");
             Transport.send(msg);
         } catch (MessagingException mesgException) {
             throw new MessagingException("Ocurrio un error al enviar el correo");
@@ -113,7 +121,7 @@ public class Utils {
         if (user.isAprobado()) {
             //Se envia el correo
             String reciever = user.getCorreo();
-            String sender = "direccion de correo de ACTI";
+            String sender = "actipruebas@gmail.com";
             String host = "smtp.gmail.com";
             int port = 465;
             Properties props = System.getProperties();
@@ -125,17 +133,23 @@ public class Utils {
 
             Session session = Session.getInstance(props, new javax.mail.Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(sender, "clave del correo de ACTI");
+                    return new PasswordAuthentication(sender, "Progra123");
                 }
             });
             //session.setDebug(true);
+            
+            String msgContent = "<html>\n"+
+                                  "<h1>Hola " + user.getNombre() + "</h1>\n" +
+                                   "<br>\n" + 
+                                   "<p>Su cuenta en ACTI ha sido habilitada, ya puede ingresar</p>\n" +
+                                "</html>";
 
             try {
                 MimeMessage msg = new MimeMessage(session);
                 msg.setFrom(new InternetAddress(sender));
                 msg.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
                 msg.setSubject("Habilitacion de Perfil");
-                msg.setContent("<AQUI VA EL CODIGO HTML/>", "text/html");
+                msg.setContent(msgContent, "text/html");
                 Transport.send(msg);
             } catch (MessagingException mesgException) {
                 throw new MessagingException("Ocurrio un error al enviar el correo");
