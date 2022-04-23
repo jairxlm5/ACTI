@@ -203,7 +203,8 @@ public class AutoregistroBean {
         try{
             Utils.sendLoginInfoEmail(newUser, generatedPass);
         } catch (Exception e){
-            this.validationMessage = "Ocurrió un error al enviar el correo, por favor intente de nuevo";
+            this.messageDisplayed = "Ocurrió un error al enviar el correo, por favor intente de nuevo" + e.getMessage() + " "+  e.toString();
+            e.printStackTrace();
             return;
         }
         //Se registran los bytes de la clave

@@ -85,7 +85,7 @@
                     </p:selectOneMenu>
                     
                     <h:commandButton class="botones" value="Agregar Teléfono" action="#{AutoregistroBean.addTelefono()}"></h:commandButton>
-                    <h:outputText class="textos" value="#{AutoregistroBean.phoneMessage}"></h:outputText>
+                    <h:outputText class="textos" value="#{AutoregistroBean.phoneMessage}" style="color: #00cccc"></h:outputText>
                     <br></br><br></br>
 
                     <h:outputText value="Correo electrónico: "></h:outputText>
@@ -103,7 +103,7 @@
                         <f:selectItems value="#{AutoregistroBean.getPerfiles()}" />
                     </p:selectOneMenu>
                     <h:commandButton class="botones" value="Agregar Perfil" action="#{AutoregistroBean.addPerfil()}"></h:commandButton>
-                    <h:outputText value="#{AutoregistroBean.profileMessage}"></h:outputText>
+                    <h:outputText class="textos" value="#{AutoregistroBean.profileMessage}" style="color: #00cccc"></h:outputText>
                     <br></br><br></br><br></br> 
                     
                     <h:commandButton class="botones" value="Aceptar" action="#{AutoregistroBean.saveNewUser()}"></h:commandButton>

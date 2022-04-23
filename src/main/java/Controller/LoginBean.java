@@ -78,22 +78,38 @@ public class LoginBean {
                         //Se tiene que verificar si es el primer para que cambie la contraseña
                         if (userDB.isFirstLogin(user)) {
                             userDB.addNewLogin(user);
+                            userDB.setLogedInUser(user, perfilSeleccionado);
                             return "CambiarContra.xhtml";
                         } else {
                             //Dependiendo del tipo de perfil se abren las paginas respectivas
                             switch (perfilSeleccionado) {
                                 case Administrativo:
-                                    userDB.setLogedInUser(user, perfilSeleccionado);
-                                    userDB.addNewLogin(user);
-                                    return "MenuAdministrativo.xhtml";
+                                    //Se tiene que verificar si el usuario tiene ese perfil
+                                    if(userDB.getUserProfile(user, perfilSeleccionado) != null){
+                                        userDB.setLogedInUser(user, perfilSeleccionado);
+                                        userDB.addNewLogin(user);
+                                        return "MenuAdministrativo.xhtml";
+                                    }
+                                    this.validationMessage = "Usted no cuenta con perfil de Administrativo";
+                                    break;
                                 case Funcionario:
-                                    userDB.setLogedInUser(user, perfilSeleccionado);
-                                    userDB.addNewLogin(user);
-                                    return "MenuFuncionario.xhtml";
+                                    //Se tiene que verificar si el usuario tiene ese perfil
+                                    if(userDB.getUserProfile(user, perfilSeleccionado) != null){
+                                        userDB.setLogedInUser(user, perfilSeleccionado);
+                                        userDB.addNewLogin(user);
+                                        return "MenuFuncionario.xhtml";
+                                    }
+                                    this.validationMessage = "Usted no cuenta con perfil de Funcionario";
+                                    break;
                                 case Tecnico:
-                                    userDB.setLogedInUser(user, perfilSeleccionado);
-                                    userDB.addNewLogin(user);
-                                    return "MenuTecnico.xhtml";
+                                    //Se tiene que verificar si el usuario tiene ese perfil
+                                    if(userDB.getUserProfile(user, perfilSeleccionado) != null){
+                                       userDB.setLogedInUser(user, perfilSeleccionado);
+                                        userDB.addNewLogin(user);
+                                        return "MenuTecnico.xhtml"; 
+                                    }
+                                    this.validationMessage = "Usted no cuenta con perfil de Técnico";
+                                    break;
                                 default:
                                     this.validationMessage = "Debe indicar el perfil con que desea entrar";
                                     return "Login.xhtml";
