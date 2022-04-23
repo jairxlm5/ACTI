@@ -16,6 +16,7 @@ import Model.CantonDB;
 import Model.Distrito;
 import Model.DistritoDB;
 import Model.PerfilDB;
+import Model.Prestamo;
 import Model.Provincia;
 import Model.ProvinciaDB;
 import Model.Sede;
@@ -87,6 +88,8 @@ public class AutoregistroBean {
     private String messageDisplayed;
     private String phoneMessage;
     private String profileMessage;
+    
+    Prestamo prestamoSeleccionado = new Prestamo();
 
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");

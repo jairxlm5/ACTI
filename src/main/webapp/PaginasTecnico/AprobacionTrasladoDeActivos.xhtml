@@ -10,8 +10,8 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-        <form>
-
+        <h:form id="form">
+  <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>         
             <!-- Para el traslado del activo ocupara un combo que diga en que sede esta 
             segun su ID y otro para poner a que sede va -->
 
@@ -19,16 +19,23 @@
 
                 <h1>Aprobacion de Traslado de activos </h1>
 
-                <p:dataTable var="traslado" value="#{AprobacionTrasladoBean.getSolicitudesDeTraslado()}"
-                             emptyMessage="No existe una solicitud de traslado con los filtros dados."
+       
+                
+                 <p:dataTable var="activo" value="${AprobacionTrasladoBean.getSolicitudesDeTraslado()}" selectionMode="single"
+                              selection="#{AprobacionPrestamoBean.trasladoSelecionado}" rowKey="#{traslado.activo.idActivo}" 
+                      emptyMessage="No existe una solicitud de traslado con los filtros dados."
                              filteredValue="#{AprobacionTrasladoBean.solicitudesDeTrasladoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
                              rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">>
-
-                    <f:facet name="header">
+                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+            
+                       
+                     <p:ajax event="rowSelect" listener="#{AprobacionTrasladoBean.onRowSelect}" update=":form:msgs"/>
+                     <p:ajax event="rowUnselect" listener="#{AprobacionTrasladoBean.onRowUnselect}" update=":form:msgs"/>
+            
+             <f:facet name="header">
                         <span>Lista de traslado de activos solicitados.</span>
                     </f:facet>
 
@@ -68,21 +75,26 @@
                     </p:column>    
 
                     <p:column headerText="Aprobar Traslado">
-                        <p:button value="Aprobar "></p:button>
-                        <p:button value="Rechazar"></p:button>
+                        <h:commandButton class="botones" value="Aprobar" action="#{AprobacionTrasladoBean.aprobarTraslado()}"></h:commandButton>
+                        <h:commandButton class="botones" value="Rechazar" action="#{AprobacionTrasladoBean.rechazarTraslado()}"></h:commandButton>
                     </p:column> 
 
                     <f:facet name="paginatorTopLeft">
                         <p:commandButton type="button" icon="pi pi-refresh"/>
-                    </f:facet>
+                    </f:facet>   
 
-                </p:dataTable>
-
+        </p:dataTable>
+                
+                <h:outputText value="#{AprobacionTrasladoBean.validationMessage}"></h:outputText>
                 <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
                 <p:button class="btn" value="Ayuda" ></p:button>
 
             </div>
-        </form>
+            
+            
+            
+            
+        </h:form>
     </h:body>
 </html>
 

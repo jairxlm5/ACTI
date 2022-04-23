@@ -185,11 +185,8 @@ public class CheckActivosAsignados {
      public void onRowSelect(SelectEvent<Activo> event) {
          
          
-         
-        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getIdActivo()));
-        
-        
-        
+         this.activoSelecionado = event.getObject();
+        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(activoSelecionado.getDescripcion()));
         
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }

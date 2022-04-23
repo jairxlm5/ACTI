@@ -13,16 +13,14 @@
         <h:form>
                <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>       
                
-            <!-- Me imagino que aqui deberia meterse un poco mas de carnita por asi decirlo jaja -->
 
             <div class="container">
 
                 <h1>Aprobacion de Prestamos de activos </h1>
 
             
-            
-        <p:dataTable var="activo"  value="#{AprobacionPrestamoBean.getSolicitudesDePrestamo()}" selectionMode="single"
-                     selection="#{AprobacionPrestamoBean.getactivoSelecionado}" rowKey="#{activo.idActivo}"  emptyMessage="No existe un prestamo con los filtros dados."
+        <p:dataTable var="prestamo"  value="#{AprobacionPrestamoBean.getSolicitudesDePrestamo()}" selectionMode="single"
+                     selection="#{AprobacionPrestamoBean.prestamoSeleccionado}" rowKey="#{prestamo.activo.idActivo}"  emptyMessage="No existe un prestamo con los filtros dados."
                      filteredValue="#{AprobacionPrestamoBean.solicitudesDePrestamoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
                                  rows="10"
                                  paginator="true"
@@ -31,8 +29,8 @@
                                  rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
             
                        
-            <p:ajax event="rowSelect" listener="#{CheckActivosAsignados.onRowSelect}" update=":form:msgs"/>
-            <p:ajax event="rowUnselect" listener="#{CheckActivosAsignados.onRowUnselect}" update=":form:msgs"/>
+            <p:ajax event="rowSelect" listener="#{AprobacionPrestamoBean.onRowSelect}" update=":form:msgs"/>
+            <p:ajax event="rowUnselect" listener="#{AprobacionPrestamoBean.onRowUnselect}" update=":form:msgs"/>
             
              <f:facet name="header">
                         <span>Lista de prestamos de activos solicitados.</span>
@@ -63,8 +61,8 @@
                     </p:column>    
 
                     <p:column headerText="Aprobar Prestamo">
-                        <p:button value="Aprobar"></p:button>
-                        <p:button value="Rechazar"></p:button>
+                        <h:commandButton class="botones" value="Aprobar" action="#{AprobacionPrestamoBean.apruebaPrestamo()}"></h:commandButton>
+                        <h:commandButton class="botones" value="Rechazar" action="#{AprobacionPrestamoBean.rechazaPrestamo()}"></h:commandButton>
                     </p:column> 
 
                     <f:facet name="paginatorTopLeft">
@@ -74,7 +72,7 @@
         </p:dataTable>
                  
                  
-                 
+                <h:outputText value="#{AprobacionPrestamoBean.validationMessage}"></h:outputText>
                 <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
                 <p:button class="btn" value="Ayuda" ></p:button>
 
