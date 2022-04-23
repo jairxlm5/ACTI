@@ -9,6 +9,7 @@ import DAO.DataAccess;
 import DAO.SNMPExceptions;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class ActivoDB {
     private SedeDB sedeDB = new SedeDB();
     private UsuarioDB userDB = new UsuarioDB();
     
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * Guarda los datos de un activo en la DB
      * @param activo
@@ -38,7 +40,7 @@ public class ActivoDB {
             str.append("'").append(activo.getDescripcion()).append("', ");
             str.append(activo.getValor()).append(", ");
             str.append("'").append(activo.getSede().getCodigo()).append("', ");
-            str.append(activo.getFechaAdquisicion()).append(", ");
+            str.append("'").append(simpleDateFormat.format(activo.getFechaAdquisicion())).append("', ");
             str.append("'").append(activo.getFuncionario().getIdentificacion()).append("')");
             
             sqlCommand = str.toString();
@@ -60,6 +62,7 @@ public class ActivoDB {
     public Activo getActivoFromDB(String idActivo) throws SQLException, SNMPExceptions{
         String sqlSelect = "";
         Activo activo = null;
+        FuncionarioDB funcDB = new FuncionarioDB();
         try{
             sqlSelect = "Select * From Activo Where ID Like " + idActivo;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
@@ -70,7 +73,7 @@ public class ActivoDB {
                 double valor = rs.getDouble("Valor");
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
-                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                Funcionario func = funcDB.getFuncFromDB(rs.getString("Funcionario"));
                 
                 activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
             }
@@ -97,7 +100,7 @@ public class ActivoDB {
             str.append("Descripcion = '").append(activo.getDescripcion()).append("', ");
             str.append("Valor = ").append(activo.getValor()).append(", ");
             str.append("Sede = '").append(activo.getSede().getCodigo()).append("', ");
-            str.append("Fecha_Adquisicion = ").append(activo.getFechaAdquisicion()).append(", ");
+            str.append("Fecha_Adquisicion = '").append(simpleDateFormat.format(activo.getFechaAdquisicion())).append("', ");
             str.append("Funcionario = '").append(activo.getFuncionario().getIdentificacion()).append("' ");
             str.append("Where ID Like ").append(activo.getIdActivo());
             
@@ -137,18 +140,19 @@ public class ActivoDB {
      */
     public ArrayList<Activo> getActivosByFunc(Funcionario funcionario) throws SQLException, SNMPExceptions{
         ArrayList<Activo> activos = new ArrayList<>();
+        FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try{
-            sqlSelect = "Select * From Activo Where Funcionario Like " + funcionario.getIdentificacion();
+            sqlSelect = "Select * From Activo Where Funcionario Like '" + funcionario.getIdentificacion() + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
-            if(rs.next()){
+            while(rs.next()){
                 String id = rs.getString("ID");
                 String nombre = rs.getString("Nombre");
                 String descripcion = rs.getString("Descripcion");
                 double valor = rs.getDouble("Valor");
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
-                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                Funcionario func = funcDB.getFuncFromDB(rs.getString("Funcionario"));
                 
                 Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
                 activos.add(activo);
@@ -170,18 +174,19 @@ public class ActivoDB {
      */
     public ArrayList<Activo> getActivosBySede(Sede sedeSeleccionada) throws SQLException, SNMPExceptions{
         ArrayList<Activo> activos = new ArrayList<>();
+        FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try{
-            sqlSelect = "Select * From Activo Where Sede Like " + sedeSeleccionada.getCodigo();
+            sqlSelect = "Select * From Activo Where Sede Like '" + sedeSeleccionada.getCodigo() + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
-            if(rs.next()){
+            while(rs.next()){
                 String id = rs.getString("ID");
                 String nombre = rs.getString("Nombre");
                 String descripcion = rs.getString("Descripcion");
                 double valor = rs.getDouble("Valor");
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
-                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                Funcionario func = funcDB.getFuncFromDB(rs.getString("Funcionario"));
                 
                 Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
                 activos.add(activo);
@@ -197,18 +202,19 @@ public class ActivoDB {
     //Cree esta para ReporteActivosPTA
        public  ArrayList<Activo> getAllActivos() throws SQLException, SNMPExceptions{
         ArrayList<Activo> activos = new ArrayList<>();
+        FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try{
             sqlSelect = "Select * From Activo";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
-            if(rs.next()){
+            while(rs.next()){
                 String id = rs.getString("ID");
                 String nombre = rs.getString("Nombre");
                 String descripcion = rs.getString("Descripcion");
                 double valor = rs.getDouble("Valor");
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
-               Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                Funcionario func = funcDB.getFuncFromDB(rs.getString("Funcionario"));
 
                
                 Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
@@ -224,18 +230,19 @@ public class ActivoDB {
        //Cree esta para ReporteSolicitudActivos
        public  ArrayList<Activo> getAllActivosSolicitados() throws SQLException, SNMPExceptions{
         ArrayList<Activo> activos = new ArrayList<>();
+        FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try{
             sqlSelect = "Select * From Activo";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
-            if(rs.next()){
+            while(rs.next()){
                 String id = rs.getString("ID");
                 String nombre = rs.getString("Nombre");
                 String descripcion = rs.getString("Descripcion");
                 double valor = rs.getDouble("Valor");
                 Sede sede = sedeDB.getSede(rs.getString("Sede"));
                 Date fechaAdquisicion = rs.getDate("Fecha_Adquisicion");
-                Funcionario func = (Funcionario)userDB.getUserFromDB(rs.getString("Funcionario"));
+                Funcionario func = funcDB.getFuncFromDB(rs.getString("Funcionario"));
                 
                 Activo activo = new Activo(id, nombre, descripcion, valor, fechaAdquisicion, sede, func);
                 activos.add(activo);

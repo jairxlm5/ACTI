@@ -36,7 +36,7 @@ public class TecnicoDB {
         String sqlSelect = "";
         Tecnico tecUser = null;
         try{
-            sqlSelect = "Select ID From Tecnico Where ID Like " + userID;
+            sqlSelect = "Select ID From Tecnico Where ID Like '" + userID + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
                 String id = rs.getString("ID");

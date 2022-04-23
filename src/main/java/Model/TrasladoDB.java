@@ -9,6 +9,7 @@ import DAO.DataAccess;
 import DAO.SNMPExceptions;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class TrasladoDB {
     private UsuarioDB userDB = new UsuarioDB();
     private MovimientoActivoDB movActDB = new MovimientoActivoDB();
     private SedeDB sedeDB = new SedeDB();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Guarda la informacion de un traslado de activo en la DB
@@ -39,8 +41,8 @@ public class TrasladoDB {
             str.append("Insert Into Traslados Values (");
             str.append("'").append(traslado.getActivo().getIdActivo()).append("', ");
             str.append("'").append(traslado.getFuncionarioSolicitante().getIdentificacion()).append("', ");
-            str.append(traslado.getFecha_Solicitud()).append(", ");
-            str.append(traslado.getFechaTraslado()).append(", ");
+            str.append("'").append(simpleDateFormat.format(traslado.getFecha_Solicitud())).append("', ");
+            str.append("'").append(simpleDateFormat.format(traslado.getFechaTraslado())).append("', ");
             str.append("'").append(traslado.getSedeOrigen().getCodigo()).append("', ");
             str.append("'").append(traslado.getSedeDestino().getCodigo()).append("' )");
 
@@ -69,12 +71,19 @@ public class TrasladoDB {
         try {
             sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Fecha_Traslado, Sede_Origen, Sede_Destino"
                     + " From Traslados "
-                    + "Where IDActivo Like " + idActivo + " and IDSolicitante Like " + idFunc + " and "
-                    + "Fecha_Solicitud = " + fechaSolicitud;
+                    + "Where IDActivo Like '" + idActivo + "' and IDSolicitante Like '" + idFunc + "' and "
+                    + "Fecha_Solicitud = '" + simpleDateFormat.format(fechaSolicitud) + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if (rs.next()) {
                 //Se traen los datos de la tabla Movimiento_Activo correspondientes al traslado
-                traslado = (Traslado) movActDB.getMovActFromDB(idActivo, idFunc, fechaSolicitud);
+                MovimientoActivo movAct = movActDB.getMovActFromDB(idActivo, idFunc, fechaSolicitud);
+                traslado = new Traslado();
+                traslado.setActivo(movAct.getActivo());
+                traslado.setAprobado(movAct.isAprobado());
+                traslado.setFecha_Solicitud(movAct.getFecha_Solicitud());
+                traslado.setFuncionarioSolicitante(movAct.getFuncionarioSolicitante());
+                traslado.setMotivo(movAct.getMotivo());
+                traslado.setTecnicoAprobante(movAct.getTecnicoAprobante()); 
                 traslado.setFechaTraslado(rs.getDate("Fecha_Traslado"));
                 traslado.setSedeOrigen(sedeDB.getSede(rs.getString("Sede_Origen")));
                 traslado.setSedeDestino(sedeDB.getSede(rs.getString("Sede_Destino")));
@@ -105,8 +114,16 @@ public class TrasladoDB {
                 Usuario funcSolicitante = userDB.getUserFromDB(rs.getString("IDSolicitante"));
                 Date requestDate = rs.getDate("Fecha_Solicitud");
                 
-                Traslado traslado = (Traslado)movActDB.getMovActFromDB(activo.getIdActivo(), 
+                //Info de MovimientoActivo
+                MovimientoActivo movAct = movActDB.getMovActFromDB(activo.getIdActivo(), 
                                         funcSolicitante.getIdentificacion(), requestDate);
+                Traslado traslado = new Traslado();
+                traslado.setActivo(movAct.getActivo());
+                traslado.setAprobado(movAct.isAprobado());
+                traslado.setFecha_Solicitud(movAct.getFecha_Solicitud());
+                traslado.setFuncionarioSolicitante(movAct.getFuncionarioSolicitante());
+                traslado.setMotivo(movAct.getMotivo());
+                traslado.setTecnicoAprobante(movAct.getTecnicoAprobante()); 
                 traslado.setFechaTraslado(rs.getDate("Fecha_Traslado"));
                 traslado.setSedeOrigen(sedeDB.getSede(rs.getString("Sede_Origen")));
                 traslado.setSedeDestino(sedeDB.getSede(rs.getString("Sede_Destino")));

@@ -9,6 +9,7 @@ import DAO.DataAccess;
 import DAO.SNMPExceptions;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class PrestamoDB {
     private ActivoDB activoDB = new ActivoDB();
     private UsuarioDB userDB = new UsuarioDB();
     private MovimientoActivoDB movActDB = new MovimientoActivoDB();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Guarda la informacion de un prestamo de activo en la DB
@@ -36,8 +38,8 @@ public class PrestamoDB {
             str.append("Insert Into Prestamos Values (");
             str.append("'").append(prestamo.getActivo().getIdActivo()).append("', ");
             str.append("'").append(prestamo.getFuncionarioSolicitante().getIdentificacion()).append("', ");
-            str.append(prestamo.getFecha_Solicitud()).append(", ");
-            str.append(prestamo.getFechaRetorno()).append(" )");
+            str.append("'").append(simpleDateFormat.format(prestamo.getFecha_Solicitud())).append("', ");
+            str.append("'").append(simpleDateFormat.format(prestamo.getFechaRetorno())).append("' )");
             
             sqlCommand = str.toString();
             dataAccess.executeSQLCommand(sqlCommand);
@@ -63,11 +65,18 @@ public class PrestamoDB {
         try{
             sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Fecha_Retorno From Prestamos"
                     + " Where IDActivo Like " + idActivo + " and IDSolicitante Like " + idFunc + " and "
-                    + "Fecha_Solicitud = " + fechaSolicitud;
+                    + "Fecha_Solicitud = '" + simpleDateFormat.format(fechaSolicitud) + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
                 //Se traen los datos de la tabla Movimiento_Activo correspondientes al prestamo
-                prestamo = (Prestamo)movActDB.getMovActFromDB(idActivo, idFunc, fechaSolicitud);
+                MovimientoActivo movAct = movActDB.getMovActFromDB(idActivo, idFunc, fechaSolicitud);
+                prestamo = new Prestamo();
+                prestamo.setActivo(movAct.getActivo());
+                prestamo.setAprobado(movAct.isAprobado());
+                prestamo.setFecha_Solicitud(movAct.getFecha_Solicitud());
+                prestamo.setFuncionarioSolicitante(movAct.getFuncionarioSolicitante());
+                prestamo.setMotivo(movAct.getMotivo());
+                prestamo.setTecnicoAprobante(movAct.getTecnicoAprobante()); 
                 prestamo.setFechaRetorno(rs.getDate("Fecha_Retorno"));
                 
             }
@@ -96,8 +105,16 @@ public class PrestamoDB {
                 Usuario funcSolicitante = userDB.getUserFromDB(rs.getString("IDSolicitante"));
                 Date requestDate = rs.getDate("Fecha_Solicitud");
                 
-                Prestamo prestamo = (Prestamo)movActDB.getMovActFromDB(activo.getIdActivo(), 
+                //Info de Movimiento Activo
+                MovimientoActivo movAct = movActDB.getMovActFromDB(activo.getIdActivo(), 
                                         funcSolicitante.getIdentificacion(), requestDate);
+                Prestamo prestamo = new Prestamo();
+                prestamo.setActivo(movAct.getActivo());
+                prestamo.setAprobado(movAct.isAprobado());
+                prestamo.setFecha_Solicitud(movAct.getFecha_Solicitud());
+                prestamo.setFuncionarioSolicitante(movAct.getFuncionarioSolicitante());
+                prestamo.setMotivo(movAct.getMotivo());
+                prestamo.setTecnicoAprobante(movAct.getTecnicoAprobante());
                 prestamo.setFechaRetorno(rs.getDate("Fecha_Retorno"));
                 prestamos.add(prestamo);
             }

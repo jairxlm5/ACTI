@@ -79,14 +79,14 @@ public class SolicitudFuncionariosBean {
     //Este es para poder traerse Las solicitudes de nuevos funcionarios
         public ArrayList<Funcionario> getSolicitudNewFuncionariosDB(){
         ArrayList<Funcionario> funcionarios = new ArrayList<>();
-        try {
+       /* try {
             FuncionarioDB funcionarioDB = new FuncionarioDB();
             funcionarios = funcionarioDB.getAllFuncionariosNuevos();
         } catch (SQLException e) {
 
         } catch (SNMPExceptions s) {
 
-        }
+        }*/
         return funcionarios;
     }
 
