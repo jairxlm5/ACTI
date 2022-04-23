@@ -7,9 +7,12 @@ package Controller;
 
 import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.ActivoDB;
 import Model.Funcionario;
+import Model.FuncionarioDB;
 import Model.Sede;
 import Model.SedeDB;
+import java.lang.reflect.Array;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,9 +32,12 @@ public class RegistroActivosBean {
     private String descripcion;
     private double valor;
     private Date fechaAdquisicion;
+       private String sedeID;
+       private String funcID;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
     private ArrayList<Sede> sedes;
+     private ArrayList<Funcionario> funcionarios;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Sede sedeSeleccionada;
     //Mensaje para desplegar info de validaciones
@@ -41,13 +47,19 @@ public class RegistroActivosBean {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fecha = myCalendar.getTime();
+    
+    ActivoDB activoDB = new ActivoDB();
 
     public RegistroActivosBean() {
+        this.funcionarios = new ArrayList<>();
         this.sedes = new ArrayList<>();
         this.idActivo = "";
         this.nombre = "";
         this.descripcion = "";
         this.validationMessage = "";
+         this.fillSedes();
+         fillFuncionarios();
+         
     }
 
     /**
@@ -90,7 +102,17 @@ public class RegistroActivosBean {
         if (funcAsignado != null) {
             //Se construye el objeto activo
             Activo activo = new Activo(idActivo, nombre, descripcion, valor, fechaAdquisicion, sedeSeleccionada, funcAsignado);
-
+           
+            
+                try {
+            activoDB.saveActivo(activo);
+            this.validationMessage = "Activo registrado correctamente";
+        } catch (SNMPExceptions e) {
+            this.validationMessage = "Error al registrar Activo" + e.toString() + e.getMessage();
+        } catch (SQLException e) {
+            this.validationMessage = "Error al registrar Activo" + e.toString() + e.getMessage();
+        }
+             
             //Se registra el activo en la BD
         } else {
             this.validationMessage = "El funcionario elegido no existe o no esta registrado en el sistema";
@@ -102,7 +124,59 @@ public class RegistroActivosBean {
 
     }
 
+    
+     public void fillSedes(){
+        try {
+            SedeDB sedeDB = new SedeDB();
+            this.sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+    }
+
+ public void fillFuncionarios(){
+     /*
+        try {
+           
+            
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+*/
+    }
+
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+    
+     
+    public ArrayList<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(ArrayList<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+
+     
+        public String getFuncID() {
+        return funcID;
+    }
+
+    public void setFuncID(String funcID) {
+        this.funcID = funcID;
+    }
+    
+        public String getSedeID() {
+        return sedeID;
+    }
+
+    public void setSedeID(String sedeID) {
+        this.sedeID = sedeID;
+    }
+    
     public String getIdActivo() {
         return idActivo;
     }

@@ -10,23 +10,31 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-        <form>
+        <h:form>
+               <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>       
+               
             <!-- Me imagino que aqui deberia meterse un poco mas de carnita por asi decirlo jaja -->
 
             <div class="container">
 
                 <h1>Aprobacion de Prestamos de activos </h1>
 
-                <p:dataTable var="prestamo" value="#{AprobacionPrestamoBean.getSolicitudesDePrestamo()}"
-                             emptyMessage="No existe un prestamo con los filtros dados."
-                             filteredValue="#{AprobacionPrestamoBean.solicitudesDePrestamoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
-                             rows="10"
-                             paginator="true"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                             rowsPerPageTemplate="5,10,{ShowAll|'All'}">
-
-                    <f:facet name="header">
+            
+            
+        <p:dataTable var="activo"  value="#{AprobacionPrestamoBean.getSolicitudesDePrestamo()}" selectionMode="single"
+                     selection="#{AprobacionPrestamoBean.getactivoSelecionado}" rowKey="#{activo.idActivo}"  emptyMessage="No existe un prestamo con los filtros dados."
+                     filteredValue="#{AprobacionPrestamoBean.solicitudesDePrestamoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
+            
+                       
+            <p:ajax event="rowSelect" listener="#{CheckActivosAsignados.onRowSelect}" update=":form:msgs"/>
+            <p:ajax event="rowUnselect" listener="#{CheckActivosAsignados.onRowUnselect}" update=":form:msgs"/>
+            
+             <f:facet name="header">
                         <span>Lista de prestamos de activos solicitados.</span>
                     </f:facet>
 
@@ -63,13 +71,21 @@
                         <p:commandButton type="button" icon="pi pi-refresh"/>
                     </f:facet>
 
-                </p:dataTable>
-
+        </p:dataTable>
+                 
+                 
+                 
                 <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
                 <p:button class="btn" value="Ayuda" ></p:button>
 
-            </div>
-        </form>
+    </div>
+            
+            
+   
+            
+            
+            
+        </h:form>
     </h:body>
 </html>
 
