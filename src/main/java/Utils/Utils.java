@@ -72,25 +72,27 @@ public class Utils {
      * @param generatedPasswd
      */
     public static void sendLoginInfoEmail(Usuario user, String generatedPasswd) throws MessagingException {
-        //Bro para este metodo tiene que enviar el String que genera el metodo generateFirstPasswd()
-        //tiene que pasarlo a este metodo sin encriptar porque el usuario tiene que ver la clave, 
-        //y luego de eso entonces ahi si lo tiene que encriptar para guardarlo en la DB
         String reciever = user.getCorreo();
-        String sender = "actipruebas@gmail.com";
+        String sender = "actiPruebas@gmail.com";
+        String password = "Progra123";
         String host = "smtp.gmail.com";
-        int port = 465;
+        int port = 587;
+        
         Properties props = System.getProperties();
-
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", host);
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", port);
-        props.put("mail.smtp.ssl.enable", true);
-        props.put("mail.smtp.auth", true);
-
-        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(sender, "Progra123");
-            }
-        });
+        props.put("mail.smtp.user", sender);
+        props.put("mail.smtp.clave", password);
+        /*
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.smtp.socketFactory.port", String.valueOf(port));
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        */
+        
+        Session session = Session.getInstance(props);
         //session.setDebug(true);
         
         String msgContent = "<html>\n"+
@@ -102,13 +104,17 @@ public class Utils {
 
         try {
             MimeMessage msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress(sender));
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
+            //msg.setFrom(new InternetAddress(sender));
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
             msg.setSubject("ACTI: Sus credenciales para inicio de sesion");
             msg.setContent(msgContent, "text/html");
-            Transport.send(msg);
-        } catch (MessagingException mesgException) {
-            throw new MessagingException("Ocurrio un error al enviar el correo");
+            
+            Transport transport = session.getTransport("smtp");
+            transport.connect(host, port, sender, password);
+            transport.sendMessage(msg, msg.getAllRecipients());
+            transport.close();
+        } catch (Exception mesgException) {
+            throw new MessagingException(mesgException.getMessage());
         }
     }
 
@@ -121,21 +127,21 @@ public class Utils {
         if (user.isAprobado()) {
             //Se envia el correo
             String reciever = user.getCorreo();
-            String sender = "actipruebas@gmail.com";
+            String sender = "actiPruebas@gmail.com";
+            String password = "Progra123";
             String host = "smtp.gmail.com";
-            int port = 465;
+            int port = 587;
+            
             Properties props = System.getProperties();
-
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.ssl.trust", host);
             props.put("mail.smtp.host", host);
             props.put("mail.smtp.port", port);
-            props.put("mail.smtp.ssl.enable", true);
-            props.put("mail.smtp.auth", true);
+            props.put("mail.smtp.user", sender);
+            props.put("mail.smtp.clave", password);
 
-            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(sender, "Progra123");
-                }
-            });
+            Session session = Session.getInstance(props);
             //session.setDebug(true);
             
             String msgContent = "<html>\n"+
@@ -146,13 +152,17 @@ public class Utils {
 
             try {
                 MimeMessage msg = new MimeMessage(session);
-                msg.setFrom(new InternetAddress(sender));
-                msg.addRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
-                msg.setSubject("Habilitacion de Perfil");
+                //msg.setFrom(new InternetAddress(sender));
+                msg.setRecipient(Message.RecipientType.TO, new InternetAddress(reciever));
+                msg.setSubject("ACTI: Cuenta Habilitada");
                 msg.setContent(msgContent, "text/html");
-                Transport.send(msg);
-            } catch (MessagingException mesgException) {
-                throw new MessagingException("Ocurrio un error al enviar el correo");
+
+                Transport transport = session.getTransport("smtp");
+                transport.connect(host, port, sender, password);
+                transport.sendMessage(msg, msg.getAllRecipients());
+                transport.close();
+            } catch (Exception mesgException) {
+                throw new MessagingException(mesgException.getMessage());
             }
         }
     }

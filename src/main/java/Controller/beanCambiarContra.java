@@ -58,6 +58,12 @@ public class beanCambiarContra {
                 this.message = "Clave Autogenerada Incorrecta";
                 return;
             }
+            //Se verifica que cumpla con los requisitos del sistema
+            String passwordPassRequirements = userDB.passwordPassRequirements(this.claveNueva);
+            if(!passwordPassRequirements.equals("Passed")){
+                this.message = passwordPassRequirements;
+                return;
+            }
             this.claveNueva = Utils.getHashedPaswd(this.claveNueva);
         } catch (Exception e) {
             this.message = "Ocurrio un error con la clave";
