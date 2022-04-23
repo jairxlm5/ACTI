@@ -10,6 +10,7 @@ import DAO.SNMPExceptions;
 import Utils.ACTIException;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,9 +23,8 @@ public class MovimientoActivoDB {
     private static final DataAccess dataAccess = new DataAccess();
 
     private ActivoDB activoDB = new ActivoDB();
-    private PrestamoDB prestamoDB = new PrestamoDB();
-    private TrasladoDB trasladoDB = new TrasladoDB();
     private UsuarioDB userDB = new UsuarioDB();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      *
@@ -35,14 +35,21 @@ public class MovimientoActivoDB {
      */
     public void saveMovimientoAct(MovimientoActivo movAct) throws SQLException, SNMPExceptions, NullPointerException {
         String sqlCommand = "";
+        PrestamoDB prestamoDB = new PrestamoDB();
+        TrasladoDB trasladoDB = new TrasladoDB();
         try {
             StringBuilder str = new StringBuilder();
             str.append("Insert Into Movimiento_Activo (IDActivo, IDSolicitante, Fecha_Solicitud, Motivo, Aprobacion) Values (");
             str.append("'").append(movAct.getActivo().getIdActivo()).append("', ");
             str.append("'").append(movAct.getFuncionarioSolicitante().getIdentificacion()).append("', ");
-            str.append(movAct.getFecha_Solicitud()).append(", ");
+            str.append("'").append(simpleDateFormat.format(movAct.getFecha_Solicitud())).append("', ");
             str.append("'").append(movAct.getMotivo()).append("', ");
-            str.append(movAct.isAprobado()).append(" )");
+            if(movAct.isAprobado()){
+                str.append(1).append(" )");
+            } else {
+                str.append(0).append(" )");
+            }
+            
 
             sqlCommand = str.toString();
             dataAccess.executeSQLCommand(sqlCommand);
@@ -78,9 +85,9 @@ public class MovimientoActivoDB {
     public void deleteMovimientoAct(MovimientoActivo movAct) throws SQLException, SNMPExceptions {
         String sqlCommand = "";
         try {
-            sqlCommand = "Delete From Movimiento_Activo Where IDActivo Like " + movAct.getActivo().getIdActivo() + " and"
-                    + " IDSolicitante Like " + movAct.getFuncionarioSolicitante().getIdentificacion() + " and"
-                    + " Fecha_Solicitud = " + movAct.getFecha_Solicitud();
+            sqlCommand = "Delete From Movimiento_Activo Where IDActivo Like '" + movAct.getActivo().getIdActivo() + "' and"
+                    + " IDSolicitante Like '" + movAct.getFuncionarioSolicitante().getIdentificacion() + "' and"
+                    + " Fecha_Solicitud = '" + simpleDateFormat.format(movAct.getFecha_Solicitud()) + "'";
             dataAccess.executeSQLCommand(sqlCommand);
         } catch (SQLException e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
@@ -101,11 +108,15 @@ public class MovimientoActivoDB {
         try {
             StringBuilder str = new StringBuilder();
             str.append("Update Movimiento_Activo Set ");
-            str.append("Aprobacion = ").append(movAct.isAprobado());
-            str.append("IDTecnicoAprobante = ").append(movAct.getTecnicoAprobante().getIdentificacion());
-            str.append("Where IDActivo Like ").append(movAct.getActivo().getIdActivo());
-            str.append(" and IDSolicitante Like ").append(movAct.getFuncionarioSolicitante().getIdentificacion());
-            str.append(" and Fecha_Solicitud = ").append(movAct.getFecha_Solicitud());
+            if(movAct.isAprobado()){
+                str.append("Aprobacion = ").append(1).append(", ");
+            } else {
+                str.append("Aprobacion = ").append(0).append(", ");
+            }
+            str.append("IDTecnicoAprobante = '").append(movAct.getTecnicoAprobante().getIdentificacion()).append("', ");
+            str.append("Where IDActivo Like '").append(movAct.getActivo().getIdActivo()).append("' ");
+            str.append(" and IDSolicitante Like '").append(movAct.getFuncionarioSolicitante().getIdentificacion()).append("' ");
+            str.append(" and Fecha_Solicitud = '").append(simpleDateFormat.format(movAct.getFecha_Solicitud())).append("'");
 
             sqlCommand = str.toString();
             dataAccess.executeSQLCommand(sqlCommand);
@@ -118,25 +129,28 @@ public class MovimientoActivoDB {
 
     public MovimientoActivo getMovActFromDB(String idActivo, String idFunc, Date fechaSolicitud) throws SQLException, SNMPExceptions{
         MovimientoActivo movAct = null;
+        TecnicoDB tecDB = new TecnicoDB();
+        FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try {
             sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Motivo, Aprobacion, IDTecnicoAprobante "
-                    + "From Movimiento_Activo Where IDActivo Like " + idActivo + " and IDSolicitante Like " + idFunc
-                    + " and " + "Fecha_Solicitud = " + fechaSolicitud;
+                    + "From Movimiento_Activo Where IDActivo Like '" + idActivo + "' and IDSolicitante Like '" + idFunc
+                    + "' and " + "Fecha_Solicitud = '" + simpleDateFormat.format(fechaSolicitud) + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
                 Activo activo = activoDB.getActivoFromDB(rs.getString("IDActivo"));
-                Usuario funcSolicitante = userDB.getUserFromDB(rs.getString("IDSolicitante"));
+                Usuario funcSolicitante = funcDB.getFuncFromDB(rs.getString("IDSolicitante")); 
                 Date requestDate = rs.getDate("Fecha_Solicitud");
                 String motivo = rs.getString("Motivo");
                 boolean aprobado = rs.getBoolean("Aprobacion");
                 
                 movAct = new MovimientoActivo(activo, fechaSolicitud, motivo, aprobado);
                 movAct.setFuncionarioSolicitante((Funcionario)funcSolicitante);
-                //En caso que el movimiento haya sido aprobado se asigna el tecnico que lo aprobo
-                if(rs.getString("IDTecnicoAprobante") != null){
+                movAct.setTecnicoAprobante(tecDB.getTecFromDB(rs.getString("IDTecnicoAprobante"))); 
+                
+                /*if(rs.getString("IDTecnicoAprobante") != null){
                     movAct.setTecnicoAprobante((Tecnico)userDB.getUserFromDB(rs.getString("IDTecnicoAprobante")));
-                }
+                }*/
             }
         } catch (SQLException e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
@@ -155,18 +169,20 @@ public class MovimientoActivoDB {
      */
     public ArrayList<MovimientoActivo> getAllMovActs() throws SQLException, SNMPExceptions {
         ArrayList<MovimientoActivo> movActs = new ArrayList<>();
+        FuncionarioDB funcDB = new FuncionarioDB();
+        TecnicoDB tecDB = new TecnicoDB();
         String sqlSelect = "";
         try {
             sqlSelect = "Select * From Movimiento_Activo";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             while (rs.next()) {
                 Activo activo = activoDB.getActivoFromDB(rs.getString("IDActivo"));
-                Usuario funcSolicitante = userDB.getUserFromDB(rs.getString("IDSolicitante"));
+                Usuario funcSolicitante = funcDB.getFuncFromDB(rs.getString("IDSolicitante")); 
                 Date fechaSolicitud = rs.getDate("Fecha_Solicitud");
                 String motivo = rs.getString("Motivo");
                 boolean aprobacion = rs.getBoolean("Aprobacion");
-                Usuario tecAprobante = userDB.getUserFromDB(rs.getString("IDTecnicoAprobante"));
-
+                Usuario tecAprobante = tecDB.getTecFromDB(rs.getString("IDTecnicoAprobante")); 
+ 
                 MovimientoActivo movAct = new MovimientoActivo(activo, fechaSolicitud, motivo, aprobacion);
                 movAct.setFuncionarioSolicitante((Funcionario) funcSolicitante);
                 movAct.setTecnicoAprobante((Tecnico) tecAprobante);
@@ -189,14 +205,15 @@ public class MovimientoActivoDB {
      */
     public ArrayList<MovimientoActivo> getMovActsNoAprobados() throws SQLException, SNMPExceptions{
         ArrayList<MovimientoActivo> movActs = new ArrayList<>();
+        FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try{
             sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Motivo, Aprobacion, IDTecnicoAprobante"
-                     + "From Movimiento_Activo Where Aprobacion = " + false;
+                     + "From Movimiento_Activo Where Aprobacion = " + 0;
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             while(rs.next()){
                 Activo activo = activoDB.getActivoFromDB(rs.getString("IDActivo"));
-                Usuario funcSolicitante = userDB.getUserFromDB(rs.getString("IDSolicitante"));
+                Usuario funcSolicitante = funcDB.getFuncFromDB(rs.getString("IDSolicitante")); 
                 Date requestDate = rs.getDate("Fecha_Solicitud");
                 String motivo = rs.getString("Motivo");
                 boolean aprobado = rs.getBoolean("Aprobacion");
@@ -229,7 +246,9 @@ public class MovimientoActivoDB {
         //Se tiene que verifica que el usuario sea un tecnico
         if (profileInUse.equals("Tecnico")) {
             movAct.setAprobado(true);
-            movAct.setTecnicoAprobante((Tecnico) userDB.getLogedInUser());
+            Tecnico tec = new Tecnico();
+            tec.setIdentificacion(userDB.getLogedInUser().getIdentificacion()); 
+            movAct.setTecnicoAprobante(tec);
             updateMovimientoAct(movAct);
             
         } else {
@@ -251,7 +270,9 @@ public class MovimientoActivoDB {
 
         //Se tiene que verificar que el usuario sea un funcionario
         if (profileInUse.equals("Funcionario")) {
-            movAct.setFuncionarioSolicitante((Funcionario) userDB.getLogedInUser());
+            Funcionario func = new Funcionario();
+            func.setIdentificacion(userDB.getLogedInUser().getIdentificacion()); 
+            movAct.setFuncionarioSolicitante(func); 
             this.saveMovimientoAct(movAct);
         } else {
             throw new ACTIException("Accion no permitida, solo los Funcionarios pueden solicitar un movimiento de activo");

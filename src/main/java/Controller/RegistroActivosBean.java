@@ -32,14 +32,15 @@ public class RegistroActivosBean {
     private String descripcion;
     private double valor;
     private Date fechaAdquisicion;
-       private String sedeID;
-       private String funcID;
+    private String sedeID;
+    private String funcID;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
     //Solo estan para desplegar informacion
     private ArrayList<Sede> sedes;
-     private ArrayList<Funcionario> funcionarios;
+    private ArrayList<Funcionario> funcionarios;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Sede sedeSeleccionada;
+    private Funcionario funcionario;
     //Mensaje para desplegar info de validaciones
     private String validationMessage = "";
 
@@ -47,7 +48,7 @@ public class RegistroActivosBean {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fecha = myCalendar.getTime();
-    
+
     ActivoDB activoDB = new ActivoDB();
 
     public RegistroActivosBean() {
@@ -57,9 +58,9 @@ public class RegistroActivosBean {
         this.nombre = "";
         this.descripcion = "";
         this.validationMessage = "";
-         this.fillSedes();
-         fillFuncionarios();
-         
+        this.fillSedes();
+        this.fillFuncionarios();
+
     }
 
     /**
@@ -93,26 +94,33 @@ public class RegistroActivosBean {
             this.validationMessage = "Debe indicar la fecha en que se adquirió el activo";
             return;
         }
+        /*
         if (this.sedeSeleccionada == null) {
             this.validationMessage = "Por favor indique la sede a la que pertenece el activo";
             return;
+        }*/
+        FuncionarioDB funcDB = new FuncionarioDB();
+        SedeDB sedeDB = new SedeDB();
+        Funcionario funcAsignado = null;
+        try{
+            funcAsignado = funcDB.getFuncFromDB(this.funcID);
+            this.sedeSeleccionada = sedeDB.getSede(this.sedeID);
+        } catch (Exception e){
+            this.validationMessage = "Ocurrió un error en el sistema al cargar los datos";
         }
-
-        Funcionario funcAsignado = getFuncionarioFromDB();
         if (funcAsignado != null) {
             //Se construye el objeto activo
             Activo activo = new Activo(idActivo, nombre, descripcion, valor, fechaAdquisicion, sedeSeleccionada, funcAsignado);
-           
-            
-                try {
-            activoDB.saveActivo(activo);
-            this.validationMessage = "Activo registrado correctamente";
-        } catch (SNMPExceptions e) {
-            this.validationMessage = "Error al registrar Activo" + e.toString() + e.getMessage();
-        } catch (SQLException e) {
-            this.validationMessage = "Error al registrar Activo" + e.toString() + e.getMessage();
-        }
-             
+
+            try {
+                activoDB.saveActivo(activo);
+                this.validationMessage = "Activo registrado correctamente";
+            } catch (SNMPExceptions e) {
+                this.validationMessage = "Error al registrar Activo" + e.toString() + e.getMessage();
+            } catch (SQLException e) {
+                this.validationMessage = "Error al registrar Activo" + e.toString() + e.getMessage();
+            }
+
             //Se registra el activo en la BD
         } else {
             this.validationMessage = "El funcionario elegido no existe o no esta registrado en el sistema";
@@ -120,12 +128,11 @@ public class RegistroActivosBean {
 
     }
 
-    public void fillComboList() {
-
+    public void showMessage() {
+        this.validationMessage = "Prueba";
     }
 
-    
-     public void fillSedes(){
+    public void fillSedes() {
         try {
             SedeDB sedeDB = new SedeDB();
             this.sedes = sedeDB.getAllSedes();
@@ -136,22 +143,18 @@ public class RegistroActivosBean {
         }
     }
 
- public void fillFuncionarios(){
-     /*
+    public void fillFuncionarios() {
         try {
-           
-            
+            FuncionarioDB funcDB = new FuncionarioDB();
+            this.funcionarios = funcDB.getAllFuncionarios();
         } catch (SQLException e) {
 
         } catch (SNMPExceptions s) {
 
         }
-*/
     }
 
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
-    
-     
     public ArrayList<Funcionario> getFuncionarios() {
         return funcionarios;
     }
@@ -160,23 +163,22 @@ public class RegistroActivosBean {
         this.funcionarios = funcionarios;
     }
 
-     
-        public String getFuncID() {
+    public String getFuncID() {
         return funcID;
     }
 
     public void setFuncID(String funcID) {
         this.funcID = funcID;
     }
-    
-        public String getSedeID() {
+
+    public String getSedeID() {
         return sedeID;
     }
 
     public void setSedeID(String sedeID) {
         this.sedeID = sedeID;
     }
-    
+
     public String getIdActivo() {
         return idActivo;
     }
@@ -261,6 +263,13 @@ public class RegistroActivosBean {
         }
         return sedes;
     }
-// </editor-fold>
 
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+// </editor-fold>
 }
