@@ -153,6 +153,7 @@ public class UsuarioDB {
                 LinkedList<Telefono> telefonos = telefonoDB.getUserPhoneNumbers(id);
 
                 //Se asigna la data a las variables
+                user = new Usuario();
                 user.setIdentificacion(identificacion);
                 user.setTipoID(tipoID);
                 user.setNombre(nombre);
