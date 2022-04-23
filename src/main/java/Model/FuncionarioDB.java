@@ -88,6 +88,10 @@ public class FuncionarioDB {
         }
         return funcUser;
     }
+
+    public void EditFunc(String aqui_va_el_id_User) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 
 }

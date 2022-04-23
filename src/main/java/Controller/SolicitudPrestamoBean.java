@@ -76,6 +76,9 @@ public class SolicitudPrestamoBean {
         Activo activoElegido = getActivoFromDB();
         if (activoElegido != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
+            
+            
+            
         } else {
             this.validationMessage = "El activo no exite o no esta registrado en el sistema";
         }

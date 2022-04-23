@@ -68,8 +68,8 @@
 
                         </p:column>   
                         <p:column headerText="Aprobacion">
-                            <p:button value="Aceptar"></p:button>
-                            <p:button value="Rechazar"></p:button>
+                            <h:commandButton class="botonMante" value="Aceptar" action="#{SolicitudFuncionariosBean.enableAccount()}"></h:commandButton>
+                            <h:commandButton class="botonMante" value="Rechazar" action="#{MantenimientoFuncionariosBean.disableUser()}"></h:commandButton>               
                         </p:column>
 
                         <f:facet name="paginatorTopLeft">

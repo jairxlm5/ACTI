@@ -43,7 +43,7 @@ public class SolicitudFuncionariosBean {
     
     //Para habilitar la cuenta de usuario seleccionada
     public void enableAccount(){
-        if(this.selectedUser != null){
+        if(this.funcionarioSelecionado != null){
             //Llamado a proceso para habilitar cuenta
         }
     }
@@ -51,7 +51,9 @@ public class SolicitudFuncionariosBean {
     
     //Para rechazar una solicitud de cuenta
     public void rejectRequest(){
-        
+          if(this.funcionarioSelecionado != null){
+            //Llamado a proceso para habilitar cuenta
+        }
     }
     
  
@@ -85,18 +87,21 @@ public class SolicitudFuncionariosBean {
         return funcionarios;
     }
 
-        
-    public Funcionario getFuncionarioSelecionado() {
-        return funcionarioSelecionado;
-    }
 
-    public void setFuncionarioSelecionado(Funcionario funcionarioSelecionado) {
-        this.funcionarioSelecionado = funcionarioSelecionado;
-    }
-        
        public void onRowSelect(SelectEvent<Funcionario> event) {
         FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getNombre()));
         
+        this.funcionarioSelecionado.setIdentificacion(event.getObject().getIdentificacion());
+        this.funcionarioSelecionado.setNombre(event.getObject().getNombre());
+        this.funcionarioSelecionado.setApellido1(event.getObject().getApellido1());
+        this.funcionarioSelecionado.setApellido2(event.getObject().getApellido2());
+        this.funcionarioSelecionado.setFechaNacimiento(event.getObject().getFechaNacimiento());
+        this.funcionarioSelecionado.setCorreo(event.getObject().getNombre());
+        this.funcionarioSelecionado.setTelefonos(event.getObject().getTelefonos());
+        
+        
+    
+               // this.funcionarioSelecionado.setAprobado(true);
         
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
@@ -112,6 +117,16 @@ public class SolicitudFuncionariosBean {
         return selectedUser;
     }
 
+         
+    public Funcionario getFuncionarioSelecionado() {
+        return funcionarioSelecionado;
+    }
+
+    public void setFuncionarioSelecionado(Funcionario funcionarioSelecionado) {
+        this.funcionarioSelecionado = funcionarioSelecionado;
+    }
+        
+ 
     public void setSelectedUser(Usuario selectedUser) {
         this.selectedUser = selectedUser;
     }

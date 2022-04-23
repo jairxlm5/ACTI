@@ -28,7 +28,7 @@
                     <p:calendar value="#{SolicitudPrestamoBean.fechaRetorno}" showOn="button"/>
                     <br></br><br></br>
 
-                    <p:button value="Solicitar prestamo" ></p:button>
+                    <p:button value="Solicitar prestamo" onclick="#{SolicitudPrestamoBean.processRequest()}"></p:button>
                     <p:button value="Cancelar" onclick="#{SolicitudPrestamoBean.cancelar()}"></p:button>
 
                 </div>

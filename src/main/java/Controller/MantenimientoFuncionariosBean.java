@@ -69,20 +69,20 @@ public class MantenimientoFuncionariosBean {
     private Canton cantonSeleccionado;
     private Distrito distritoSeleccionado;
     private Barrio barrioSeleccionado;
-    
     private Sede sede;
     private String sedeID;
+
     private String direccionCompleta;
-      private String numeroTelefono;
-       private TipoTelefono tipoTelefonoSeleccionado;
-         private ArrayList<TipoTelefono> tipoTelefono = new ArrayList<TipoTelefono>();
+    private String numeroTelefono;
+    private TipoTelefono tipoTelefonoSeleccionado;
+    private ArrayList<TipoTelefono> tipoTelefono = new ArrayList<TipoTelefono>();
     private Perfil perfilSeleccionado;
- 
-           private String messageDisplayed;
+
+    private String messageDisplayed;
     private String phoneMessage;
     private String profileMessage;
     FuncionarioDB funcionarioDB = new FuncionarioDB();
-       
+
     //Estas dos listas solo tienen perfiles y telefonos que posee el usuario
     private LinkedList<UsuarioPerfil> perfiles;
     private LinkedList<Telefono> telefonos;
@@ -91,23 +91,17 @@ public class MantenimientoFuncionariosBean {
 
     private ArrayList<Funcionario> funcionarios;
     private ArrayList<Funcionario> funcionariosFiltrados;
-    
-    //Bro necesitaba la tabla funcionarios para poder cargar la data
 
+    //Bro necesitaba la tabla funcionarios para poder cargar la data
     private ArrayList<Provincia> provincias;
     private ArrayList<Canton> cantones;
     private ArrayList<Distrito> distritos;
     private ArrayList<Barrio> barrios;
     private ArrayList<Sede> sedes;
-  
+
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
-    //Variables para poder filtrar los lugares
-    private int prov;
-    private int cant;
-    private int dist;
-    private int barr;
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
@@ -118,20 +112,14 @@ public class MantenimientoFuncionariosBean {
     //Este funcionario es el que voy a agarrar para aplicar los botones de la db 
     Funcionario funcionarioParaMantenimiento = new Funcionario();
 
+    
+    
+        //Estos son los atributos para relacionarlos con campos de texto en el bean
+    private TipoIdentificacion tipoIdSeleccionado;
+
+ 
     public MantenimientoFuncionariosBean() {
-        this.perfiles = new LinkedList<>();
         this.telefonos = new LinkedList<>();
-        this.funcionarios = new ArrayList();
-        this.funcionariosFiltrados = new ArrayList();
-        this.identificacion = "";
-        this.nombre = "";
-        this.apellido1 = "";
-        this.apellido2 = "";
-        this.correo = "";
-        this.otrasDirecciones = "";
-        this.validationMessage = "";
-        
-         this.telefonos = new LinkedList<>();
         this.perfiles = new LinkedList<>();
         this.sedes = new ArrayList<>();
         this.provincias = new ArrayList<>();
@@ -139,268 +127,10 @@ public class MantenimientoFuncionariosBean {
         this.distritos = new ArrayList<>();
         this.barrios = new ArrayList<>();
         this.fillSedes();
-       
-    }
-
-    /**
-     * Obtiene la informacion de un usuario ya registrado en el sistema ya sea
-     * para editarlo y simplemente ver los datos
-     *
-     * @return Usuario
-     */
-    public Usuario getUser() {
-        return null;
-    }
-
-    /**
-     * Guarda un usuario nuevo
-     */
-    public void saveNewUser() {
-        this.validationMessage = "";
-        //Primero validar que todos los datos se hayan ingresado
-        if (this.identificacion.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Nombre";
-            return;
-        }
-        if (this.apellido1.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Primer Apellido";
-            return;
-        }
-        if (this.apellido2.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Segundo Apellido";
-            return;
-        }
-        if (this.fechaNacimiento == null) {
-            this.validationMessage = "Indique su Fecha de Nacimiento";
-            return;
-        }
-        if (this.correo.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Correo Electrónico";
-            return;
-        }
-        if (this.telefonos.isEmpty()) {
-            this.validationMessage = "Debe registrar al menos un teléfono";
-            return;
-        }
-        if (this.perfiles.isEmpty()) {
-            this.validationMessage = "Debe usar al menos un tipo de perfil";
-            return;
-        }
-        //Se tiene que crear el nuevo usuario
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
-                perfiles, telefonos);
-        
-       
-    }
-
-    /**
-     * Edita la informacion de un usuario ya existente
-     */
-    public void editUser() {
-        //Se tienen que aplicar casi el mismo proceso a cuando se registra un usuario nuevo
-        this.validationMessage = "";
-        //Primero validar que todos los datos se hayan ingresado
-        if (this.identificacion.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Nombre";
-            return;
-        }
-        if (this.apellido1.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Primer Apellido";
-            return;
-        }
-        if (this.apellido2.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Segundo Apellido";
-            return;
-        }
-        if (this.fechaNacimiento == null) {
-            this.validationMessage = "Indique su Fecha de Nacimiento";
-            return;
-        }
-        if (this.correo.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Correo Electrónico";
-            return;
-        }
-        if (this.telefonos.isEmpty()) {
-            this.validationMessage = "Debe registrar al menos un teléfono";
-            return;
-        }
-        if (this.perfiles.isEmpty()) {
-            this.validationMessage = "Debe usar al menos un tipo de perfil";
-            return;
-        }
-        //Se tiene que crear un objeto usuario con la informacion editada
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
-                perfiles, telefonos);
-
-        //Se actualiza la informacion en la BD
-    }
-
-    /**
-     * Para deshabilitar una cuenta de usuario
-     */
-    public void disableUser() {
 
     }
 
-    /**
-     * Limpia la informacion
-     */
-    public void cleanData() {
-        //lo deje asi para arreglar una vara
-    }
-
-    
-    //Devuelve los perfiles del enum
-    public ArrayList<Perfil> getPerfiles() {
-        ArrayList<Perfil> perfiles = new ArrayList<Perfil>();
-        try {
-            PerfilDB perfilDB = new PerfilDB();
-            perfiles = perfilDB.getAllPerfiles();
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return perfiles;
-    }
-
-    //Devuelve los tipos de identificacion del enum
-    public ArrayList<TipoIdentificacion> getTipoIdentificacion() {
-        ArrayList<TipoIdentificacion> tiposID = new ArrayList<>();
-        try {
-            TipoIdentificacionDB tipoIdDB = new TipoIdentificacionDB();
-            tiposID = tipoIdDB.getIdTypes();
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return tiposID;
-    }
-
-    //Devuelve los tipos de telefonos
-    public ArrayList<TipoTelefono> getTiposTelefono() {
-        ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
-        try {
-            TipoTelefonoDB phoneTypeDB = new TipoTelefonoDB();
-            phoneTypes = phoneTypeDB.getPhoneTypes();
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return phoneTypes;
-    }
-
-    //Agrega un telefono a la lista
-    public void addTelefono() {
-        this.phoneMessage= "";
-        if (this.identificacion.trim().length() == 0) {
-            this.phoneMessage = "Ingrese su Número de Identificación";
-            return;
-        }
-        if (this.numeroTelefono.trim().length() == 0) {
-            this.phoneMessage = "Digite el número telefónico";
-            return;
-        }
-
-        //Se agrega a la lista de telefonos
-        this.telefonos.add(new Telefono(this.numeroTelefono, this.identificacion, this.tipoTelefonoSeleccionado));
-        this.phoneMessage = "Teléfono Agregado";
-    }
-
-    //Agrega un perfil a la lista
-    public void addPerfil() {
-        this.profileMessage = "";
-        if (this.identificacion.trim().length() == 0) {
-            this.profileMessage = "Ingrese su Número de Identificación";
-            return;
-        }
-
-        //Se agrega a la lista de perfiles
-        try {
-            this.perfiles.add(new UsuarioPerfil(this.identificacion, this.perfilSeleccionado, Utils.getCurrentDate()));
-            this.profileMessage = "Perfil agregado";
-        } catch (Exception e) {
-            this.profileMessage = "Ocurrió un error al registrar el perfil" + e.getMessage();
-        }
-    }
-
-    public ArrayList<Provincia> getProvincias() {
-        try {
-            return ProvinciaDB.getAllProvincesFromDB();
-        } catch (Exception e) {
-
-        }
-        return new ArrayList<>();
-    }
-
-    public void fillCantones(AjaxBehaviorEvent event) {
-        try {
-            //Se construye la provincia
-            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
-            this.cantones = CantonDB.getCantonesByProvince(this.provinciaSeleccionada.getId());
-            System.out.println("Cantones cargados");
-            
-        } catch (Exception e) {
-            
-        }
-    }
-
-    public void fillDistritos(AjaxBehaviorEvent event) {
-        try {
-            //Se construye el canton
-            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
-            this.distritos = DistritoDB.getDistrictsByCanton(this.cantonSeleccionado.getId(),provID);
-            System.out.println("Distritos Agregados");
-        } catch (Exception e) {
-
-        }
-    }
-
-    public void fillBarrios(AjaxBehaviorEvent event) {
-        try {
-            //Se construye el distrito
-            this.distritoSeleccionado = DistritoDB.getDistrictFromDB(disID, provID, canID);
-            this.barrios = BarrioDB.getBarriosByDistrito(this.distritoSeleccionado.getId(), 
-                                       provID, canID);
-            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
-            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
-            this.barrioSeleccionado = BarrioDB.getBarrioFromDB(this.barID, this.provID, this.canID, this.disID);
-            System.out.println("Datos de ubicacion agregados");
-        } catch (Exception e) {
-
-        }
-    }
-    
-    public void fillSedes(){
-        try {
-            SedeDB sedeDB = new SedeDB();
-            this.sedes = sedeDB.getAllSedes();
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-    }
-
-    public ArrayList<Funcionario> getFuncionariosDB(){
-        try {
-            FuncionarioDB funcDB = new FuncionarioDB();
-            this.funcionarios = funcDB.getAllFuncionarios();
-         
-        } catch (SQLException e) {
-
-        } catch (SNMPExceptions s) {
-
-        }
-        return funcionarios;
-    }
-    
-    
-      public void GuardarFuncionario() {
+    public void GuardarFuncionario() {
         this.messageDisplayed = "";
 
         //Primero validar que todos los datos se hayan ingresado
@@ -449,23 +179,20 @@ public class MantenimientoFuncionariosBean {
             return;
         }
         SedeDB sedeDB = new SedeDB();
-        try{
+        try {
             this.sede = sedeDB.getSede(this.sedeID);
-        } catch (Exception e){
-            
+        } catch (Exception e) {
+
         }
-        if(this.sede == null){
+        if (this.sede == null) {
             this.messageDisplayed = "Debe seleccionar una sede";
             return;
         }
-        
+
         //Se tiene que crear el nuevo Funcionario
-        
-          Funcionario newFuncionario = new Funcionario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
-                  cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, perfiles, telefonos);
-          
-                   
-       
+        Funcionario newFuncionario = new Funcionario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, perfiles, telefonos);
+
         //Se tiene que guardar toda la informacion del Usuario en la base de datos Pero no se que dato manarle al metodo NewFunc
         try {
             funcionarioDB.addNewFunc("Aqui va el id User");
@@ -478,47 +205,144 @@ public class MantenimientoFuncionariosBean {
 
     }
 
+    public void saveNewUser() {
+        this.validationMessage = "";
+        //Primero validar que todos los datos se hayan ingresado
+        if (this.identificacion.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Nombre";
+            return;
+        }
+        if (this.apellido1.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Primer Apellido";
+            return;
+        }
+        if (this.apellido2.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Segundo Apellido";
+            return;
+        }
+        if (this.fechaNacimiento == null) {
+            this.validationMessage = "Indique su Fecha de Nacimiento";
+            return;
+        }
+        if (this.correo.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Correo Electrónico";
+            return;
+        }
+        if (this.telefonos.isEmpty()) {
+            this.validationMessage = "Debe registrar al menos un teléfono";
+            return;
+        }
+        if (this.perfiles.isEmpty()) {
+            this.validationMessage = "Debe usar al menos un tipo de perfil";
+            return;
+        }
+        //Se tiene que crear el nuevo usuario
+
+        
+            Funcionario newFuncionario = new Funcionario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, perfiles, telefonos);
+
+        //Se tiene que guardar toda la informacion del Usuario en la base de datos Pero no se que dato manarle al metodo NewFunc
+       
+        /*
+        try {
+            funcionarioDB.EditFunc("Aqui va el id User");
+            this.messageDisplayed = "Funcionario agregado exitosamente.";
+        } catch (SNMPExceptions e) {
+            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
+        } catch (SQLException e) {
+            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
+        }
+        
+        }
+*/
+
     
-    
-    public Perfil getPerfilSeleccionado() {
-        return perfilSeleccionado;
+
     }
 
-    public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
-        this.perfilSeleccionado = perfilSeleccionado;
+    public void editFuncionario() {
+        //Se tienen que aplicar casi el mismo proceso a cuando se registra un usuario nuevo
+        this.validationMessage = "";
+        //Primero validar que todos los datos se hayan ingresado
+        if (this.identificacion.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Nombre";
+            return;
+        }
+        if (this.apellido1.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Primer Apellido";
+            return;
+        }
+        if (this.apellido2.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Segundo Apellido";
+            return;
+        }
+        if (this.fechaNacimiento == null) {
+            this.validationMessage = "Indique su Fecha de Nacimiento";
+            return;
+        }
+        if (this.correo.trim().length() == 0) {
+            this.validationMessage = "Ingrese su Correo Electrónico";
+            return;
+        }
+        if (this.telefonos.isEmpty()) {
+            this.validationMessage = "Debe registrar al menos un teléfono";
+            return;
+        }
+        if (this.perfiles.isEmpty()) {
+            this.validationMessage = "Debe usar al menos un tipo de perfil";
+            return;
+        }
+        //Se tiene que crear un objeto usuario con la informacion editada
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
+                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
+                perfiles, telefonos);
+
+        //Se actualiza la informacion en la BD
+        
+        
+        
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void disableUser() {
 
-    public String getNumeroTelefono() {
-        return numeroTelefono;
     }
 
-    public void setNumeroTelefono(String numeroTelefono) {
-        this.numeroTelefono = numeroTelefono;
+    public void cleanData() {
+        //lo deje asi para arreglar una vara
     }
 
-    public TipoTelefono getTipoTelefonoSeleccionado() {
-        return tipoTelefonoSeleccionado;
+    //Devuelve los perfiles del enum
+    public ArrayList<Perfil> getPerfiles() {
+        ArrayList<Perfil> perfiles = new ArrayList<Perfil>();
+        try {
+            PerfilDB perfilDB = new PerfilDB();
+            perfiles = perfilDB.getAllPerfiles();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return perfiles;
     }
 
-    public void setTipoTelefonoSeleccionado(TipoTelefono tipoTelefonoSeleccionado) {
-        this.tipoTelefonoSeleccionado = tipoTelefonoSeleccionado;
+    //Devuelve los tipos de identificacion del enum
+    public ArrayList<TipoIdentificacion> getTipoIdentificacion() {
+        ArrayList<TipoIdentificacion> tiposID = new ArrayList<>();
+        try {
+            TipoIdentificacionDB tipoIdDB = new TipoIdentificacionDB();
+            tiposID = tipoIdDB.getIdTypes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return tiposID;
     }
 
-   public ArrayList<TipoTelefono> getTipoTelefono() {
-         ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
+    //Devuelve los tipos de telefonos
+    public ArrayList<TipoTelefono> getTiposTelefono() {
+        ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
         try {
             TipoTelefonoDB phoneTypeDB = new TipoTelefonoDB();
             phoneTypes = phoneTypeDB.getPhoneTypes();
@@ -527,29 +351,128 @@ public class MantenimientoFuncionariosBean {
         } catch (SNMPExceptions s) {
 
         }
-        tipoTelefono= phoneTypes;
+        return phoneTypes;
+    }
+
+    //Agrega un telefono a la lista
+    public void addTelefono() {
+        this.phoneMessage = "";
+        if (this.identificacion.trim().length() == 0) {
+            this.phoneMessage = "Ingrese su Número de Identificación";
+            return;
+        }
+        if (this.numeroTelefono.trim().length() == 0) {
+            this.phoneMessage = "Digite el número telefónico";
+            return;
+        }
+
+        //Se agrega a la lista de telefonos
+        this.telefonos.add(new Telefono(this.numeroTelefono, this.identificacion, this.tipoTelefonoSeleccionado));
+        this.phoneMessage = "Teléfono Agregado";
+    }
+
+    //Agrega un perfil a la lista
+    public void addPerfil() {
+        this.profileMessage = "";
+        if (this.identificacion.trim().length() == 0) {
+            this.profileMessage = "Ingrese su Número de Identificación";
+            return;
+        }
+
+        //Se agrega a la lista de perfiles
+        try {
+            this.perfiles.add(new UsuarioPerfil(this.identificacion, this.perfilSeleccionado, Utils.getCurrentDate()));
+            this.profileMessage = "Perfil agregado";
+        } catch (Exception e) {
+            this.profileMessage = "Ocurrió un error al registrar el perfil" + e.getMessage();
+        }
+    }
+
+    public ArrayList<Provincia> getProvincias() {
+        try {
+            return ProvinciaDB.getAllProvincesFromDB();
+        } catch (Exception e) {
+
+        }
+        return new ArrayList<>();
+    }
+
+    public void fillCantones(AjaxBehaviorEvent event) {
+        try {
+            //Se construye la provincia
+            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
+            this.cantones = CantonDB.getCantonesByProvince(this.provinciaSeleccionada.getId());
+            System.out.println("Cantones cargados");
+
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void fillDistritos(AjaxBehaviorEvent event) {
+        try {
+            //Se construye el canton
+            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
+            this.distritos = DistritoDB.getDistrictsByCanton(this.cantonSeleccionado.getId(), provID);
+            System.out.println("Distritos Agregados");
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void fillBarrios(AjaxBehaviorEvent event) {
+        try {
+            //Se construye el distrito
+            this.distritoSeleccionado = DistritoDB.getDistrictFromDB(disID, provID, canID);
+            this.barrios = BarrioDB.getBarriosByDistrito(this.distritoSeleccionado.getId(),
+                    provID, canID);
+            this.provinciaSeleccionada = ProvinciaDB.getProvinceFromDB(this.provID);
+            this.cantonSeleccionado = CantonDB.getCantonFromDB(canID, provID);
+            this.barrioSeleccionado = BarrioDB.getBarrioFromDB(this.barID, this.provID, this.canID, this.disID);
+            System.out.println("Datos de ubicacion agregados");
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void fillSedes() {
+        try {
+            SedeDB sedeDB = new SedeDB();
+            this.sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+    }
+
+    public ArrayList<Funcionario> getFuncionariosDB() {
+        try {
+            FuncionarioDB funcDB = new FuncionarioDB();
+            this.funcionarios = funcDB.getAllFuncionarios();
+
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return funcionarios;
+    }
+
+    public ArrayList<TipoTelefono> getTipoTelefono() {
+        ArrayList<TipoTelefono> phoneTypes = new ArrayList<TipoTelefono>();
+        try {
+            TipoTelefonoDB phoneTypeDB = new TipoTelefonoDB();
+            phoneTypes = phoneTypeDB.getPhoneTypes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        tipoTelefono = phoneTypes;
         return tipoTelefono;
     }
-       
-    
 
-    public void setTipoTelefono(ArrayList<TipoTelefono> tipoTelefono) {
-        this.tipoTelefono = tipoTelefono;
-    }
-
-    public String getMessageDisplayed() {
-        return messageDisplayed;
-    }
-
-
-    public void setMessageDisplayed(String messageDisplayed) {
-        this.messageDisplayed = messageDisplayed;
-    }
-
-    public String getPhoneMessage() {
-        return phoneMessage;
-    }
-    
     public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
@@ -564,6 +487,43 @@ public class MantenimientoFuncionariosBean {
 
     }
 
+    public void onRowSelect(SelectEvent<Funcionario> event) {
+        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getNombre()));
+
+        this.identificacion = event.getObject().getIdentificacion();
+        this.nombre = event.getObject().getNombre();
+        this.apellido1 = event.getObject().getApellido1();
+        this.apellido2 = event.getObject().getApellido2();
+        this.fechaNacimiento = event.getObject().getFechaNacimiento();
+        this.correo = event.getObject().getNombre();
+        this.telefonos = event.getObject().getTelefonos();
+        this.perfiles = event.getObject().getPerfiles();
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent<Funcionario> event) {
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getNombre()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+// <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
+    public void setTipoTelefono(ArrayList<TipoTelefono> tipoTelefono) {
+        this.tipoTelefono = tipoTelefono;
+    }
+
+    public String getMessageDisplayed() {
+        return messageDisplayed;
+    }
+
+    public void setMessageDisplayed(String messageDisplayed) {
+        this.messageDisplayed = messageDisplayed;
+    }
+
+    public String getPhoneMessage() {
+        return phoneMessage;
+    }
+
     public void setPhoneMessage(String phoneMessage) {
         this.phoneMessage = phoneMessage;
     }
@@ -574,20 +534,6 @@ public class MantenimientoFuncionariosBean {
 
     public void setProfileMessage(String profileMessage) {
         this.profileMessage = profileMessage;
-    }
-    
-    
- 
-     public void onRowSelect(SelectEvent<Funcionario> event) {
-        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getNombre()));
-        
-        
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
-    public void onRowUnselect(UnselectEvent<Funcionario> event) {
-        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getNombre()));
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public Funcionario getFuncionarioSelecionado() {
@@ -605,24 +551,31 @@ public class MantenimientoFuncionariosBean {
     public void setFuncionarioParaMantenimiento(Funcionario funcionarioParaMantenimiento) {
         this.funcionarioParaMantenimiento = funcionarioParaMantenimiento;
     }
-    
-    
-    
 
-
-    
-    
-// <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
-    public void setBarr(int barr) {
-        this.barr = barr;
+    public String getNumeroTelefono() {
+        return numeroTelefono;
     }
 
-    public int getProv() {
-        return prov;
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
     }
 
-    
-    
+    public TipoTelefono getTipoTelefonoSeleccionado() {
+        return tipoTelefonoSeleccionado;
+    }
+
+    public void setTipoTelefonoSeleccionado(TipoTelefono tipoTelefonoSeleccionado) {
+        this.tipoTelefonoSeleccionado = tipoTelefonoSeleccionado;
+    }
+
+    public Perfil getPerfilSeleccionado() {
+        return perfilSeleccionado;
+    }
+
+    public void setPerfilSeleccionado(Perfil perfilSeleccionado) {
+        this.perfilSeleccionado = perfilSeleccionado;
+    }
+
     public int getProvID() {
         return provID;
     }
@@ -694,30 +647,6 @@ public class MantenimientoFuncionariosBean {
     public void setUserDB(UsuarioDB userDB) {
         this.userDB = userDB;
     }
-    
-    public void setProv(int prov) {
-        this.prov = prov;
-    }
-
-    public int getCant() {
-        return cant;
-    }
-
-    public void setCant(int cant) {
-        this.cant = cant;
-    }
-
-    public int getDist() {
-        return dist;
-    }
-
-    public void setDist(int dist) {
-        this.dist = dist;
-    }
-
-    public int getBarr() {
-        return barr;
-    }
 
     public String getIdentificacion() {
         return identificacion;
@@ -769,6 +698,10 @@ public class MantenimientoFuncionariosBean {
 
     public Canton getCantonSeleccionado() {
         return cantonSeleccionado;
+    }
+
+    public Usuario getUser() {
+        return null;
     }
 
     public void setCantonSeleccionado(Canton canton) {
@@ -826,7 +759,6 @@ public class MantenimientoFuncionariosBean {
     public void setTelefonos(LinkedList<Telefono> telefonos) {
         this.telefonos = telefonos;
     }
-
 
     public void setProvincias(ArrayList<Provincia> provincias) {
         this.provincias = provincias;

@@ -43,8 +43,10 @@
                     <br></br><br></br>
 
 
-                    <p:button value="Solicitar traslado" ></p:button>
+                    <p:button value="Solicitar traslado" onclick="#{SolicitudTrasladoBean.processRequest()}" ></p:button>
                     <p:button value="Cancelar" onclick="#{SolicitudTrasladoBean.cancelar()}"></p:button>
+                    
+                    
                 </div>
 
             </div>
