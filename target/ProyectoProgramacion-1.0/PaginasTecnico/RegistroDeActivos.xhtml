@@ -38,21 +38,30 @@
                     <h:outputText class="textos"  value="₡"></h:outputText>
                     <br></br><br></br>
 
-                    <h:outputText value="Sede:   "></h:outputText>
-                    <p:selectOneMenu value="#{RegistroActivosBean.sedeSeleccionada}">
-                        <f:selectItems value="#{RegistroActivosBean.getSedesDB()}"></f:selectItems>
-                        
+                    <h:outputText value="Sede: "></h:outputText>
+                    <p:selectOneMenu value="#{RegistroActivosBean.sedeID}">
+                        <f:selectItems value="#{RegistroActivosBean.sedes}" var="sede" itemValue="#{sede.codigo}"></f:selectItems>
                     </p:selectOneMenu>
                     <br></br><br></br>
 
+                    
+                    
                     <h:outputText value="Fecha de Adquisicion: "></h:outputText>
                     <p:calendar value="#{RegistroActivosBean.fecha}" showOn="button"/>
                     <br></br><br></br>
 
-                    <h:outputText value="Funcionario:   "></h:outputText>
-                    <p:inputText value="#{RegistroActivosBean.funcionarioFromDB}"></p:inputText>
-                    <br></br><br></br>
 
+                    <h:outputText value="Funcionarios: "></h:outputText>
+                    <p:selectOneMenu value="#{RegistroActivosBean.funcID}">
+                        <f:selectItems value="#{RegistroActivosBean.funcionarios}" var="func" itemValue="#{func.identificacion}"></f:selectItems>
+                    </p:selectOneMenu>
+                    <br></br><br></br>
+                    
+                    
+                    <h:outputText value="#{RegistroActivosBean.validationMessage}"></h:outputText>
+                    
+                    <h:commandButton value="Guardar Activo" action="#{RegistroActivosBean.guardaActivo()}" class="btn"></h:commandButton>
+                     
                     <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
                     <p:button class="btn" value="Ayuda" ></p:button>
                 </div>

@@ -45,6 +45,9 @@ public class SolicitudFuncionariosBean {
     public void enableAccount(){
         if(this.funcionarioSelecionado != null){
             //Llamado a proceso para habilitar cuenta
+            
+            
+            
         }
     }
     

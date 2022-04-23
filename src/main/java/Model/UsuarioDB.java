@@ -418,6 +418,11 @@ public class UsuarioDB {
      * @throws SNMPExceptions
      * @throws ParseException
      */
+    
+    
+    
+    //Este se usa cuando se hace click en el boton de activar Funcionarios SOLICITUD DE FUNCIONARIOS NUEVOS
+    
     public void activateAccount(Usuario userToActivate) throws SQLException, SNMPExceptions, ParseException {
         userToActivate.setAprobado(true);
         userToActivate.setFechaAprobacion(Utils.getCurrentDate());
@@ -435,6 +440,9 @@ public class UsuarioDB {
      * @throws SNMPExceptions
      * @throws ParseException
      */
+    
+    
+    
     public void deactivateAccount(Usuario user) throws SQLException, SNMPExceptions, ParseException {
         user.setAprobado(false);
         //Llamar al Update
@@ -449,6 +457,9 @@ public class UsuarioDB {
      * @throws ParseException
      * @throws NullPointerException
      */
+    
+    
+    //EXTRA  
     public int calculateAge(Date fechaNacimiento) throws ParseException, NullPointerException{
         try {
             //Las fechas se tienen que convertir a LocalDate
@@ -470,6 +481,9 @@ public class UsuarioDB {
      * @throws SQLException
      * @throws SNMPExceptions
      */
+    
+    
+    //LLena solicitud de funcionarios NUEVOS
     public ArrayList<Usuario> getDisabledUsersFromDB() throws SQLException, SNMPExceptions {
         ArrayList<Usuario> disabledUsers = new ArrayList<>();
         String sqlSelect = "";
