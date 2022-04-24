@@ -7,6 +7,8 @@ package Controller;
 
 import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.MovimientoActivo;
+import Model.MovimientoActivoDB;
 import Model.Prestamo;
 import Model.PrestamoDB;
 import Model.Sede;
@@ -32,6 +34,7 @@ public class AprobacionTrasladoBean {
     private ArrayList<Traslado> solicitudesDeTrasladoFiltradas;
     //Estos son los datos a desplegar en las columnas de la tabla
     private Activo activo;
+    private Activo activoSeleccionado;
     private Usuario funcionarioSolicitante, tecnicoAprobante;
     private Date fecha_Solicitud;
     private String motivo;
@@ -56,7 +59,16 @@ public class AprobacionTrasladoBean {
      * Metodo que llama a los metodos que aprueban un traslado de activo
      */
     public void aprobarTraslado() {
-
+        if(this.activoSeleccionado != null){
+            //Se tiene que crear un objeto MovimientoActivo
+            try{
+                MovimientoActivoDB movActDB = new MovimientoActivoDB();
+                MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), motivo, fecha_Solicitud);
+                movActDB.aproveMovimientoAct(movAct);
+            } catch (Exception e){
+                this.validationMessage = "Error al aprobar traslado";
+            }
+        }
     }
 
     /**
@@ -213,6 +225,17 @@ public class AprobacionTrasladoBean {
     public void setSolicitudesDeTrasladoFiltradas(ArrayList<Traslado> solicitudesDeTrasladoFiltradas) {
         this.solicitudesDeTrasladoFiltradas = solicitudesDeTrasladoFiltradas;
     }
+    
+    public Activo getActivoSeleccionado() {
+        return activoSeleccionado;
+    }
+
+    public void setActivoSeleccionado(Activo activoSeleccionado) {
+        this.activoSeleccionado = activoSeleccionado;
+    }
+
+    
 // </editor-fold>
 
+    
 }

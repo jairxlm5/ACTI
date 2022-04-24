@@ -7,6 +7,8 @@ package Controller;
 
 import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.MovimientoActivo;
+import Model.MovimientoActivoDB;
 import Model.Prestamo;
 import Model.PrestamoDB;
 import Model.Sede;
@@ -31,6 +33,7 @@ public class AprobacionPrestamoBean {
     private ArrayList<Prestamo> solicitudesDePrestamoFiltradas;
     //Estos son los datos a desplegar en las columnas de la tabla
     private Activo activo;
+    private Activo activoSeleccionado;
     private Usuario funcionarioSolicitante, tecnicoAprobante;
     private Date fecha_Solicitud;
     private String motivo;
@@ -44,14 +47,22 @@ public class AprobacionPrestamoBean {
     
     public AprobacionPrestamoBean() {
         this.solicitudesDePrestamo = new ArrayList<>();
-        this.validationMessage = "";
+        this.getSolicitudesDePrestamo();
     }
 
     /**
      * Metodo que llama a los metodos que aprueban un prestamo de activo
      */
     public void apruebaPrestamo() {
-
+        if(this.activoSeleccionado != null){
+            try{
+                MovimientoActivoDB movActDB = new MovimientoActivoDB();
+                MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), motivo, fecha_Solicitud);
+                movActDB.aproveMovimientoAct(movAct);
+            } catch (Exception e){
+                this.validationMessage = "Error al aprobar prestamo";
+            }
+        }
     }
 
     /**
@@ -68,23 +79,13 @@ public class AprobacionPrestamoBean {
      * @return ArrayList
      */
     public ArrayList<Prestamo> getSolicitudesDePrestamo() {
-        //Esta variable se llena con los datos que vienen de la DB
-        ArrayList<Prestamo> prestamosDB = new ArrayList<>();
-
         try {
             PrestamoDB prestamoDB = new PrestamoDB();
-            prestamosDB = prestamoDB.getAllPrestamos();
+            this.solicitudesDePrestamo = prestamoDB.getPrestamosNoAprobados();
         } catch (SQLException e) {
 
         } catch (SNMPExceptions s) {
 
-        }
-
-        for (Prestamo prestamo : prestamosDB) {
-            //Se agregan solo los prestamos que no han sido aprobados
-            if (!prestamo.isAprobado()) {
-                this.solicitudesDePrestamo.add(prestamo);
-            }
         }
         return solicitudesDePrestamo;
     }
@@ -206,6 +207,16 @@ public class AprobacionPrestamoBean {
     public void setSolicitudesDePrestamoFiltradas(ArrayList<Prestamo> solicitudesDePrestamoFiltradas) {
         this.solicitudesDePrestamoFiltradas = solicitudesDePrestamoFiltradas;
     }
+    
+    public Activo getActivoSeleccionado() {
+        return activoSeleccionado;
+    }
+
+    public void setActivoSeleccionado(Activo activoSeleccionado) {
+        this.activoSeleccionado = activoSeleccionado;
+    }
+
 // </editor-fold>
 
+    
 }
