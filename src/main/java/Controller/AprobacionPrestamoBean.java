@@ -41,10 +41,8 @@ public class AprobacionPrestamoBean {
     private Date fechaRetorno;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
-    Prestamo prestamoSeleccionado = new Prestamo();
-         
-    
-    
+    private Prestamo prestamoSeleccionado;
+
     public AprobacionPrestamoBean() {
         this.solicitudesDePrestamo = new ArrayList<>();
         this.getSolicitudesDePrestamo();
@@ -54,14 +52,19 @@ public class AprobacionPrestamoBean {
      * Metodo que llama a los metodos que aprueban un prestamo de activo
      */
     public void apruebaPrestamo() {
-        if(this.activoSeleccionado != null){
-            try{
+        if (this.prestamoSeleccionado != null) {
+            try {
                 MovimientoActivoDB movActDB = new MovimientoActivoDB();
+                this.activoSeleccionado = this.prestamoSeleccionado.getActivo();
+                this.motivo = this.prestamoSeleccionado.getMotivo();
+                this.fecha_Solicitud = this.prestamoSeleccionado.getFecha_Solicitud();
                 MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), motivo, fecha_Solicitud);
                 movActDB.aproveMovimientoAct(movAct);
-            } catch (Exception e){
+            } catch (Exception e) {
                 this.validationMessage = "Error al aprobar prestamo";
             }
+        } else {
+            this.validationMessage = "Debe seleccionar el Prestamo a aprobar";
         }
     }
 
@@ -83,13 +86,12 @@ public class AprobacionPrestamoBean {
             PrestamoDB prestamoDB = new PrestamoDB();
             this.solicitudesDePrestamo = prestamoDB.getPrestamosNoAprobados();
         } catch (SQLException e) {
-
+            this.validationMessage = "Ocurrió un error al cargar los prestamos";
         } catch (SNMPExceptions s) {
-
+            this.validationMessage = "Ocurrió un error al cargar los prestamos";
         }
         return solicitudesDePrestamo;
     }
-    
 
     public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
@@ -104,13 +106,11 @@ public class AprobacionPrestamoBean {
         return sedes;
     }
 
+    public void onRowSelect(SelectEvent<Prestamo> event) {
 
-      public void onRowSelect(SelectEvent<Prestamo> event) {
-         
-         
-         this.prestamoSeleccionado = event.getObject();
+        this.prestamoSeleccionado = event.getObject();
         FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(prestamoSeleccionado.getMotivo()));
-        
+
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -118,27 +118,25 @@ public class AprobacionPrestamoBean {
         FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getMotivo()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
-      public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
-    
+
     public void showSticky() {
         FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
     }
-    
-    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
 
-        public Prestamo getPrestamoSeleccionado() {
+    // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+    public Prestamo getPrestamoSeleccionado() {
         return prestamoSeleccionado;
     }
 
     public void setPrestamoSeleccionado(Prestamo prestamoSeleccionado) {
         this.prestamoSeleccionado = prestamoSeleccionado;
     }
-    
-    
+
     public void setSolicitudesDePrestamo(ArrayList<Prestamo> solicitudesDePrestamo) {
         this.solicitudesDePrestamo = solicitudesDePrestamo;
     }
@@ -214,7 +212,7 @@ public class AprobacionPrestamoBean {
     public void setSolicitudesDePrestamoFiltradas(ArrayList<Prestamo> solicitudesDePrestamoFiltradas) {
         this.solicitudesDePrestamoFiltradas = solicitudesDePrestamoFiltradas;
     }
-    
+
     public Activo getActivoSeleccionado() {
         return activoSeleccionado;
     }
@@ -224,6 +222,4 @@ public class AprobacionPrestamoBean {
     }
 
 // </editor-fold>
-
-    
 }

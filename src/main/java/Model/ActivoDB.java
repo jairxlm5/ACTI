@@ -64,7 +64,7 @@ public class ActivoDB {
         Activo activo = null;
         FuncionarioDB funcDB = new FuncionarioDB();
         try{
-            sqlSelect = "Select * From Activo Where ID Like " + idActivo;
+            sqlSelect = "Select * From Activo Where ID Like '" + idActivo  + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
                 String id = rs.getString("ID");
@@ -102,7 +102,7 @@ public class ActivoDB {
             str.append("Sede = '").append(activo.getSede().getCodigo()).append("', ");
             str.append("Fecha_Adquisicion = '").append(simpleDateFormat.format(activo.getFechaAdquisicion())).append("', ");
             str.append("Funcionario = '").append(activo.getFuncionario().getIdentificacion()).append("' ");
-            str.append("Where ID Like ").append(activo.getIdActivo());
+            str.append("Where ID Like '").append(activo.getIdActivo()).append("'");
             
             sqlCommand = str.toString();
             dataAccess.executeSQLCommand(sqlCommand);
