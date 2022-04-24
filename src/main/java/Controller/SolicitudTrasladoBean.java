@@ -25,7 +25,7 @@ import java.util.GregorianCalendar;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.xml.registry.infomodel.User;
-
+import Utils.Utils;
 /**
  *
  * @author danielp
@@ -36,10 +36,10 @@ public class SolicitudTrasladoBean {
     private String idActivo;
     private String nombreSedeOrigen;
 
-     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
-   private Date fechaTraslado = myCalendar.getTime();
-   private Date fechaActual = myCalendar.getTime();
+    private Date fechaTraslado;
+    private Date fechaActual;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Sede sedeDestino;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
@@ -58,9 +58,9 @@ public class SolicitudTrasladoBean {
     private String motivo;
     MovimientoActivoDB movDB = new MovimientoActivoDB();
     FuncionarioDB funcDB = new FuncionarioDB();
-            
+
     public SolicitudTrasladoBean() {
-      
+
         this.fillSedes();
     }
 
@@ -70,24 +70,24 @@ public class SolicitudTrasladoBean {
      * @return Activo
      */
     public void consultaActivo() {
-        
-            try {
+
+        try {
             this.activoBuscado = this.activoDB.getActivoFromDB(idActivo);
-            this.infoActivo = 
-                  "Nombre Activo: " + this.activoBuscado.getNombre()+
-                  "Descripcion: "+ this.activoBuscado.getDescripcion();
-            
+            this.infoActivo
+                    = "Nombre Activo: " + this.activoBuscado.getNombre()
+                    + "\nDescripcion: " + this.activoBuscado.getDescripcion();
+
         } catch (SQLException e) {
-                     mensajeBusqueda = "No existe el activo.";
-                     this.activoBuscado = null;
+            mensajeBusqueda = "No existe el activo.";
+            this.activoBuscado = null;
         } catch (SNMPExceptions s) {
-                      mensajeBusqueda = "No existe el activo.";
-                      this.activoBuscado = null;
+            mensajeBusqueda = "No existe el activo.";
+            this.activoBuscado = null;
         }
-        
+
     }
-         
-       public void fillSedes(){
+
+    public void fillSedes() {
         try {
             SedeDB sedeDB = new SedeDB();
             this.sedes = sedeDB.getAllSedes();
@@ -116,60 +116,62 @@ public class SolicitudTrasladoBean {
             this.validationMessage = "Ingrese el codigo del activo";
             return;
         }
-        
+
         if (this.fechaTraslado == null) {
             this.validationMessage = "Por favor ingrese la fecha en que desea hacer el traslado";
             return;
         }
 
-
         if (activoBuscado != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
-             try {
-           
-            UsuarioDB userDB = new UsuarioDB();
-            userDB.getLogedInUser();
-            
-            Traslado traslado = new Traslado();
-            traslado.setActivo(activoBuscado);
-            traslado.setAprobado(false);
-            traslado.setFechaTraslado(fechaTraslado);
-            traslado.setFecha_Solicitud(fechaActual);
-            traslado.setSedeDestino(this.sedeDB.getSede(sedeDestinoID));
-            traslado.setSedeOrigen(this.sedeDB.getSede(sedeOrigenID));
-            traslado.setMotivo(this.motivo);
-            
-            
-            //-----------------------------------------------------------------------------------
-            //Esto la verdad creo que lo bretie mal 
-             Funcionario funcSolicitante = new Funcionario();
-            funcSolicitante = funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
-            traslado.setFuncionarioSolicitante(funcSolicitante);
-            //-----------------------------------------------------------------------------------
-              
-            movDB.saveMovimientoAct(traslado);
-            validationMessage = "Traslado Solicitado exitosamente";
-            
-        } catch (SQLException e) {
-         validationMessage = "Error al guardar en DB" + e.toString();
-        } catch (SNMPExceptions s) {
-          validationMessage = "Error al guardar en DB" + s.toString();
-        }
-            
-        
-            
+            try {
+
+                try{
+                    this.fechaActual = Utils.getCurrentDate();
+                } catch (Exception e){
+                    this.validationMessage = "Ocurrió un error al obtener la fecha del sistema";
+                    
+                }
+                UsuarioDB userDB = new UsuarioDB();
+                userDB.getLogedInUser();
+
+                Traslado traslado = new Traslado();
+                traslado.setActivo(activoBuscado);
+                traslado.setAprobado(false);
+                traslado.setFechaTraslado(fechaTraslado);
+                traslado.setFecha_Solicitud(fechaActual);
+                traslado.setSedeDestino(this.sedeDB.getSede(sedeDestinoID));
+                traslado.setSedeOrigen(this.sedeDB.getSede(sedeOrigenID));
+                traslado.setMotivo(this.motivo);
+
+                //-----------------------------------------------------------------------------------
+                //Esto la verdad creo que lo bretie mal 
+                Funcionario funcSolicitante = new Funcionario();
+                funcSolicitante = funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
+                traslado.setFuncionarioSolicitante(funcSolicitante);
+                //-----------------------------------------------------------------------------------
+
+                movDB.saveMovimientoAct(traslado);
+                validationMessage = "Traslado Solicitado exitosamente";
+
+            } catch (SQLException e) {
+                validationMessage = "Error al guardar en DB" + e.toString();
+            } catch (SNMPExceptions s) {
+                validationMessage = "Error al guardar en DB" + s.toString();
+            }
+
         } else {
             this.validationMessage = "El activo no exite o no esta registrado en el sistema";
         }
     }
 
-/*
+    /*
     public void cancelar() {
         this.idActivo = "";
         this.nombreSedeOrigen = "";
         this.validationMessage = "";
     }
-*/
+     */
     public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
@@ -183,25 +185,17 @@ public class SolicitudTrasladoBean {
         return sedes;
     }
 
-
-
-
-
-  public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
-    
+
     public void showSticky() {
         FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
     }
 
- 
- 
-    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
-    
-        public MovimientoActivoDB getMovDB() {
+    public MovimientoActivoDB getMovDB() {
         return movDB;
     }
 
@@ -216,8 +210,8 @@ public class SolicitudTrasladoBean {
     public void setFuncDB(FuncionarioDB funcDB) {
         this.funcDB = funcDB;
     }
-    
-        public String getMotivo() {
+
+    public String getMotivo() {
         return motivo;
     }
 
@@ -225,8 +219,7 @@ public class SolicitudTrasladoBean {
         this.motivo = motivo;
     }
 
-    
-        public SedeDB getSedeDB() {
+    public SedeDB getSedeDB() {
         return sedeDB;
     }
 
@@ -234,9 +227,7 @@ public class SolicitudTrasladoBean {
         this.sedeDB = sedeDB;
     }
 
-
-    
-        public Date getFechaActual() {
+    public Date getFechaActual() {
         return fechaActual;
     }
 
@@ -252,12 +243,11 @@ public class SolicitudTrasladoBean {
         this.activoBuscado = activoBuscado;
     }
 
-    
     public String getIdActivo() {
         return idActivo;
     }
-    
-        public String getSedeOrigenID() {
+
+    public String getSedeOrigenID() {
         return sedeOrigenID;
     }
 
@@ -272,15 +262,14 @@ public class SolicitudTrasladoBean {
     public void setSedeDestinoID(String sedeDestinoID) {
         this.sedeDestinoID = sedeDestinoID;
     }
-    
-       public String getMensajeBusqueda() {
+
+    public String getMensajeBusqueda() {
         return mensajeBusqueda;
     }
 
     public void setMensajeBusqueda(String mensajeBusqueda) {
         this.mensajeBusqueda = mensajeBusqueda;
     }
-
 
     public void setIdActivo(String idActivo) {
         this.idActivo = idActivo;

@@ -10,6 +10,7 @@ import Model.Activo;
 import Model.ActivoDB;
 import Model.Funcionario;
 import Model.FuncionarioDB;
+import Model.MovimientoActivo;
 import Model.MovimientoActivoDB;
 import Model.Prestamo;
 import Model.Traslado;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import Utils.Utils;
 
 /**
  *
@@ -30,7 +32,6 @@ public class SolicitudPrestamoBean {
 
     //Estos son los atributos para relacionarlos con campos de texto en el bean, los primeros 2 los tiene que ingresar
     //el usuario, los ultimos 3 son solo para desplegar informacion
-
     private String nombre;
     private String descripcion;
 
@@ -39,24 +40,22 @@ public class SolicitudPrestamoBean {
     ActivoDB activoDB = new ActivoDB();
     Activo activoBuscado = new Activo();
     FuncionarioDB funcDB = new FuncionarioDB();
-    
+
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
-    private Date fechaRetorno = myCalendar.getTime();
-    private Date fechaActual = myCalendar.getTime();
-    
-    
-   private String infoActivo = "";
-    private String mensajeBusqueda="";
+    private Date fechaRetorno;
+    private Date fechaActual;
+
+    private String infoActivo = "";
+    private String mensajeBusqueda = "";
     private String motivo;
     private String idActivo;
-
 
     MovimientoActivoDB movDB = new MovimientoActivoDB();
 
     public SolicitudPrestamoBean() {
-      
+
     }
 
     /**
@@ -76,80 +75,78 @@ public class SolicitudPrestamoBean {
 
         if (activoBuscado != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
-            
-            
+
             if (activoBuscado != null) {
-            //Se tiene que obtener la info del usuario que esta haciendo la solicitud
-             try {
-           
-            UsuarioDB userDB = new UsuarioDB();
-            userDB.getLogedInUser();
-            
-            Prestamo prestamo = new Prestamo();
-            prestamo.setActivo(activoBuscado);
+                //Se tiene que obtener la info del usuario que esta haciendo la solicitud
+                try {
+
+                    UsuarioDB userDB = new UsuarioDB();
+                    userDB.getLogedInUser();
+                    try{
+                        this.fechaActual = Utils.getCurrentDate();
+                    } catch (Exception e){
+                        this.validationMessage = "Ocurrió un error al obtener la fecha del sistema";
+                    }
+
+                    //Bro aqui le cambie a MovimientoActivo porque se tiene que declarar asi para que no se caiga
+                    MovimientoActivo prestamo = new Prestamo(fechaRetorno, activoBuscado, fechaActual, motivo, false);
+                    /*prestamo.setActivo(activoBuscado);
             prestamo.setAprobado(false);
             prestamo.setFechaRetorno(fechaRetorno);
-            prestamo.setFecha_Solicitud(fechaActual);
-            //prestamo.setMotivo(motivo);
-            
-            
-    
-            
-            //-----------------------------------------------------------------------------------
-  
-            Funcionario funcSolicitante = new Funcionario();
-            funcSolicitante = funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
-            prestamo.setFuncionarioSolicitante(funcSolicitante);
-            //-----------------------------------------------------------------------------------
-              
-            
-            //Aqui se esta cayendo
-            movDB.saveMovimientoAct((Prestamo)prestamo);
-            
-        } catch (SQLException e) {
-         validationMessage = "Error al guardar en DB" + e.toString();
-        } catch (SNMPExceptions s) {
-          validationMessage = "Error al guardar en DB" + s.toString();
-        }
-            
+            prestamo.setFecha_Solicitud(fechaActual);*/
+                    //prestamo.setMotivo(motivo);
 
-            
-        } else {
-            this.validationMessage = "El activo no exite o no esta registrado en el sistema";
+                    //-----------------------------------------------------------------------------------
+                    Funcionario funcSolicitante = new Funcionario();
+                    funcSolicitante = funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
+                    prestamo.setFuncionarioSolicitante(funcSolicitante);
+                    //-----------------------------------------------------------------------------------
+
+                    //Aqui se esta cayendo
+                    movDB.saveMovimientoAct(prestamo);
+                    this.validationMessage = "Prestamo registrado";
+
+                } catch (SQLException e) {
+                    validationMessage = "Error al guardar en DB" + e.toString();
+                } catch (SNMPExceptions s) {
+                    validationMessage = "Error al guardar en DB" + s.toString();
+                }
+
+            } else {
+                this.validationMessage = "El activo no exite o no esta registrado en el sistema";
+            }
         }
     }
-    }
 
-       public void consultaActivo(){
-        
-            try {
+    public void consultaActivo() {
+
+        try {
             this.activoBuscado = this.activoDB.getActivoFromDB(idActivo);
-            this.infoActivo = 
-                  "Nombre Activo: " + this.activoBuscado.getNombre()+
-                  "Descripcion: "+ this.activoBuscado.getDescripcion();
-            
+            this.infoActivo
+                    = "Nombre Activo: " + this.activoBuscado.getNombre()
+                    + "\nDescripcion: " + this.activoBuscado.getDescripcion();
+
         } catch (SQLException e) {
-                     mensajeBusqueda = "No existe el activo.";
-                     this.activoBuscado = null;
+            mensajeBusqueda = "No existe el activo.";
+            this.activoBuscado = null;
         } catch (SNMPExceptions s) {
-                      mensajeBusqueda = "No existe el activo.";
-                      this.activoBuscado = null;
+            mensajeBusqueda = "No existe el activo.";
+            this.activoBuscado = null;
         }
-        
+
     }
 
-         public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
     }
-    
+
     public void showSticky() {
         FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
-       
-           public Date getFechaActual() {
+    public Date getFechaActual() {
         return fechaActual;
     }
 
@@ -164,7 +161,7 @@ public class SolicitudPrestamoBean {
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
-       
+
     public ActivoDB getActivoDB() {
         return activoDB;
     }
@@ -196,9 +193,7 @@ public class SolicitudPrestamoBean {
     public void setMensajeBusqueda(String mensajeBusqueda) {
         this.mensajeBusqueda = mensajeBusqueda;
     }
-       
-       
-       
+
     public String getIdActivo() {
         return idActivo;
     }
@@ -230,8 +225,6 @@ public class SolicitudPrestamoBean {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
-
 
     public String getValidationMessage() {
         return validationMessage;

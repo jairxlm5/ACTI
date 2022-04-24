@@ -23,7 +23,7 @@ public class PrestamoDB {
     private ActivoDB activoDB = new ActivoDB();
     private UsuarioDB userDB = new UsuarioDB();
     private MovimientoActivoDB movActDB = new MovimientoActivoDB();
-     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Guarda la informacion de un prestamo de activo en la DB
