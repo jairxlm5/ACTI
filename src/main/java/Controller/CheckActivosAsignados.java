@@ -12,6 +12,7 @@ import Model.Funcionario;
 import Model.FuncionarioDB;
 import Model.Sede;
 import Model.Usuario;
+import Model.UsuarioDB;
 import com.sun.accessibility.internal.resources.accessibility;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.sql.SQLException;
@@ -62,6 +63,8 @@ public class CheckActivosAsignados {
     //Variable extra para usarse internamente
     private Map<String, Integer> mapOpciones;
     private Activo activoSelecionado;
+    FuncionarioDB funcDB = new FuncionarioDB();
+    UsuarioDB userDB = new UsuarioDB();
 
     public CheckActivosAsignados() {
         this.activosAsignados = new ArrayList<>();
@@ -110,6 +113,15 @@ public class CheckActivosAsignados {
     //Obtiene los activos por funcionario para CheckActivosAsignados
     public ArrayList<Activo> getActivosAsignadosXFuncionario() {
         //Se hace la consulta por Funcionario
+                 try {
+                           funcionario =  funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
+                } catch (SQLException e) {
+
+                } catch (SNMPExceptions s) {
+
+                }
+
+            
         if (this.funcionario != null) {
             if (this.funcionario instanceof Funcionario) {
                 //Llamado a la consulta y se asigna el resultado a activosAsignados
@@ -195,13 +207,41 @@ public class CheckActivosAsignados {
         FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getIdActivo()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+
+
+  public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
     
+    public void showSticky() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+    }
     
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+    
+    
+    public UsuarioDB getUserDB() {
+        return userDB;
+    }
+
+    public void setUserDB(UsuarioDB userDB) {
+        this.userDB = userDB;
+    }
+    
     public Usuario getFuncionarioConsultado() {
         return funcionarioConsultado;
     }
 
+        public FuncionarioDB getFuncDB() {
+        return funcDB;
+    }
+
+    public void setFuncDB(FuncionarioDB funcDB) {
+        this.funcDB = funcDB;
+    }
+    
+    
     public void setFuncionarioConsultado(Usuario funcionarioConsultado) {
         this.funcionarioConsultado = funcionarioConsultado;
     }

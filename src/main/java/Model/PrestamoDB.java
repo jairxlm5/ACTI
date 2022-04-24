@@ -23,7 +23,7 @@ public class PrestamoDB {
     private ActivoDB activoDB = new ActivoDB();
     private UsuarioDB userDB = new UsuarioDB();
     private MovimientoActivoDB movActDB = new MovimientoActivoDB();
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     
     /**
      * Guarda la informacion de un prestamo de activo en la DB
@@ -38,6 +38,8 @@ public class PrestamoDB {
             str.append("Insert Into Prestamos Values (");
             str.append("'").append(prestamo.getActivo().getIdActivo()).append("', ");
             str.append("'").append(prestamo.getFuncionarioSolicitante().getIdentificacion()).append("', ");
+
+            //AQUI ES DONDE SE CAE AL TRATAR DE GUARDAR PRESTAMO
             str.append("'").append(simpleDateFormat.format(prestamo.getFecha_Solicitud())).append("', ");
             str.append("'").append(simpleDateFormat.format(prestamo.getFechaRetorno())).append("' )");
             

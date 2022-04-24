@@ -11,9 +11,12 @@
     </h:head>
     <h:body>
         
-        <h:form id="form">
+      <h:form id="form">
+            
    <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>         
-   
+   <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        
    
             <div class="container">
                 <h1>Sus activos Asignados</h1>
@@ -26,7 +29,7 @@
     <div class="card">
 
             
-        <p:dataTable var="activo" value="${CheckActivosAsignados.getActivosAsignados()}" selectionMode="single"
+        <p:dataTable var="activo" value="${CheckActivosAsignados.activosAsignadosXFuncionario}" selectionMode="single"
                      selection="#{CheckActivosAsignados.activoSelecionado}" rowKey="#{activo.idActivo}" emptyMessage="No existe un activo con los filtros dados."
                      filteredValue="#{CheckActivosAsignados.activosAsignadosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
                                  rows="10"
@@ -71,7 +74,7 @@
     </div>
 
                     <p:button class="btn" value="Regresar" href="../MenuFuncionario.xhtml"></p:button>
-                    <p:button class="btn" value="Ayuda" ></p:button>
+                     <p:commandButton actionListener="#{CheckActivosAsignados.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
 
                 </div>
                 

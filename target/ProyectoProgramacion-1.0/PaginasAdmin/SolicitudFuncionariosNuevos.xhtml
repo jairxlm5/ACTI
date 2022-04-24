@@ -12,7 +12,9 @@
     <h:body>
          <h:form id="form">
                <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>        
-               
+               <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        
                
             <div class="container">
 
@@ -69,7 +71,7 @@
                         </p:column>   
                         <p:column headerText="Aprobacion">
                             <h:commandButton class="botonMante" value="Aceptar" action="#{SolicitudFuncionariosBean.enableAccount()}"></h:commandButton>
-                            <h:commandButton class="botonMante" value="Rechazar" action="#{MantenimientoFuncionariosBean.disableUser()}"></h:commandButton>               
+                            <h:commandButton class="botonMante" value="Rechazar" action="#{SolicitudFuncionariosBean.disableUser()}"></h:commandButton>               
                         </p:column>
 
                         <f:facet name="paginatorTopLeft">
@@ -79,7 +81,7 @@
         </p:dataTable>
 
                     <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                    <p:button class="btn" value="Ayuda" ></p:button>
+                     <p:commandButton actionListener="#{SolicitudFuncionariosBean.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
 
                 </div>
                 

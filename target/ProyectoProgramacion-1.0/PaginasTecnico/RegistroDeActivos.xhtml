@@ -10,8 +10,10 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-        <h:form>
-
+        <h:form id="form">
+        <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        
             <!-- Para poder registrarlos voy a tener que gacer tipo autoregristro
             pero con toda la info que pueda tener un activo, sacare los campos necesarios
             de la base de datos -->
@@ -65,7 +67,9 @@
                     <h:commandButton value="Guardar Activo" action="#{RegistroActivosBean.guardaActivo()}" class="botones"></h:commandButton>
                     
                     <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
-                    <p:button class="btn" value="Ayuda" ></p:button>
+                    <p:commandButton actionListener="#{RegistroActivosBean.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
+                    
+                   
                 </div>
             </div>
         </h:form>

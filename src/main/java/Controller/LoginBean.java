@@ -12,6 +12,8 @@ import Model.Usuario;
 import Model.UsuarioDB;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -139,6 +141,15 @@ public class LoginBean {
         this.perfilSeleccionado = Perfil.PERFIL;
     }
 
+      public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void showSticky() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getUsername() {
         return username;
