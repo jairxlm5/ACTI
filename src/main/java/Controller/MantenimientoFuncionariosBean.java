@@ -506,6 +506,15 @@ public class MantenimientoFuncionariosBean {
         FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getNombre()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+    
+      public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void showSticky() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+    }
 
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
     public void setTipoTelefono(ArrayList<TipoTelefono> tipoTelefono) {

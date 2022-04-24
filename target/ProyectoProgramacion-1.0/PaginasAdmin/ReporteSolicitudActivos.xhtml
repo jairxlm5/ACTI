@@ -10,8 +10,10 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-        <form>
-
+        <h:form id="form">
+<p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        
             <div class="container">
                 <h1> Reporte de solicitud de Activos </h1>
 
@@ -64,10 +66,10 @@
 
                 <br></br><br></br><br></br>
                 <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                <p:button class="btn" value="Ayuda" ></p:button>
+                 <p:commandButton actionListener="#{ReporteSolicitudActivos.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
             </div>
 
-        </form>
+       </h:form>
     </h:body>
 </html>
 

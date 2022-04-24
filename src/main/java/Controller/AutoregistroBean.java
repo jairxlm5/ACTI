@@ -36,6 +36,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.swing.JOptionPane;
@@ -380,6 +382,15 @@ public class AutoregistroBean {
         return sedes;
     }
 
+      public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void showSticky() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public String getIdentificacion() {
         return identificacion;

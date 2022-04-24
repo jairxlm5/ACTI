@@ -12,6 +12,10 @@
     <h:body>
         <h:form id="form">
   <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>         
+  
+  <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        
             <!-- Para el traslado del activo ocupara un combo que diga en que sede esta 
             segun su ID y otro para poner a que sede va -->
 
@@ -87,7 +91,7 @@
                 
                 <h:outputText value="#{AprobacionTrasladoBean.validationMessage}"></h:outputText>
                 <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
-                <p:button class="btn" value="Ayuda" ></p:button>
+                 <p:commandButton actionListener="#{AprobacionTrasladoBean.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
 
             </div>
             

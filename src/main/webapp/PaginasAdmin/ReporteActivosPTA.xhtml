@@ -12,7 +12,10 @@
     </h:head>
     <h:body>
 
-        <form>
+      <h:form id="form">
+            <p:growl id="growl" showDetail="true" />
+        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+        
             <h1> Reporte de Activos </h1>
 
             <div class="container">
@@ -65,11 +68,11 @@
                 </p:dataTable>
 
                 <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                <p:button class="btn" value="Ayuda" ></p:button>
+                 <p:commandButton actionListener="#{ReporteActivosPTA.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
 
             </div>
 
-        </form>
+        </h:form>
     </h:body>
 </html>
 

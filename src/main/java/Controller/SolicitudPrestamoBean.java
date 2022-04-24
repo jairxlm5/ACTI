@@ -9,6 +9,7 @@ import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.ActivoDB;
 import Model.Funcionario;
+import Model.FuncionarioDB;
 import Model.MovimientoActivoDB;
 import Model.Prestamo;
 import Model.Traslado;
@@ -18,6 +19,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -30,50 +33,30 @@ public class SolicitudPrestamoBean {
 
     private String nombre;
     private String descripcion;
-    private String nombreSede;
+
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
-ActivoDB activoDB = new ActivoDB();
+    ActivoDB activoDB = new ActivoDB();
     Activo activoBuscado = new Activo();
+    FuncionarioDB funcDB = new FuncionarioDB();
     
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaRetorno = myCalendar.getTime();
     private Date fechaActual = myCalendar.getTime();
+    
+    
    private String infoActivo = "";
     private String mensajeBusqueda="";
     private String motivo;
-        private String idActivo;
+    private String idActivo;
+
 
     MovimientoActivoDB movDB = new MovimientoActivoDB();
 
     public SolicitudPrestamoBean() {
       
-    }
-
-
-    
-    
-
-    /**
-     * Trae la informacion del activo elegido
-     *
-     * @return Activo
-     */
-    /*
-    public void cancelar() {
-        this.idActivo = "";
-        this.nombre = "";
-        this.descripcion = "";
-        this.nombreSede = "";
-        this.validationMessage = "";
-
-    }
-    */
-
-    public Activo getActivoFromDB() {
-        return null;
     }
 
     /**
@@ -91,8 +74,7 @@ ActivoDB activoDB = new ActivoDB();
             return;
         }
 
-        Activo activoElegido = getActivoFromDB();
-        if (activoElegido != null) {
+        if (activoBuscado != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
             
             
@@ -108,20 +90,21 @@ ActivoDB activoDB = new ActivoDB();
             prestamo.setAprobado(false);
             prestamo.setFechaRetorno(fechaRetorno);
             prestamo.setFecha_Solicitud(fechaActual);
-            prestamo.setMotivo(motivo);
+            //prestamo.setMotivo(motivo);
             
             
     
             
             //-----------------------------------------------------------------------------------
-            //Esto la verdad creo que lo bretie mal 
+  
             Funcionario funcSolicitante = new Funcionario();
-            funcSolicitante.setIdentificacion(userDB.getLogedInUser().getIdentificacion());
-            
+            funcSolicitante = funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
             prestamo.setFuncionarioSolicitante(funcSolicitante);
             //-----------------------------------------------------------------------------------
               
-            movDB.saveMovimientoAct(prestamo);
+            
+            //Aqui se esta cayendo
+            movDB.saveMovimientoAct((Prestamo)prestamo);
             
         } catch (SQLException e) {
          validationMessage = "Error al guardar en DB" + e.toString();
@@ -155,7 +138,14 @@ ActivoDB activoDB = new ActivoDB();
         
     }
 
-       
+         public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void showSticky() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+    }
     
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
        
@@ -241,13 +231,7 @@ ActivoDB activoDB = new ActivoDB();
         this.descripcion = descripcion;
     }
 
-    public String getNombreSede() {
-        return nombreSede;
-    }
 
-    public void setNombreSede(String nombreSede) {
-        this.nombreSede = nombreSede;
-    }
 
     public String getValidationMessage() {
         return validationMessage;

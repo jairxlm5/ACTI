@@ -9,6 +9,7 @@ import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.ActivoDB;
 import Model.Funcionario;
+import Model.FuncionarioDB;
 import Model.MovimientoActivoDB;
 import Model.Sede;
 import Model.SedeDB;
@@ -56,6 +57,7 @@ public class SolicitudTrasladoBean {
     SedeDB sedeDB = new SedeDB();
     private String motivo;
     MovimientoActivoDB movDB = new MovimientoActivoDB();
+    FuncionarioDB funcDB = new FuncionarioDB();
             
     public SolicitudTrasladoBean() {
       
@@ -140,13 +142,13 @@ public class SolicitudTrasladoBean {
             
             //-----------------------------------------------------------------------------------
             //Esto la verdad creo que lo bretie mal 
-            Funcionario funcSolicitante = new Funcionario();
-            funcSolicitante.setIdentificacion(userDB.getLogedInUser().getIdentificacion());
-            
+             Funcionario funcSolicitante = new Funcionario();
+            funcSolicitante = funcDB.getFuncFromDB(userDB.getLogedInUser().getIdentificacion());
             traslado.setFuncionarioSolicitante(funcSolicitante);
             //-----------------------------------------------------------------------------------
               
             movDB.saveMovimientoAct(traslado);
+            validationMessage = "Traslado Solicitado exitosamente";
             
         } catch (SQLException e) {
          validationMessage = "Error al guardar en DB" + e.toString();
@@ -185,10 +187,36 @@ public class SolicitudTrasladoBean {
 
 
 
+  public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void showSticky() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+    }
+
  
  
     
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+    
+        public MovimientoActivoDB getMovDB() {
+        return movDB;
+    }
+
+    public void setMovDB(MovimientoActivoDB movDB) {
+        this.movDB = movDB;
+    }
+
+    public FuncionarioDB getFuncDB() {
+        return funcDB;
+    }
+
+    public void setFuncDB(FuncionarioDB funcDB) {
+        this.funcDB = funcDB;
+    }
+    
         public String getMotivo() {
         return motivo;
     }
