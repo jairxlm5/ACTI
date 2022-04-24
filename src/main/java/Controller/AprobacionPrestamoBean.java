@@ -17,6 +17,10 @@ import Model.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -37,7 +41,10 @@ public class AprobacionPrestamoBean {
     private Date fechaRetorno;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
-
+    Prestamo prestamoSeleccionado = new Prestamo();
+         
+    
+    
     public AprobacionPrestamoBean() {
         this.solicitudesDePrestamo = new ArrayList<>();
         this.getSolicitudesDePrestamo();
@@ -96,8 +103,35 @@ public class AprobacionPrestamoBean {
         }
         return sedes;
     }
+
+
+      public void onRowSelect(SelectEvent<Prestamo> event) {
+         
+         
+         this.prestamoSeleccionado = event.getObject();
+        FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(prestamoSeleccionado.getMotivo()));
+        
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent<Prestamo> event) {
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getMotivo()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
 
+        public Prestamo getPrestamoSeleccionado() {
+        return prestamoSeleccionado;
+    }
+
+    public void setPrestamoSeleccionado(Prestamo prestamoSeleccionado) {
+        this.prestamoSeleccionado = prestamoSeleccionado;
+    }
+    
+    
     public void setSolicitudesDePrestamo(ArrayList<Prestamo> solicitudesDePrestamo) {
         this.solicitudesDePrestamo = solicitudesDePrestamo;
     }

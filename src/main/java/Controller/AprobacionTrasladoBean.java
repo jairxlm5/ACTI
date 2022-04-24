@@ -18,6 +18,10 @@ import Model.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -39,9 +43,16 @@ public class AprobacionTrasladoBean {
     private Sede sedeOrigen, sedeDestino;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
+    
+    
+    
+    
+    //Este traslado es el que el usuario clickea Siempre que el usuario le de click se va a estar actualizando aqui en el bean 
+    private Traslado trasladoSeleccionado;
 
     public AprobacionTrasladoBean() {
         this.solicitudesDeTraslado = new ArrayList<>();
+        
         this.validationMessage = "";
     }
 
@@ -101,7 +112,33 @@ public class AprobacionTrasladoBean {
         this.solicitudesDeTraslado = solicitudesDeTraslado;
     }
 
+     public void onRowSelect(SelectEvent<Traslado> event) {
+         
+         trasladoSeleccionado =(Traslado) event.getObject();
+        FacesMessage msg = new FacesMessage("Traslado Selected", String.valueOf(trasladoSeleccionado.getMotivo()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowUnselect(UnselectEvent<Traslado> event) {
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getMotivo()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+    
+    
+       public Traslado getTrasladoSeleccionado() {
+        return trasladoSeleccionado;
+    }
+
+    public void setTrasladoSeleccionado(Traslado trasladoSeleccionado) {
+        this.trasladoSeleccionado = trasladoSeleccionado;
+    }
+
+    
+    
     public Activo getActivo() {
         return activo;
     }

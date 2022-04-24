@@ -7,11 +7,23 @@ package Controller;
 
 import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.ActivoDB;
+import Model.Funcionario;
+import Model.MovimientoActivoDB;
 import Model.Sede;
 import Model.SedeDB;
+import Model.Traslado;
+import Model.Usuario;
+import Model.UsuarioDB;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.xml.registry.infomodel.User;
 
 /**
  *
@@ -22,7 +34,11 @@ public class SolicitudTrasladoBean {
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String idActivo;
     private String nombreSedeOrigen;
-    private Date fechaTraslado;
+
+     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Calendar myCalendar = new GregorianCalendar();
+   private Date fechaTraslado = myCalendar.getTime();
+   private Date fechaActual = myCalendar.getTime();
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private Sede sedeDestino;
     //Estos ArrayLists son para llenar los datos que aparecen en el combo con la info de la BD
@@ -31,12 +47,19 @@ public class SolicitudTrasladoBean {
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
     private String infoActivo = "";
-
+    ActivoDB activoDB = new ActivoDB();
+    Activo activoBuscado = new Activo();
+    private String mensajeBusqueda = "";
+    private String sedeOrigenID;
+    private String sedeDestinoID;
+    private Usuario usuarioActual = new Usuario();
+    SedeDB sedeDB = new SedeDB();
+    private String motivo;
+    MovimientoActivoDB movDB = new MovimientoActivoDB();
+            
     public SolicitudTrasladoBean() {
-        this.idActivo = "";
-        this.nombreSedeOrigen = "";
-        this.validationMessage = "";
-        fillLists();
+      
+        this.fillSedes();
     }
 
     /**
@@ -44,8 +67,33 @@ public class SolicitudTrasladoBean {
      *
      * @return Activo
      */
-    public Activo getActivoFromDB() {
-        return null;
+    public void consultaActivo() {
+        
+            try {
+            this.activoBuscado = this.activoDB.getActivoFromDB(idActivo);
+            this.infoActivo = 
+                  "Nombre Activo: " + this.activoBuscado.getNombre()+
+                  "Descripcion: "+ this.activoBuscado.getDescripcion();
+            
+        } catch (SQLException e) {
+                     mensajeBusqueda = "No existe el activo.";
+                     this.activoBuscado = null;
+        } catch (SNMPExceptions s) {
+                      mensajeBusqueda = "No existe el activo.";
+                      this.activoBuscado = null;
+        }
+        
+    }
+         
+       public void fillSedes(){
+        try {
+            SedeDB sedeDB = new SedeDB();
+            this.sedes = sedeDB.getAllSedes();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
     }
 
     /**
@@ -66,30 +114,60 @@ public class SolicitudTrasladoBean {
             this.validationMessage = "Ingrese el codigo del activo";
             return;
         }
+        
         if (this.fechaTraslado == null) {
             this.validationMessage = "Por favor ingrese la fecha en que desea hacer el traslado";
             return;
         }
 
-        Activo activoElegido = getActivoFromDB();
-        if (activoElegido != null) {
+
+        if (activoBuscado != null) {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
+             try {
+           
+            UsuarioDB userDB = new UsuarioDB();
+            userDB.getLogedInUser();
+            
+            Traslado traslado = new Traslado();
+            traslado.setActivo(activoBuscado);
+            traslado.setAprobado(false);
+            traslado.setFechaTraslado(fechaTraslado);
+            traslado.setFecha_Solicitud(fechaActual);
+            traslado.setSedeDestino(this.sedeDB.getSede(sedeDestinoID));
+            traslado.setSedeOrigen(this.sedeDB.getSede(sedeOrigenID));
+            traslado.setMotivo(this.motivo);
+            
+            
+            //-----------------------------------------------------------------------------------
+            //Esto la verdad creo que lo bretie mal 
+            Funcionario funcSolicitante = new Funcionario();
+            funcSolicitante.setIdentificacion(userDB.getLogedInUser().getIdentificacion());
+            
+            traslado.setFuncionarioSolicitante(funcSolicitante);
+            //-----------------------------------------------------------------------------------
+              
+            movDB.saveMovimientoAct(traslado);
+            
+        } catch (SQLException e) {
+         validationMessage = "Error al guardar en DB" + e.toString();
+        } catch (SNMPExceptions s) {
+          validationMessage = "Error al guardar en DB" + s.toString();
+        }
+            
+        
+            
         } else {
             this.validationMessage = "El activo no exite o no esta registrado en el sistema";
         }
     }
 
-    public void fillLists() {
-        this.sedes = new ArrayList<>();
-        //Se llena la lista con las sedes guardadas en la DB
-    }
-
+/*
     public void cancelar() {
         this.idActivo = "";
         this.nombreSedeOrigen = "";
         this.validationMessage = "";
     }
-
+*/
     public ArrayList<Sede> getSedesDB() {
         ArrayList<Sede> sedes = new ArrayList<>();
         try {
@@ -103,10 +181,78 @@ public class SolicitudTrasladoBean {
         return sedes;
     }
 
+
+
+
+
+ 
+ 
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+        public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    
+        public SedeDB getSedeDB() {
+        return sedeDB;
+    }
+
+    public void setSedeDB(SedeDB sedeDB) {
+        this.sedeDB = sedeDB;
+    }
+
+
+    
+        public Date getFechaActual() {
+        return fechaActual;
+    }
+
+    public void setFechaActual(Date fechaActual) {
+        this.fechaActual = fechaActual;
+    }
+
+    public Activo getActivoBuscado() {
+        return activoBuscado;
+    }
+
+    public void setActivoBuscado(Activo activoBuscado) {
+        this.activoBuscado = activoBuscado;
+    }
+
+    
     public String getIdActivo() {
         return idActivo;
     }
+    
+        public String getSedeOrigenID() {
+        return sedeOrigenID;
+    }
+
+    public void setSedeOrigenID(String sedeOrigenID) {
+        this.sedeOrigenID = sedeOrigenID;
+    }
+
+    public String getSedeDestinoID() {
+        return sedeDestinoID;
+    }
+
+    public void setSedeDestinoID(String sedeDestinoID) {
+        this.sedeDestinoID = sedeDestinoID;
+    }
+    
+       public String getMensajeBusqueda() {
+        return mensajeBusqueda;
+    }
+
+    public void setMensajeBusqueda(String mensajeBusqueda) {
+        this.mensajeBusqueda = mensajeBusqueda;
+    }
+
 
     public void setIdActivo(String idActivo) {
         this.idActivo = idActivo;
