@@ -22,7 +22,7 @@
        
                 
                  <p:dataTable var="activo" value="${AprobacionTrasladoBean.getSolicitudesDeTraslado()}" selectionMode="single"
-                              selection="#{AprobacionPrestamoBean.trasladoSelecionado}" rowKey="#{traslado.activo.idActivo}" 
+                              selection="#{AprobacionTrasladoBean.trasladoSeleccionado}" rowKey="#{traslado.activo.idActivo}" 
                       emptyMessage="No existe una solicitud de traslado con los filtros dados."
                              filteredValue="#{AprobacionTrasladoBean.solicitudesDeTrasladoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
                              rows="10"

@@ -5,7 +5,15 @@
  */
 package Controller;
 
+import DAO.SNMPExceptions;
 import Model.Activo;
+import Model.ActivoDB;
+import Model.Funcionario;
+import Model.MovimientoActivoDB;
+import Model.Prestamo;
+import Model.Traslado;
+import Model.UsuarioDB;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,32 +27,41 @@ public class SolicitudPrestamoBean {
 
     //Estos son los atributos para relacionarlos con campos de texto en el bean, los primeros 2 los tiene que ingresar
     //el usuario, los ultimos 3 son solo para desplegar informacion
-    private String idActivo;
 
     private String nombre;
     private String descripcion;
     private String nombreSede;
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
-
+ActivoDB activoDB = new ActivoDB();
+    Activo activoBuscado = new Activo();
+    
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaRetorno = myCalendar.getTime();
+    private Date fechaActual = myCalendar.getTime();
+   private String infoActivo = "";
+    private String mensajeBusqueda="";
+    private String motivo;
+        private String idActivo;
+
+    MovimientoActivoDB movDB = new MovimientoActivoDB();
 
     public SolicitudPrestamoBean() {
-        this.idActivo = "";
-        this.nombre = "";
-        this.descripcion = "";
-        this.nombreSede = "";
-        this.validationMessage = "";
+      
     }
+
+
+    
+    
 
     /**
      * Trae la informacion del activo elegido
      *
      * @return Activo
      */
+    /*
     public void cancelar() {
         this.idActivo = "";
         this.nombre = "";
@@ -53,6 +70,7 @@ public class SolicitudPrestamoBean {
         this.validationMessage = "";
 
     }
+    */
 
     public Activo getActivoFromDB() {
         return null;
@@ -78,13 +96,119 @@ public class SolicitudPrestamoBean {
             //Se tiene que obtener la info del usuario que esta haciendo la solicitud
             
             
+            if (activoBuscado != null) {
+            //Se tiene que obtener la info del usuario que esta haciendo la solicitud
+             try {
+           
+            UsuarioDB userDB = new UsuarioDB();
+            userDB.getLogedInUser();
+            
+            Prestamo prestamo = new Prestamo();
+            prestamo.setActivo(activoBuscado);
+            prestamo.setAprobado(false);
+            prestamo.setFechaRetorno(fechaRetorno);
+            prestamo.setFecha_Solicitud(fechaActual);
+            prestamo.setMotivo(motivo);
+            
+            
+    
+            
+            //-----------------------------------------------------------------------------------
+            //Esto la verdad creo que lo bretie mal 
+            Funcionario funcSolicitante = new Funcionario();
+            funcSolicitante.setIdentificacion(userDB.getLogedInUser().getIdentificacion());
+            
+            prestamo.setFuncionarioSolicitante(funcSolicitante);
+            //-----------------------------------------------------------------------------------
+              
+            movDB.saveMovimientoAct(prestamo);
+            
+        } catch (SQLException e) {
+         validationMessage = "Error al guardar en DB" + e.toString();
+        } catch (SNMPExceptions s) {
+          validationMessage = "Error al guardar en DB" + s.toString();
+        }
+            
+
             
         } else {
             this.validationMessage = "El activo no exite o no esta registrado en el sistema";
         }
     }
+    }
 
+       public void consultaActivo(){
+        
+            try {
+            this.activoBuscado = this.activoDB.getActivoFromDB(idActivo);
+            this.infoActivo = 
+                  "Nombre Activo: " + this.activoBuscado.getNombre()+
+                  "Descripcion: "+ this.activoBuscado.getDescripcion();
+            
+        } catch (SQLException e) {
+                     mensajeBusqueda = "No existe el activo.";
+                     this.activoBuscado = null;
+        } catch (SNMPExceptions s) {
+                      mensajeBusqueda = "No existe el activo.";
+                      this.activoBuscado = null;
+        }
+        
+    }
+
+       
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
+       
+           public Date getFechaActual() {
+        return fechaActual;
+    }
+
+    public void setFechaActual(Date fechaActual) {
+        this.fechaActual = fechaActual;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+       
+    public ActivoDB getActivoDB() {
+        return activoDB;
+    }
+
+    public void setActivoDB(ActivoDB activoDB) {
+        this.activoDB = activoDB;
+    }
+
+    public Activo getActivoBuscado() {
+        return activoBuscado;
+    }
+
+    public void setActivoBuscado(Activo activoBuscado) {
+        this.activoBuscado = activoBuscado;
+    }
+
+    public String getInfoActivo() {
+        return infoActivo;
+    }
+
+    public void setInfoActivo(String infoActivo) {
+        this.infoActivo = infoActivo;
+    }
+
+    public String getMensajeBusqueda() {
+        return mensajeBusqueda;
+    }
+
+    public void setMensajeBusqueda(String mensajeBusqueda) {
+        this.mensajeBusqueda = mensajeBusqueda;
+    }
+       
+       
+       
     public String getIdActivo() {
         return idActivo;
     }

@@ -46,8 +46,9 @@ public class AprobacionTrasladoBean {
     
     
     
+    
     //Este traslado es el que el usuario clickea Siempre que el usuario le de click se va a estar actualizando aqui en el bean 
-    Traslado trasladoSeleccionado;
+    private Traslado trasladoSeleccionado;
 
     public AprobacionTrasladoBean() {
         this.solicitudesDeTraslado = new ArrayList<>();
