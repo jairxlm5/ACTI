@@ -94,7 +94,10 @@ public class MantenimientoFuncionariosBean {
 
     private ArrayList<Funcionario> funcionarios;
     private ArrayList<Funcionario> funcionariosFiltrados;
-    Usuario newUser;
+    private Usuario newUser;
+    
+    
+     private TipoIdentificacion tipoIdSeleccionado;
 
     //Bro necesitaba la tabla funcionarios para poder cargar la data
     private ArrayList<Provincia> provincias;
@@ -103,13 +106,14 @@ public class MantenimientoFuncionariosBean {
     private ArrayList<Barrio> barrios;
     private ArrayList<Sede> sedes;
 
+
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
 
     //Logica necesaria para las fechas
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
-    private Date fechaNacimiento = myCalendar.getTime();
+    private Date fechaNacimiento;
     //Llamado clases del Model
     UsuarioDB userDB = new UsuarioDB();
     Funcionario funcionarioSelecionado = new Funcionario();
@@ -119,7 +123,7 @@ public class MantenimientoFuncionariosBean {
     
     
         //Estos son los atributos para relacionarlos con campos de texto en el bean
-    private TipoIdentificacion tipoIdSeleccionado;
+ 
 
  
     public MantenimientoFuncionariosBean() {
@@ -187,6 +191,7 @@ public class MantenimientoFuncionariosBean {
             this.messageDisplayed = "Debe registrar al menos un teléfono";
             return;
         }
+               agregaPerfil();
         if (this.perfiles.isEmpty()) {
             this.messageDisplayed = "Debe usar al menos un tipo de perfil";
             return;
@@ -205,9 +210,14 @@ public class MantenimientoFuncionariosBean {
         
         //Se tiene que crear el nuevo usuario\
         
-        agregaPerfil();
+ 
         try{
-             this.newUser = userDB.getUserFromDB(identificacion);
+          
+             
+              newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento,null,
+                null,null, null, otrasDirecciones, correo, sede,
+                perfiles, telefonos);
+             newUser.setTipoID(TipoIdentificacion.Cedula_Nacional);
                       //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
         int codSeguridad = userDB.generateSecurityCode();
         newUser.setCodSeguridad(codSeguridad);
@@ -228,22 +238,14 @@ public class MantenimientoFuncionariosBean {
             this.messageDisplayed = "Error al registrar contraseña";
         }
         newUser.setClave(generatedPass);
-        
-        
-
-        
               
         } catch (Exception e){
             
         }
-     
-
-
-      
     
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
         try {
-            userDB.addNewUser(newUser);
+            userDB.addNewUserFUNC(newUser);
             this.messageDisplayed = "Funcionario registrado correctamente";
         } catch (SNMPExceptions e) {
             this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
@@ -284,21 +286,29 @@ public class MantenimientoFuncionariosBean {
             this.validationMessage = "Debe registrar al menos un teléfono";
             return;
         }
+        agregaPerfil();
         if (this.perfiles.isEmpty()) {
             this.validationMessage = "Debe usar al menos un tipo de perfil";
             return;
         }
         //Se tiene que crear un objeto usuario con la informacion editada
-        agregaPerfil();
         
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento,null,
+        try{
+               newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento,null,
                 null,null, null, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
         newUser.setTipoID(this.tipoIdSeleccionado);
         
+           this.newUser = userDB.getUserFromDB(identificacion);
+           
+        }catch (Exception e){
+            
+        }
+      
+        
         //Se actualiza la informacion en la BD
             try {
-            userDB.updateUser(user);
+            userDB.updateUser(newUser);
             this.messageDisplayed = "Funcionario Editado correctamente";
         } catch (SNMPExceptions e) {
             this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
@@ -382,7 +392,7 @@ public class MantenimientoFuncionariosBean {
 
         //Se agrega a la lista de perfiles
         try {
-            this.perfiles.add(new UsuarioPerfil(this.identificacion, this.perfilSeleccionado, Utils.getCurrentDate()));
+            this.perfiles.add(new UsuarioPerfil(this.identificacion,Perfil.Funcionario, Utils.getCurrentDate()));
             this.profileMessage = "Perfil agregado";
         } catch (Exception e) {
             this.profileMessage = "Ocurrió un error al registrar el perfil" + e.getMessage();
@@ -518,12 +528,13 @@ public class MantenimientoFuncionariosBean {
     }
     
     public void showSticky() {
-        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion General", "Para poder hacer uso de la pagina debe clickear el funcionario esperar la notificacion y luego apretar el boton editar."));
     }
 
+        public void showSticky2() {
+        FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Informacion General", "Puede rellenar los datos de un Usuario existente y editarlos o añadirlos."));
+    }
 
-    
-    
     
 
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">

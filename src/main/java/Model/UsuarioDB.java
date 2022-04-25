@@ -120,6 +120,77 @@ public class UsuarioDB {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
         }
     }
+    
+    public void addNewUserFUNC(Usuario newUser) throws SNMPExceptions, SQLException {
+        String sqlCommand = "";
+        try {
+            //Se arma la sentencia del Insert
+            StringBuilder str = new StringBuilder();
+            /*str.append("Insert Into Usuario "
+                    + "(ID, TipoID, Nombre, Apellido1, Apellido2, Fecha_De_Nacimiento, Canton, Otras_Direcciones,"
+                    + "+ Correo_Electronico, Sede, Codigo_Seguridad, Clave, Provincia, Distrito, Barrio, Logins, Aprobacion)"+                  
+                    "Values (");*/
+            str.append("Insert Into Usuario (ID, TipoID, Nombre, Apellido1, Apellido2, Fecha_De_Nacimiento, Canton, "
+                    + "Otras_Direcciones, Correo_Electronico, Sede, Codigo_Seguridad, Clave, Provincia, Distrito, "
+                    + "Barrio, Logins) Values (");
+            str.append("'").append(newUser.getIdentificacion()).append("', ");
+            str.append(newUser.getTipoID().ordinal()).append(", ");
+            str.append("'").append(newUser.getNombre()).append("', ");
+            str.append("'").append(newUser.getApellido1()).append("', ");
+            str.append("'").append(newUser.getApellido2()).append("', ");
+            str.append("'").append(simpleDateFormat.format(newUser.getFechaNacimiento())).append("', ");
+            str.append(3).append(", ");
+            str.append("'").append(newUser.getOtrasDirecciones()).append("',");
+            str.append("'").append(newUser.getCorreo()).append("' ,");
+            str.append("'").append(newUser.getSede().getCodigo()).append("', ");
+            str.append(newUser.getCodSeguridad()).append(", ");
+            str.append("'").append(newUser.getClave()).append("', ");
+            str.append(2).append(", ");
+            str.append(3).append(", ");
+            str.append(203).append(", ");
+            str.append(0).append(" )");
+            /*str.append(0).append("");
+            str.append("'").append(simpleDateFormat.format(newUser.getFechaNacimiento())).append("')");*/
+
+            sqlCommand = str.toString();
+            System.out.println(sqlCommand);
+            //Se ejecuta la sentencia SQL
+            dataAccess.executeSQLCommand(sqlCommand);
+
+            //Se guardan los distintos perfiles para el usuario
+            for (UsuarioPerfil profile : newUser.getPerfiles()) {
+                //Se revisa el tipo de perfil, se construye el respectivo tipo y se guarda
+                switch (profile.getTipoPerfil()) {
+                    case Administrativo:
+                        AdministrativoDB adminDB = new AdministrativoDB();
+                        adminDB.addNewAdmin(newUser.getIdentificacion());
+                        activateAccount(newUser);
+                        System.out.println("Si llego");
+                        break;
+                    case Funcionario:
+                        FuncionarioDB funcDB = new FuncionarioDB();
+                        funcDB.addNewFunc(newUser.getIdentificacion());
+                        break;
+                    case Tecnico:
+                        TecnicoDB tecDB = new TecnicoDB();
+                        tecDB.addNewTec(newUser.getIdentificacion());
+                        break;
+                    default:
+                        throw new Exception("El usuario " + newUser.getIdentificacion() + " no eligio un perfil");
+                }
+                usuarioPerfilDB.saveUserProfile(profile);
+            }
+            //Se guardan los telefonos que el usuario registro 
+            for (Telefono phone : newUser.getTelefonos()) {
+                telefonoDB.savePhone(phone);
+            }
+
+        } catch (SQLException e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
+        } catch (Exception e) {
+            throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage());
+        }
+    }
 
     public Usuario getUserFromDB(String id) throws SNMPExceptions, SQLException {
         String sqlSelect = "";
@@ -488,7 +559,8 @@ public class UsuarioDB {
         ArrayList<Usuario> disabledUsers = new ArrayList<>();
         String sqlSelect = "";
         try {
-            sqlSelect = "Select ID From Usuario Where Aprobacion =" + 0;
+            
+            sqlSelect = "Select ID From Usuario Where Aprobacion is null or Aprobacion = 0";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             while (rs.next()) {
                 Usuario user = getUserFromDB(rs.getString("ID"));
