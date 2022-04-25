@@ -18,17 +18,19 @@ import Model.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
  * @author danielp
  */
 public class AprobacionTrasladoBean {
-
+  private List<FilterMeta> filterBy;
     //ArrayList que se llena con la lista de solicitudes de traslados de activos
     private ArrayList<Traslado> solicitudesDeTraslado;
     private ArrayList<Traslado> solicitudesDeTrasladoFiltradas;
@@ -240,5 +242,14 @@ public class AprobacionTrasladoBean {
     
 // </editor-fold>
 
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+
+    
     
 }

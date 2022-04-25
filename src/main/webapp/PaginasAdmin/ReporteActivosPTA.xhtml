@@ -22,7 +22,7 @@
 
                 <p:dataTable var="activo" value="#{ReporteActivosPTA.getActivoDB()}"
                              emptyMessage="No existe un activo con los filtros dados."
-                             filteredValue="#{ReporteActivosPTA.activosfiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                             filteredValue="#{ReporteActivosPTA.activosfiltrados}" filterBy="#{ReporteActivosPTA.filterBy}" 
                              rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

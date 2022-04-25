@@ -23,6 +23,8 @@ import java.util.GregorianCalendar;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import Utils.Utils;
+import java.util.List;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
@@ -34,6 +36,7 @@ public class SolicitudPrestamoBean {
     //el usuario, los ultimos 3 son solo para desplegar informacion
     private String nombre;
     private String descripcion;
+      private List<FilterMeta> filterBy;
 
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
@@ -235,4 +238,16 @@ public class SolicitudPrestamoBean {
     }
 
 // </editor-fold>
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+    
+    
+
 }
+

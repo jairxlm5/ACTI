@@ -17,9 +17,9 @@
             <div class="container">
                 <h1> Reporte de solicitud de Activos </h1>
 
-                <p:dataTable var="activo" value="#{ReporteSolicitudActivos.getActivoDB()}"
+                <p:dataTable var="soli" value="#{ReporteSolicitudActivos.solicitudes}"
                              emptyMessage="No existe un activo con los filtros dados."
-                             filteredValue="#{ReporteSolicitudActivos.activosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                             filteredValue="#{ReporteSolicitudActivos.solicitudesFiltradas}" filterBy="#{ReporteSolicitudActivos.filterBy}" 
                              rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -30,32 +30,32 @@
                         <span>Lista de Solicitudes solicitados.</span>
                     </f:facet>
 
-                    <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}">
-                        <h:outputText value="#{activo.idActivo}" />
+                    <p:column headerText="ID" sortBy="#{soli.activo.idActivo}" filterBy="#{soli.activo.idActivo}">
+                        <h:outputText value="#{soli.activo.idActivo}" />
                     </p:column>
 
                     <p:column headerText="Nombre">
-                        <h:outputText value="#{activo.nombre}" />
+                        <h:outputText value="#{soli.activo.nombre}" />
                     </p:column>
 
                     <p:column headerText="Descripcion">
-                        <h:outputText value="#{activo.descripcion}" />
+                        <h:outputText value="#{soli.activo.descripcion}" />
                     </p:column>
 
                     <p:column headerText="Estado">
-                        <h:outputText value="#{activo.valor}" />
+                        <h:outputText value="#{soli.activo.valor}" />
                     </p:column>
 
                     <p:column headerText="Motivo">
-                        <h:outputText value="#{activo.sede}" />
+                        <h:outputText value="#{soli.activo.sede}" />
                     </p:column>
 
                     <p:column headerText="Fecha de Solicitud">
-                        <h:outputText value="#{activo.fechaAdquisicion}" />
+                        <h:outputText value="#{soli.activo.fechaAdquisicion}" />
                     </p:column>      
 
                     <p:column headerText="Funcionario Solicitante">
-                        <h:outputText value="#{activo.funcionario}" />
+                        <h:outputText value="#{soli.activo.funcionario}" />
                     </p:column>
 
                     <f:facet name="paginatorTopLeft">

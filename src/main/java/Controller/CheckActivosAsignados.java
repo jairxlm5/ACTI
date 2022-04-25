@@ -22,19 +22,21 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
  * @author danielp
  */
 public class CheckActivosAsignados {
-
+  private List<FilterMeta> filterBy;
     //ArrayList con las opciones para consulta, la idea es llenar un combo con esto
     private ArrayList<SelectItem> opcionesParaConsulta;
     //Opcion que el usuario elija
@@ -386,4 +388,21 @@ public class CheckActivosAsignados {
         this.activosAsignadosFiltrados = activosAsignadosFiltrados;
     }
 // </editor-fold>
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+    
+    
+    
 }
+
+
+
+
+
+

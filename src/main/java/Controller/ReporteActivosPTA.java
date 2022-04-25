@@ -17,8 +17,10 @@ import Model.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
@@ -31,7 +33,7 @@ public class ReporteActivosPTA {
     private ArrayList<Activo> activos;
     private ArrayList<Activo> activosfiltrados;
     
-    
+      private List<FilterMeta> filterBy;
     //ArrayLists con la info para desplegar en las tablas
     private ArrayList<Prestamo> prestamos;
     private ArrayList<Traslado> traslados;
@@ -212,5 +214,13 @@ public class ReporteActivosPTA {
     
 
 // </editor-fold>
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
 
 }

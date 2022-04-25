@@ -94,6 +94,7 @@ public class MantenimientoFuncionariosBean {
 
     private ArrayList<Funcionario> funcionarios;
     private ArrayList<Funcionario> funcionariosFiltrados;
+    Usuario newUser;
 
     //Bro necesitaba la tabla funcionarios para poder cargar la data
     private ArrayList<Provincia> provincias;
@@ -205,32 +206,41 @@ public class MantenimientoFuncionariosBean {
         //Se tiene que crear el nuevo usuario\
         
         agregaPerfil();
-        
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento,null,
-                null,null, null, otrasDirecciones, correo, sede,
-                perfiles, telefonos);
-        newUser.setTipoID(this.tipoIdSeleccionado);
-        
-        //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
+        try{
+             this.newUser = userDB.getUserFromDB(identificacion);
+                      //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
         int codSeguridad = userDB.generateSecurityCode();
         newUser.setCodSeguridad(codSeguridad);
         String generatedPass = userDB.generateFirstPasswd();
-
-        try{
+              
+          try{
             Utils.sendLoginInfoEmail(newUser, generatedPass);
         } catch (Exception e){
             this.messageDisplayed = "Ocurrió un error al enviar el correo, por favor intente de nuevo" + e.getMessage() + " "+  e.toString();
             e.printStackTrace();
             return;
         }
-        //Se registran los bytes de la clave
+          
+              //Se registran los bytes de la clave
         try {
             generatedPass = Utils.getHashedPaswd(generatedPass);
         } catch (Exception e) {
             this.messageDisplayed = "Error al registrar contraseña";
         }
         newUser.setClave(generatedPass);
+        
+        
 
+        
+              
+        } catch (Exception e){
+            
+        }
+     
+
+
+      
+    
         //Se tiene que guardar toda la informacion del Usuario en la base de datos
         try {
             userDB.addNewUser(newUser);

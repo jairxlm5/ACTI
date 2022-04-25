@@ -23,7 +23,7 @@
             
         <p:dataTable var="prestamo"  value="#{AprobacionPrestamoBean.getSolicitudesDePrestamo()}" selectionMode="single"
                      selection="#{AprobacionPrestamoBean.prestamoSeleccionado}" rowKey="#{prestamo.activo.idActivo}"  emptyMessage="No existe un prestamo con los filtros dados."
-                     filteredValue="#{AprobacionPrestamoBean.solicitudesDePrestamoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
+                     filteredValue="#{AprobacionPrestamoBean.solicitudesDePrestamoFiltradas}" filterBy="#{AprobacionPrestamoBean.filterBy}" 
                                  rows="10"
                                  paginator="true"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
