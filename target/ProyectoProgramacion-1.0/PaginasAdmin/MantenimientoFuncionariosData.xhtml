@@ -39,7 +39,7 @@
 
                                 <p:dataTable var="funcionario" value="${MantenimientoFuncionariosBean.getFuncionariosDB()}" selectionMode="single"
                                              selection="#{MantenimientoFuncionariosBean.funcionarioSelecionado}" rowKey="#{funcionario.identificacion}"  emptyMessage="No existe un funcionario con los filtros dados."
-                                             filteredValue="#{MantenimientoFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                                             filteredValue="#{MantenimientoFuncionariosBean.funcionariosFiltrados}" filterBy="#{MantenimientoFuncionariosBean.filterBy}" 
                                              rows="10"
                                              paginator="true"
                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -55,7 +55,7 @@
                                         <span>Lista de funcionarios.</span>
                                     </f:facet>
 
-                                    <p:column headerText="Identificacion" sortBy="#{funcionario.identificacion}" filterBy="#{funcionario.identificacion}">
+                                    <p:column headerText="Identificacion" sortBy="#{funcionario.identificacion}" filterBy="#{funcionario.identificacion}" filterMatchMode="contains">
                                         <h:outputText value="#{funcionario.identificacion}"/>
                                     </p:column>
 

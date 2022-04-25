@@ -72,6 +72,8 @@ public class AprobacionPrestamoBean {
      * Rechaza el prestamo
      */
     public void rechazaPrestamo() {
+        
+        
 
     }
 

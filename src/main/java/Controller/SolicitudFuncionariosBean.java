@@ -9,6 +9,7 @@ import DAO.SNMPExceptions;
 import Model.Funcionario;
 import Model.FuncionarioDB;
 import Model.Usuario;
+import Model.UsuarioDB;
 import Model.UsuarioPerfil;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,7 +31,9 @@ public class SolicitudFuncionariosBean {
     //Tuve que meter este ArrayList para lo del primer avance luego podemos ver como bretearlo 
     private ArrayList<Funcionario> funcionarios = new ArrayList<>();
     private ArrayList<Funcionario> funcionariosFiltrados = new ArrayList<>();
+    private ArrayList<Funcionario> funcionariosParaMostrar = new ArrayList<>();
     private Funcionario funcionarioSelecionado = new Funcionario();
+    
     
     //Mensaje para desplegar info de validaciones
     private String validationMessage;
@@ -38,6 +41,7 @@ public class SolicitudFuncionariosBean {
     public SolicitudFuncionariosBean() {
         this.getDisabledUsers();
         this.validationMessage = "";
+        fillFuncionarios();
     }
     
     
@@ -45,8 +49,6 @@ public class SolicitudFuncionariosBean {
     public void enableAccount(){
         if(this.funcionarioSelecionado != null){
             //Llamado a proceso para habilitar cuenta
-            
-            
             
         }
     }
@@ -77,35 +79,29 @@ public class SolicitudFuncionariosBean {
     
     
     //Este es para poder traerse Las solicitudes de nuevos funcionarios
-        public ArrayList<Funcionario> getSolicitudNewFuncionariosDB(){
-        ArrayList<Funcionario> funcionarios = new ArrayList<>();
-       /* try {
-            FuncionarioDB funcionarioDB = new FuncionarioDB();
-            funcionarios = funcionarioDB.getAllFuncionariosNuevos();
+       public void fillFuncionarios() {
+        try {
+            FuncionarioDB funcDB = new FuncionarioDB();
+            this.funcionarios = funcDB.getAllFuncionarios();
+            
+            for (Funcionario func : funcionarios) {
+                
+                if(func.isAprobado()==false){
+                    funcionariosParaMostrar.add(func);
+                }
+                
+            }
         } catch (SQLException e) {
 
         } catch (SNMPExceptions s) {
 
-        }*/
-        return funcionarios;
+        }
     }
-
 
        public void onRowSelect(SelectEvent<Funcionario> event) {
         FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getNombre()));
-        
-        this.funcionarioSelecionado.setIdentificacion(event.getObject().getIdentificacion());
-        this.funcionarioSelecionado.setNombre(event.getObject().getNombre());
-        this.funcionarioSelecionado.setApellido1(event.getObject().getApellido1());
-        this.funcionarioSelecionado.setApellido2(event.getObject().getApellido2());
-        this.funcionarioSelecionado.setFechaNacimiento(event.getObject().getFechaNacimiento());
-        this.funcionarioSelecionado.setCorreo(event.getObject().getNombre());
-        this.funcionarioSelecionado.setTelefonos(event.getObject().getTelefonos());
-        
-        
-    
-               // this.funcionarioSelecionado.setAprobado(true);
-        
+        this.funcionarioSelecionado = ((Funcionario) event.getObject());
+
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -127,6 +123,14 @@ public class SolicitudFuncionariosBean {
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
  public Usuario getSelectedUser() {
         return selectedUser;
+    }
+
+    public ArrayList<Funcionario> getFuncionariosParaMostrar() {
+        return funcionariosParaMostrar;
+    }
+
+    public void setFuncionariosParaMostrar(ArrayList<Funcionario> funcionariosParaMostrar) {
+        this.funcionariosParaMostrar = funcionariosParaMostrar;
     }
 
          
@@ -173,6 +177,7 @@ public class SolicitudFuncionariosBean {
     
 // </editor-fold>
 
+ 
    
     
 }
