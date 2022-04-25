@@ -113,12 +113,13 @@ public class MovimientoActivoDB {
             } else {
                 str.append("Aprobacion = ").append(0).append(", ");
             }
-            str.append("IDTecnicoAprobante = '").append(movAct.getTecnicoAprobante().getIdentificacion()).append("', ");
+            str.append("IDTecnicoAprobante = '").append(movAct.getTecnicoAprobante().getIdentificacion()).append("' ");
             str.append("Where IDActivo Like '").append(movAct.getActivo().getIdActivo()).append("' ");
             str.append(" and IDSolicitante Like '").append(movAct.getFuncionarioSolicitante().getIdentificacion()).append("' ");
             str.append(" and Fecha_Solicitud = '").append(simpleDateFormat.format(movAct.getFecha_Solicitud())).append("'");
 
             sqlCommand = str.toString();
+            System.out.println(sqlCommand);
             dataAccess.executeSQLCommand(sqlCommand);
         } catch (SQLException e) {
             throw new SNMPExceptions(SNMPExceptions.SQL_EXCEPTION, e.getMessage(), e.getErrorCode());
@@ -208,8 +209,8 @@ public class MovimientoActivoDB {
         FuncionarioDB funcDB = new FuncionarioDB();
         String sqlSelect = "";
         try{
-            sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Motivo, Aprobacion, IDTecnicoAprobante"
-                     + "From Movimiento_Activo Where Aprobacion = " + 0;
+            sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Motivo, Aprobacion, IDTecnicoAprobante\n" +
+"                     From Movimiento_Activo Where Aprobacion = 0";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             while(rs.next()){
                 Activo activo = activoDB.getActivoFromDB(rs.getString("IDActivo"));
@@ -241,19 +242,12 @@ public class MovimientoActivoDB {
      */
     public void aproveMovimientoAct(MovimientoActivo movAct) throws SQLException, SNMPExceptions, ACTIException {
         //Se obtiene y asigna el tecnico que aprobo
-        String profileInUse = userDB.getLogedInProfile();
-
-        //Se tiene que verifica que el usuario sea un tecnico
-        if (profileInUse.equals("Tecnico")) {
-            movAct.setAprobado(true);
-            Tecnico tec = new Tecnico();
-            tec.setIdentificacion(userDB.getLogedInUser().getIdentificacion()); 
-            movAct.setTecnicoAprobante(tec);
-            updateMovimientoAct(movAct);
-            
-        } else {
-            throw new ACTIException("Accion no permitida, solo los Tecnicos pueden aprobar un movimiento de activo");
-        }
+        //String profileInUse = userDB.getLogedInProfile();
+        TecnicoDB tecDB = new TecnicoDB();
+        movAct.setAprobado(true);
+        Tecnico tec = tecDB.getTecFromDB(userDB.getLogedInUser().getIdentificacion());
+        movAct.setTecnicoAprobante(tec);
+        updateMovimientoAct(movAct);
     }
 
     /**
