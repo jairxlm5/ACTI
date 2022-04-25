@@ -44,7 +44,7 @@ public class AprobacionPrestamoBean {
     private Prestamo prestamoSeleccionado;
 
     public AprobacionPrestamoBean() {
-        this.solicitudesDePrestamo = new ArrayList<>();
+        //this.solicitudesDePrestamo = new ArrayList<>();
         this.getSolicitudesDePrestamo();
     }
 
@@ -56,10 +56,13 @@ public class AprobacionPrestamoBean {
             try {
                 MovimientoActivoDB movActDB = new MovimientoActivoDB();
                 this.activoSeleccionado = this.prestamoSeleccionado.getActivo();
-                this.motivo = this.prestamoSeleccionado.getMotivo();
+                this.funcionarioSolicitante = this.prestamoSeleccionado.getFuncionarioSolicitante();
                 this.fecha_Solicitud = this.prestamoSeleccionado.getFecha_Solicitud();
-                MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), motivo, fecha_Solicitud);
+                MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), 
+                                funcionarioSolicitante.getIdentificacion(), fecha_Solicitud);
                 movActDB.aproveMovimientoAct(movAct);
+                this.validationMessage = "Prestamo Aprobado";
+                this.getSolicitudesDePrestamo();
             } catch (Exception e) {
                 this.validationMessage = "Error al aprobar prestamo";
             }
@@ -85,6 +88,7 @@ public class AprobacionPrestamoBean {
      */
     public ArrayList<Prestamo> getSolicitudesDePrestamo() {
         try {
+            this.solicitudesDePrestamo = new ArrayList<>();
             PrestamoDB prestamoDB = new PrestamoDB();
             this.solicitudesDePrestamo = prestamoDB.getPrestamosNoAprobados();
         } catch (SQLException e) {

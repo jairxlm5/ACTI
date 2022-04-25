@@ -51,9 +51,8 @@ public class AprobacionTrasladoBean {
     private Traslado trasladoSeleccionado;
 
     public AprobacionTrasladoBean() {
-        this.solicitudesDeTraslado = new ArrayList<>();
+        //this.solicitudesDeTraslado = new ArrayList<>();
         this.getSolicitudesDeTraslado();
-        this.validationMessage = "";
     }
 
     /**
@@ -65,10 +64,13 @@ public class AprobacionTrasladoBean {
             try{
                 MovimientoActivoDB movActDB = new MovimientoActivoDB();
                 this.activoSeleccionado = this.trasladoSeleccionado.getActivo();
-                this.motivo = this.trasladoSeleccionado.getMotivo();
+                this.funcionarioSolicitante = this.trasladoSeleccionado.getFuncionarioSolicitante();
                 this.fecha_Solicitud = this.trasladoSeleccionado.getFecha_Solicitud();
-                MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), motivo, fecha_Solicitud);
+                MovimientoActivo movAct = movActDB.getMovActFromDB(this.activoSeleccionado.getIdActivo(), 
+                        this.funcionarioSolicitante.getIdentificacion(), fecha_Solicitud);
                 movActDB.aproveMovimientoAct(movAct);
+                this.validationMessage = "Traslado Aprobado";
+                this.getSolicitudesDeTraslado();
             } catch (Exception e){
                 this.validationMessage = "Error al aprobar traslado";
             }
@@ -92,9 +94,9 @@ public class AprobacionTrasladoBean {
      */
     public ArrayList<Traslado> getSolicitudesDeTraslado() {
         try {
+            this.solicitudesDeTraslado = new ArrayList<>();
             TrasladoDB trasladoDB = new TrasladoDB();
             this.solicitudesDeTraslado = trasladoDB.getTrasladosNoAprobados();
-
         } catch (SQLException e) {
             this.validationMessage = "Ocurrió un error al cargar los traslados";
         } catch (SNMPExceptions s) {

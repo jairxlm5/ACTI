@@ -66,7 +66,7 @@ public class PrestamoDB {
         String sqlSelect = "";
         try{
             sqlSelect = "Select IDActivo, IDSolicitante, Fecha_Solicitud, Fecha_Retorno From Prestamos"
-                    + " Where IDActivo Like " + idActivo + " and IDSolicitante Like " + idFunc + " and "
+                    + " Where IDActivo Like '" + idActivo + "' and IDSolicitante Like '" + idFunc + "' and "
                     + "Fecha_Solicitud = '" + simpleDateFormat.format(fechaSolicitud) + "'";
             ResultSet rs = dataAccess.executeSQLReturnsRS(sqlSelect);
             if(rs.next()){
