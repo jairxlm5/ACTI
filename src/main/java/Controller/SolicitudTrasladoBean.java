@@ -26,6 +26,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.xml.registry.infomodel.User;
 import Utils.Utils;
+import java.util.List;
+import org.primefaces.model.FilterMeta;
 /**
  *
  * @author danielp
@@ -35,7 +37,7 @@ public class SolicitudTrasladoBean {
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String idActivo;
     private String nombreSedeOrigen;
-
+  private List<FilterMeta> filterBy;
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
     private Calendar myCalendar = new GregorianCalendar();
     private Date fechaTraslado;
@@ -324,4 +326,15 @@ public class SolicitudTrasladoBean {
     }
 
 // </editor-fold>
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+    
+    
+    
 }

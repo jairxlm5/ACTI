@@ -9,23 +9,28 @@ import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.ActivoDB;
 import Model.MovimientoActivo;
+import Model.MovimientoActivoDB;
 import Model.Traslado;
 import Model.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
  * @author danielp
  */
 public class ReporteSolicitudActivos {
-
+  private List<FilterMeta> filterBy;
     //ArrayLists con la info para desplegar en las tablas
     private ArrayList<MovimientoActivo> solicitudesAprobadas;
     private ArrayList<MovimientoActivo> solicitudesNoAprobadas;
+    private ArrayList<MovimientoActivo> solicitudes;
+    private ArrayList<MovimientoActivo> solicitudesFiltradas;
 
     //Bro para trabajar los beans en este primer entregable lo que hice fue hacer un array de activos 
     //Luego decidimos como bretearlo 
@@ -43,16 +48,26 @@ public class ReporteSolicitudActivos {
 
     public ReporteSolicitudActivos() {
         this.tipoSolicitud = "";
+          this.activos = new ArrayList<>();
+        this.solicitudes = new ArrayList<>() ;
         fillData();
     }
 
     public void fillData() {
-        this.solicitudesAprobadas = new ArrayList<>();
-        this.solicitudesNoAprobadas = new ArrayList<>();
-        this.activos = new ArrayList<>();
+      
+        
+        try{
+            MovimientoActivoDB movDB = new MovimientoActivoDB();
+        this.solicitudes = movDB.getAllMovActs();
+        }catch (Exception e){
+             
+        }
         //Cada metodo se encarga de consultar la DB y llenar su ArrayList respectivo
-        getSolicitudesAprobadas();
-        getSolicitudesNoAprobadas();
+       
+        
+        
+        
+        
     }
 
     
@@ -84,6 +99,21 @@ public class ReporteSolicitudActivos {
 
         }
         return activos;
+    }
+        
+        
+          public ArrayList<MovimientoActivo> getMovDB() {
+        ArrayList<MovimientoActivo> MovActivos = new ArrayList<>();
+        try {
+            MovimientoActivoDB movActivoDB = new MovimientoActivoDB();
+            
+            MovActivos = movActivoDB.getAllMovActs();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return MovActivos;
     }
 
           public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
@@ -170,6 +200,31 @@ public Activo getActivo() {
 
 // </editor-fold>
 
-    
+    public ArrayList<MovimientoActivo> getSolicitudes() {
+        return solicitudes;
+    }
 
+    public void setSolicitudes(ArrayList<MovimientoActivo> solicitudes) {
+        this.solicitudes = solicitudes;
+    }
+
+    public ArrayList<MovimientoActivo> getSolicitudesFiltradas() {
+        return solicitudesFiltradas;
+    }
+
+    public void setSolicitudesFiltradas(ArrayList<MovimientoActivo> solicitudesFiltradas) {
+        this.solicitudesFiltradas = solicitudesFiltradas;
+    }
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+
+    
+    
+    
 }

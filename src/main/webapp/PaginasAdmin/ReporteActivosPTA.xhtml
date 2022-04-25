@@ -22,7 +22,7 @@
 
                 <p:dataTable var="activo" value="#{ReporteActivosPTA.getActivoDB()}"
                              emptyMessage="No existe un activo con los filtros dados."
-                             filteredValue="#{ReporteActivosPTA.activosfiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                             filteredValue="#{ReporteActivosPTA.activosfiltrados}" filterBy="#{ReporteActivosPTA.filterBy}" 
                              rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -68,7 +68,7 @@
                 </p:dataTable>
 
                 <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                 <p:commandButton actionListener="#{ReporteActivosPTA.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
+             
 
             </div>
 

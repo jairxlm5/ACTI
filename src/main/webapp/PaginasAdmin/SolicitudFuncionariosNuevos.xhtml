@@ -10,81 +10,85 @@
         <link rel="stylesheet" href="../CSS/CSS General/styleGeneral.css"></link>
     </h:head>
     <h:body>
-         <h:form id="form">
-               <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>        
-               <p:growl id="growl" showDetail="true" />
-        <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
-        
-               
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>        
+            <p:growl id="growl" showDetail="true" />
+            <p:growl id="growl-sticky" for="sticky-key" showDetail="true" sticky="true" />
+
+
             <div class="container">
 
-                <h1>Solicitud de funcionarios nuevos </h1>
+                <h1>Solicitud de Funcionarios Y Tecnicos  nuevos </h1>
                 <div class="VarasDeLaDB">
 
-           
-                     
-                    <p:dataTable var="funcionario" value="${SolicitudFuncionariosBean.funcionariosParaMostrar}" selectionMode="single"
-                                  selection="#{SolicitudFuncionariosBean.funcionarioSelecionado}" rowKey="#{funcionario.identificacion}"   emptyMessage="No existe una solicitud con los filtros dados."
-                                       
-                     filteredValue="#{SolicitudFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 
+                        <p:dataTable var="usuario"  value="#{SolicitudFuncionariosBean.disabledUsers}" selectionMode="single"
+                                     selection="#{SolicitudFuncionariosBean.usuarioSelecionado}" rowKey="#{usuario.identificacion}"  emptyMessage="No existe un prestamo con los filtros dados."
+                                     filteredValue="#{SolicitudFuncionariosBean.usuariosFiltrados}" filterBy="#{SolicitudFuncionariosBean.filterBy}" 
                                  rows="10"
                                  paginator="true"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+                                 rowsPerPageTemplate="5,10,{ShowAll|'All'}" >
             
                        
-                         <p:ajax event="rowSelect" listener="#{SolicitudFuncionariosBean.onRowSelect}" update=":form:msgs"/>
-                         <p:ajax event="rowUnselect" listener="#{SolicitudFuncionariosBean.onRowUnselect}" update=":form:msgs"/>
-            
-                                      <f:facet name="header">
-                            <span>Lista de solicitudes de nuevos Funcionarios.</span>
-                        </f:facet>
+            <p:ajax event="rowSelect" listener="#{AprobacionPrestamoBean.onRowSelect}" update=":form:msgs"/>
+            <p:ajax event="rowUnselect" listener="#{AprobacionPrestamoBean.onRowUnselect}" update=":form:msgs"/>
 
-                        <p:column headerText="Identificacion" sortBy="#{funcionario.identificacion}" filterBy="#{funcionario.identificacion}">
-                            <h:outputText value="#{funcionario.identificacion}"/>
+            
+            
+             <f:facet name="header">
+                        <span>Lista de prestamos de activos solicitados.</span>
+                    </f:facet>
+
+                    <p:column headerText="Identificacion" sortBy="#{usuario.identificacion}" filterBy="#{usuario.identificacion}">
+                            <h:outputText value="#{usuario.identificacion}"/>
                         </p:column>
 
                         <p:column headerText="Nombre">
-                            <h:outputText value="#{funcionario.nombre}" />
+                            <h:outputText value="#{usuario.nombre}" />
                         </p:column>
 
                         <p:column headerText="Primer Apellido">
-                            <h:outputText value="#{funcionario.apellido1}" />
+                            <h:outputText value="#{usuario.apellido1}" />
                         </p:column>
 
                         <p:column headerText="Segundo Apellido">
-                            <h:outputText value="#{funcionario.apellido2}" />
+                            <h:outputText value="#{usuario.apellido2}" />
                         </p:column>
 
                         <p:column headerText="Fecha de Nacimiento">
-                            <h:outputText value="#{funcionario.fechaNacimiento}" />
+                            <h:outputText value="#{usuario.fechaNacimiento}" />
                         </p:column>
 
                         <p:column headerText="Telefono">
-                            <h:outputText value="#{funcionario.telefonos}" />
+                            <h:outputText value="#{usuario.telefonos}" />
                         </p:column>      
 
                         <p:column headerText="Correo">
-                            <h:outputText value="#{funcionario.correo}" />
+                            <h:outputText value="#{usuario.correo}" />
 
                         </p:column>   
                         <p:column headerText="Aprobacion">
-                            <h:commandButton class="botonMante" value="Aceptar" action="#{SolicitudFuncionariosBean.enableAccount()}"></h:commandButton>
-                            <h:commandButton class="botonMante" value="Rechazar" action="#{SolicitudFuncionariosBean.disableUser()}"></h:commandButton>               
+                            <h:commandButton class="botones" value="Aprobar" action="#{SolicitudFuncionariosBean.enableAccount()}"></h:commandButton>
+                            <h:commandButton class="botones" value="Rechazar" action="#{SolicitudFuncionariosBean.rejectRequest()}"></h:commandButton>
+                            
                         </p:column>
 
-                        <f:facet name="paginatorTopLeft">
-                            <p:commandButton type="button" icon="pi pi-refresh"/>
-                        </f:facet>
-            
-        </p:dataTable>
+                    <f:facet name="paginatorTopLeft">
+                        <p:commandButton type="button" icon="pi pi-refresh"/>
+                    </f:facet>
 
+        </p:dataTable>
+                    
+  
+
+                    <br></br><br></br>
+                    <h:outputText value="#{SolicitudFuncionariosBean.validationMessage}" style="color: red"></h:outputText>
                     <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                     <p:commandButton actionListener="#{SolicitudFuncionariosBean.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
+                   
 
                 </div>
-                
+
             </div>
 
         </h:form>

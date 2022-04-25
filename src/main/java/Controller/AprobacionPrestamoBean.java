@@ -17,17 +17,19 @@ import Model.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
  * @author danielp
  */
 public class AprobacionPrestamoBean {
-
+  private List<FilterMeta> filterBy;
     //ArrayList que se llena con la lista de solicitudes de prestamos de activos
     private ArrayList<Prestamo> solicitudesDePrestamo;
     private ArrayList<Prestamo> solicitudesDePrestamoFiltradas;
@@ -134,6 +136,16 @@ public class AprobacionPrestamoBean {
         FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
     }
 
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+
+    
+    
     // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">\
     public Prestamo getPrestamoSeleccionado() {
         return prestamoSeleccionado;

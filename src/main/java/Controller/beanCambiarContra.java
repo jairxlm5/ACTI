@@ -8,8 +8,10 @@ package Controller;
 import Model.Usuario;
 import Model.UsuarioDB;
 import Utils.Utils;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
@@ -21,6 +23,7 @@ public class beanCambiarContra {
     private int codigoSeguridad;
     private String claveNueva;
     private String message;
+      private List<FilterMeta> filterBy;
 
     /*
     public beanCambiarContra(String claveAutogenerada, String codigoSeguridad, String claveNueva) {
@@ -126,4 +129,15 @@ public class beanCambiarContra {
     }
 
 // </editor-fold>
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+    
+
+    
 }

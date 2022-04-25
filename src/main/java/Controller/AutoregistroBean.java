@@ -28,7 +28,6 @@ import Model.Usuario;
 import Model.UsuarioDB;
 import Model.UsuarioPerfil;
 import Utils.Utils;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,18 +35,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
+import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ValueChangeEvent;
-import javax.swing.JOptionPane;
+import org.primefaces.model.FilterMeta;
 
 /**
  *
  * @author danielp
  */
 public class AutoregistroBean {
-
+  private List<FilterMeta> filterBy;
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private TipoIdentificacion tipoIdSeleccionado;
     private TipoTelefono tipoTelefonoSeleccionado;
@@ -653,6 +652,14 @@ public class AutoregistroBean {
     }
     
 // </editor-fold>  
+
+    public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
 
     
 }

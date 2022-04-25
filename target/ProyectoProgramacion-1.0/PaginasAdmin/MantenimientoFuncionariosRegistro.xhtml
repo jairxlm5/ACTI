@@ -25,6 +25,7 @@
                 <!--Con la info de usuario-->
                 <div class="containerInfoUsuario">
 
+                    
                     <h:outputText class="textos"  value="Identificacion: "></h:outputText>
                     <p:inputText value="#{MantenimientoFuncionariosBean.identificacion}"></p:inputText>
                     <br></br><br></br>
@@ -78,7 +79,7 @@
                 <br></br><br></br>
 
                 <p:button class="btn" value="Regresar" href="../MenuAdministrativo.xhtml" ></p:button>
-                 <p:commandButton actionListener="#{MantenimientoFuncionariosBean.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
+                 <p:commandButton actionListener="#{MantenimientoFuncionariosBean.showSticky2}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
                 <p:button class="btn" value="Consultar Funcionarios" href="MantenimientoFuncionariosData.xhtml" ></p:button>
                 <br></br><br></br>
 

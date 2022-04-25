@@ -25,10 +25,10 @@
 
        
                 
-                 <p:dataTable var="activo" value="${AprobacionTrasladoBean.getSolicitudesDeTraslado()}" selectionMode="single"
+                 <p:dataTable var="traslado" value="${AprobacionTrasladoBean.getSolicitudesDeTraslado()}" selectionMode="single"
                               selection="#{AprobacionTrasladoBean.trasladoSeleccionado}" rowKey="#{traslado.activo.idActivo}" 
                       emptyMessage="No existe una solicitud de traslado con los filtros dados."
-                             filteredValue="#{AprobacionTrasladoBean.solicitudesDeTrasladoFiltradas}" filterBy="#{dtFilterView.filterBy}" 
+                      filteredValue="#{AprobacionTrasladoBean.solicitudesDeTrasladoFiltradas}" filterBy="#{AprobacionTrasladoBean.filterBy}" 
                              rows="10"
                              paginator="true"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -91,7 +91,7 @@
                 
                 <h:outputText value="#{AprobacionTrasladoBean.validationMessage}"></h:outputText>
                 <p:button class="btn" value="Regresar" href="../MenuTecnico.xhtml" ></p:button>
-                 <p:commandButton actionListener="#{AprobacionTrasladoBean.showSticky}" update="growl-sticky" value="Ayuda" style="width: 10rem" styleClass="ui-button-help" />
+        
 
             </div>
             

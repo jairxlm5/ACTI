@@ -30,6 +30,7 @@ public class MovimientoActivo {
         
     }
 
+
     public Activo getActivo() {
         return activo;
     }
