@@ -27,7 +27,7 @@
                              rowsPerPageTemplate="5,10,{ShowAll|'All'}">
 
                     <f:facet name="header">
-                        <span>Lista de Activos solicitados.</span>
+                        <span>Lista de Solicitudes solicitados.</span>
                     </f:facet>
 
                     <p:column headerText="ID" sortBy="#{activo.idActivo}" filterBy="#{activo.idActivo}">
@@ -42,19 +42,19 @@
                         <h:outputText value="#{activo.descripcion}" />
                     </p:column>
 
-                    <p:column headerText="Valor">
+                    <p:column headerText="Estado">
                         <h:outputText value="#{activo.valor}" />
                     </p:column>
 
-                    <p:column headerText="Sede">
+                    <p:column headerText="Motivo">
                         <h:outputText value="#{activo.sede}" />
                     </p:column>
 
-                    <p:column headerText="Fecha de Adquisicion">
+                    <p:column headerText="Fecha de Solicitud">
                         <h:outputText value="#{activo.fechaAdquisicion}" />
                     </p:column>      
 
-                    <p:column headerText="Funcionario">
+                    <p:column headerText="Funcionario Solicitante">
                         <h:outputText value="#{activo.funcionario}" />
                     </p:column>
 

@@ -9,6 +9,7 @@ import DAO.SNMPExceptions;
 import Model.Activo;
 import Model.ActivoDB;
 import Model.MovimientoActivo;
+import Model.MovimientoActivoDB;
 import Model.Traslado;
 import Model.Usuario;
 import java.sql.SQLException;
@@ -84,6 +85,21 @@ public class ReporteSolicitudActivos {
 
         }
         return activos;
+    }
+        
+        
+          public ArrayList<MovimientoActivo> getMovDB() {
+        ArrayList<MovimientoActivo> MovActivos = new ArrayList<>();
+        try {
+            MovimientoActivoDB movActivoDB = new MovimientoActivoDB();
+            
+            MovActivos = movActivoDB.getAllMovActs();
+        } catch (SQLException e) {
+
+        } catch (SNMPExceptions s) {
+
+        }
+        return MovActivos;
     }
 
           public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
