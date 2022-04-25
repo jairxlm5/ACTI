@@ -38,6 +38,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import Utils.Utils;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import javax.faces.event.AjaxBehaviorEvent;
 
@@ -46,6 +47,8 @@ import javax.faces.context.FacesContext;
 import javax.mail.MessagingException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.FilterMeta;
+import org.primefaces.model.MatchMode;
 
 /**
  *
@@ -58,7 +61,7 @@ public class MantenimientoFuncionariosBean {
     //Estos son los atributos para relacionarlos con campos de texto en el bean
     private String identificacion;
     private String nombre, apellido1, apellido2;
-    private String otrasDirecciones;
+    private String otrasDirecciones = "";
     private String correo;
     //Estos son atributos seleccionados por el usuario de los combos, algo parecido al SelectedItem
     private int provID;
@@ -111,7 +114,7 @@ public class MantenimientoFuncionariosBean {
     Funcionario funcionarioSelecionado = new Funcionario();
     //Este funcionario es el que voy a agarrar para aplicar los botones de la db 
     Funcionario funcionarioParaMantenimiento = new Funcionario();
-
+    private List<FilterMeta> filterBy;
     
     
         //Estos son los atributos para relacionarlos con campos de texto en el bean
@@ -127,10 +130,31 @@ public class MantenimientoFuncionariosBean {
         this.distritos = new ArrayList<>();
         this.barrios = new ArrayList<>();
         this.fillSedes();
-
+        
+        filterBy = new ArrayList<>();
+        
+       
     }
 
+    
+    public void agregaPerfil(){
+        try{
+               if (this.identificacion.trim().length() == 0) {
+            this.profileMessage = "Ingrese su Número de Identificación";
+            return;
+        }
+        this.perfiles.add(new UsuarioPerfil(this.identificacion, Perfil.Funcionario, Utils.getCurrentDate()));
+        
+        }catch (Exception e){
+            
+        }
+      
+    }
+    
+    
+    
     public void GuardarFuncionario() {
+  
         this.messageDisplayed = "";
 
         //Primero validar que todos los datos se hayan ingresado
@@ -162,41 +186,55 @@ public class MantenimientoFuncionariosBean {
             this.messageDisplayed = "Debe registrar al menos un teléfono";
             return;
         }
-        if (this.provinciaSeleccionada == null) {
-            this.messageDisplayed = "Debe seleccionar una provincia";
+        if (this.perfiles.isEmpty()) {
+            this.messageDisplayed = "Debe usar al menos un tipo de perfil";
             return;
         }
-        if (this.cantonSeleccionado == null) {
-            this.messageDisplayed = "Debe seleccionar un cantón";
-            return;
-        }
-        if (this.distritoSeleccionado == null) {
-            this.messageDisplayed = "Debe seleccionar un distrito";
-            return;
-        }
-        if (this.barrioSeleccionado == null) {
-            this.messageDisplayed = "Debe seleccionar un barrio";
-            return;
-        }
+   
         SedeDB sedeDB = new SedeDB();
-        try {
+        try{
             this.sede = sedeDB.getSede(this.sedeID);
-        } catch (Exception e) {
-
+        } catch (Exception e){
+            
         }
-        if (this.sede == null) {
+        if(this.sede == null){
             this.messageDisplayed = "Debe seleccionar una sede";
             return;
         }
+        
+        //Se tiene que crear el nuevo usuario\
+        
+        agregaPerfil();
+        
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento,null,
+                null,null, null, otrasDirecciones, correo, sede,
+                perfiles, telefonos);
+        newUser.setTipoID(this.tipoIdSeleccionado);
+        
+        //Una vez creado el usuario se tiene que enviar un correo con un codigo de seguridad y la clave de primer ingreso
+        int codSeguridad = userDB.generateSecurityCode();
+        newUser.setCodSeguridad(codSeguridad);
+        String generatedPass = userDB.generateFirstPasswd();
 
-        //Se tiene que crear el nuevo Funcionario
-        Funcionario newFuncionario = new Funcionario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, perfiles, telefonos);
-
-        //Se tiene que guardar toda la informacion del Usuario en la base de datos Pero no se que dato manarle al metodo NewFunc
+        try{
+            Utils.sendLoginInfoEmail(newUser, generatedPass);
+        } catch (Exception e){
+            this.messageDisplayed = "Ocurrió un error al enviar el correo, por favor intente de nuevo" + e.getMessage() + " "+  e.toString();
+            e.printStackTrace();
+            return;
+        }
+        //Se registran los bytes de la clave
         try {
-            funcionarioDB.addNewFunc("Aqui va el id User");
-            this.messageDisplayed = "Funcionario agregado exitosamente.";
+            generatedPass = Utils.getHashedPaswd(generatedPass);
+        } catch (Exception e) {
+            this.messageDisplayed = "Error al registrar contraseña";
+        }
+        newUser.setClave(generatedPass);
+
+        //Se tiene que guardar toda la informacion del Usuario en la base de datos
+        try {
+            userDB.addNewUser(newUser);
+            this.messageDisplayed = "Funcionario registrado correctamente";
         } catch (SNMPExceptions e) {
             this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
         } catch (SQLException e) {
@@ -204,62 +242,9 @@ public class MantenimientoFuncionariosBean {
         }
 
     }
-
-    public void saveNewUser() {
-        this.validationMessage = "";
-        //Primero validar que todos los datos se hayan ingresado
-        if (this.identificacion.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Nombre";
-            return;
-        }
-        if (this.apellido1.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Primer Apellido";
-            return;
-        }
-        if (this.apellido2.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Segundo Apellido";
-            return;
-        }
-        if (this.fechaNacimiento == null) {
-            this.validationMessage = "Indique su Fecha de Nacimiento";
-            return;
-        }
-        if (this.correo.trim().length() == 0) {
-            this.validationMessage = "Ingrese su Correo Electrónico";
-            return;
-        }
-        if (this.telefonos.isEmpty()) {
-            this.validationMessage = "Debe registrar al menos un teléfono";
-            return;
-        }
-        if (this.perfiles.isEmpty()) {
-            this.validationMessage = "Debe usar al menos un tipo de perfil";
-            return;
-        }
-        //Se tiene que crear el nuevo usuario
-
-        
-            Funcionario newFuncionario = new Funcionario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede, perfiles, telefonos);
-
-        //Se tiene que guardar toda la informacion del Usuario en la base de datos Pero no se que dato manarle al metodo NewFunc
-       
-        /*
-        try {
-            funcionarioDB.EditFunc("Aqui va el id User");
-            this.messageDisplayed = "Funcionario agregado exitosamente.";
-        } catch (SNMPExceptions e) {
-            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
-        } catch (SQLException e) {
-            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
-        }
-        
-        }
-*/
 
     
 
-    }
 
     public void editFuncionario() {
         //Se tienen que aplicar casi el mismo proceso a cuando se registra un usuario nuevo
@@ -294,19 +279,26 @@ public class MantenimientoFuncionariosBean {
             return;
         }
         //Se tiene que crear un objeto usuario con la informacion editada
-        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento, provinciaSeleccionada,
-                cantonSeleccionado, distritoSeleccionado, barrioSeleccionado, otrasDirecciones, correo, sede,
+        agregaPerfil();
+        
+        Usuario newUser = new Usuario(identificacion, nombre, apellido1, apellido2, fechaNacimiento,null,
+                null,null, null, otrasDirecciones, correo, sede,
                 perfiles, telefonos);
-
+        newUser.setTipoID(this.tipoIdSeleccionado);
+        
         //Se actualiza la informacion en la BD
-        
+            try {
+            userDB.updateUser(user);
+            this.messageDisplayed = "Funcionario Editado correctamente";
+        } catch (SNMPExceptions e) {
+            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
+        } catch (SQLException e) {
+            this.messageDisplayed = "Error al registrar Funcionario" + e.toString() + e.getMessage();
+        }
         
         
     }
 
-    public void disableUser() {
-
-    }
 
     public void cleanData() {
         //lo deje asi para arreglar una vara
@@ -354,9 +346,8 @@ public class MantenimientoFuncionariosBean {
         return phoneTypes;
     }
 
-    //Agrega un telefono a la lista
-    public void addTelefono() {
-        this.phoneMessage = "";
+      public void addTelefono() {
+        this.phoneMessage= "";
         if (this.identificacion.trim().length() == 0) {
             this.phoneMessage = "Ingrese su Número de Identificación";
             return;
@@ -495,10 +486,14 @@ public class MantenimientoFuncionariosBean {
         this.apellido1 = event.getObject().getApellido1();
         this.apellido2 = event.getObject().getApellido2();
         this.fechaNacimiento = event.getObject().getFechaNacimiento();
-        this.correo = event.getObject().getNombre();
+        this.correo = event.getObject().getCorreo();
         this.telefonos = event.getObject().getTelefonos();
         this.perfiles = event.getObject().getPerfiles();
-
+        this.direccionCompleta = event.getObject().getOtrasDirecciones();
+        this.sedeID = event.getObject().getSede().getCodigo();
+        
+        
+        
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -516,7 +511,23 @@ public class MantenimientoFuncionariosBean {
         FacesContext.getCurrentInstance().addMessage("sticky-key", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sticky Message", "Message Content"));
     }
 
+
+    
+    
+    
+
 // <editor-fold defaultstate="collapsed" desc="METODOS GET Y SET">
+    
+    
+        public List<FilterMeta> getFilterBy() {
+        return filterBy;
+    }
+
+    public void setFilterBy(List<FilterMeta> filterBy) {
+        this.filterBy = filterBy;
+    }
+    
+    
     public void setTipoTelefono(ArrayList<TipoTelefono> tipoTelefono) {
         this.tipoTelefono = tipoTelefono;
     }

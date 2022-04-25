@@ -23,7 +23,7 @@
 
            
                      
-                     <p:dataTable var="funcionario" value="${SolicitudFuncionariosBean.getSolicitudNewFuncionariosDB()}" selectionMode="single"
+                    <p:dataTable var="funcionario" value="${SolicitudFuncionariosBean.funcionariosParaMostrar}" selectionMode="single"
                                   selection="#{SolicitudFuncionariosBean.funcionarioSelecionado}" rowKey="#{funcionario.identificacion}"   emptyMessage="No existe una solicitud con los filtros dados."
                                        
                      filteredValue="#{SolicitudFuncionariosBean.funcionariosFiltrados}" filterBy="#{dtFilterView.filterBy}" 

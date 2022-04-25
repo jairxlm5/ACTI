@@ -5,13 +5,19 @@
  */
 package Model;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
  * @author danielp
  */
 public class Prestamo extends MovimientoActivo{
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private Calendar myCalendar = new GregorianCalendar();
     private Date fechaRetorno;
 
     public Prestamo(Date fechaRetorno, Activo activo,  Date fecha_Solicitud, String motivo,
